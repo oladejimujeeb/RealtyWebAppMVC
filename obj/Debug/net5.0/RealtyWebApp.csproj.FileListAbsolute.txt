@@ -1,0 +1,11 @@
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\obj\Debug\net5.0\RealtyWebApp.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\obj\Debug\net5.0\RealtyWebApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\obj\Debug\net5.0\RealtyWebApp.AssemblyInfoInputs.cache
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\obj\Debug\net5.0\RealtyWebApp.AssemblyInfo.cs
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\obj\Debug\net5.0\RealtyWebApp.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\obj\Debug\net5.0\RealtyWebApp.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\obj\Debug\net5.0\RealtyWebApp.RazorAssemblyInfo.cache
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\obj\Debug\net5.0\RealtyWebApp.RazorAssemblyInfo.cs
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\obj\Debug\net5.0\RealtyWebApp.dll
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\obj\Debug\net5.0\ref\RealtyWebApp.dll
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\obj\Debug\net5.0\RealtyWebApp.pdb
