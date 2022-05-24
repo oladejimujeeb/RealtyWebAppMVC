@@ -51,18 +51,81 @@ namespace RealtyWebApp.Implementation.Services
                     Status = getProperty.Status,
                     VerificationStatus = getProperty.VerificationStatus,
                     IsAvailable = getProperty.IsAvailable,
-                }
+                    ImagePath = getProperty.PropertyImages.Select(z=>z.DocumentPath).ToList(),
+                },
+                Message = "load successfully"
             };
         }
 
-        public Task<BaseResponseModel<IEnumerable<PropertyDto>>> GetAllPropertyWithImage()
+        public BaseResponseModel<IEnumerable<PropertyDto>> AllAvailablePropertyWithImage()
         {
-            throw new System.NotImplementedException();
+            var getProperty =  _propertyRepository.QueryWhere(x=>x.IsAvailable && x.VerificationStatus && x.BuyerId==0).
+                Select(x=>new PropertyDto()
+                {
+                    Id = x.Id,
+                    Address = x.Address,
+                    Bedroom = x.Bedroom,
+                    Features = x.Features,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
+                    Toilet = x.Toilet,
+                    BuildingType = x.BuildingType,
+                    LandArea = x.PlotArea,
+                    PropertyPrice = x.Price,
+                    RealtorId = x.RealtorId,
+                    PropertyType = x.PropertyType,
+                    PropertyRegNumber = x.PropertyRegNo,
+                    Action = x.Action,
+                    Status = x.Status,
+                    VerificationStatus = x.VerificationStatus,
+                    IsAvailable = x.IsAvailable,
+                    PropertyRegNo = x.PropertyRegNo,
+                    ImagePath = x.PropertyImages.Select(z=>z.DocumentPath).ToList(),//Possible Error
+                }).ToList();
+
+            return new BaseResponseModel<IEnumerable<PropertyDto>>()
+            {
+                Status = true,
+                Data = getProperty
+            };
         }
 
         public  BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByRealtor(int realtorId)
         {
-            var getProperty = _propertyRepository.QueryWhere(x => x.RealtorId == realtorId).
+            var getProperty = _propertyRepository.QueryWhere(x => x.RealtorId == realtorId && x.BuyerId==0).
+                Select(x=>new PropertyDto()
+                {
+                    Id = x.Id,
+                    Address = x.Address,
+                    Bedroom = x.Bedroom,
+                    Features = x.Features,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
+                    Toilet = x.Toilet,
+                    BuildingType = x.BuildingType,
+                    LandArea = x.PlotArea,
+                    PropertyPrice = x.Price,
+                    RealtorId = x.RealtorId,
+                    PropertyType = x.PropertyType,
+                    PropertyRegNumber = x.PropertyRegNo,
+                    Action = x.Action,
+                    Status = x.Status,
+                    VerificationStatus = x.VerificationStatus,
+                    IsAvailable = x.IsAvailable,
+                    PropertyRegNo = x.PropertyRegNo,
+                    //ImagePath = x.PropertyImages.Select(z=>z.DocumentPath).ToList(),//Possible Error
+                }).ToList();
+            
+            return new BaseResponseModel<IEnumerable<PropertyDto>>()
+            {
+                Status = true,
+                Data =getProperty
+            };
+        }
+
+        public BaseResponseModel<IEnumerable<PropertyDto>> GetSoldPropertyByRealtor(int realtorId)
+        {
+            var getProperty = _propertyRepository.QueryWhere(x => x.RealtorId == realtorId && x.IsAvailable==false).
                 Select(x=>new PropertyDto()
                 {
                     Id = x.Id,
@@ -84,7 +147,39 @@ namespace RealtyWebApp.Implementation.Services
                     VerificationStatus = x.VerificationStatus,
                     IsAvailable = x.IsAvailable,
                     PropertyRegNo = x.PropertyRegNo,
-                    ImagePath = x.PropertyImages.Select(z=>z.DocumentPath),//Possible Error
+                }).ToList();
+            return new BaseResponseModel<IEnumerable<PropertyDto>>()
+            {
+                Status = true,
+                Data =getProperty
+            };
+        }
+
+        public BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByBuyer(int buyerId)
+        {
+            var getProperty = _propertyRepository.QueryWhere(x => x.BuyerId == buyerId).
+                Select(x=>new PropertyDto()
+                {
+                    Id = x.Id,
+                    Address = x.Address,
+                    Bedroom = x.Bedroom,
+                    Features = x.Features,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
+                    Toilet = x.Toilet,
+                    BuildingType = x.BuildingType,
+                    BuyerId = x.BuyerId,
+                    LandArea = x.PlotArea,
+                    PropertyPrice = x.Price,
+                    RealtorId = x.RealtorId,
+                    PropertyType = x.PropertyType,
+                    PropertyRegNumber = x.PropertyRegNo,
+                    Action = x.Action,
+                    Status = x.Status,
+                    VerificationStatus = x.VerificationStatus,
+                    IsAvailable = x.IsAvailable,
+                    PropertyRegNo = x.PropertyRegNo,
+                    //ImagePath = x.PropertyImages.Select(z=>z.DocumentPath).ToList(),//Possible Error
                 }).ToList();
             
             return new BaseResponseModel<IEnumerable<PropertyDto>>()
@@ -94,9 +189,70 @@ namespace RealtyWebApp.Implementation.Services
             };
         }
 
-        public Task<BaseResponseModel<IEnumerable<PropertyDto>>> GetPropertyByBuyer(int buyerId)
+        public BaseResponseModel<IEnumerable<PropertyDto>> GetRealtorApprovedProperty(int id)
         {
-            throw new System.NotImplementedException();
+            var getProperty = _propertyRepository.QueryWhere(x => x.RealtorId == id && x.VerificationStatus).
+                Select(x=>new PropertyDto()
+                {
+                    Id = x.Id,
+                    Address = x.Address,
+                    Bedroom = x.Bedroom,
+                    Features = x.Features,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
+                    Toilet = x.Toilet,
+                    BuildingType = x.BuildingType,
+                    BuyerId = x.BuyerId,
+                    LandArea = x.PlotArea,
+                    PropertyPrice = x.Price,
+                    RealtorId = x.RealtorId,
+                    PropertyType = x.PropertyType,
+                    PropertyRegNumber = x.PropertyRegNo,
+                    Action = x.Action,
+                    Status = x.Status,
+                    VerificationStatus = x.VerificationStatus,
+                    IsAvailable = x.IsAvailable,
+                    PropertyRegNo = x.PropertyRegNo,
+                    //ImagePath = x.PropertyImages.Select(z=>z.DocumentPath).ToList(),//Possible Error
+                }).ToList();
+            return new BaseResponseModel<IEnumerable<PropertyDto>>()
+            {
+                Status = true,
+                Data =getProperty
+            };
+        }
+
+        public BaseResponseModel<IEnumerable<PropertyDto>> AllProperty()
+        {
+            var getProperty = _propertyRepository.QueryWhere(x => x.BuyerId==0).
+                Select(x=>new PropertyDto()
+                {
+                    Id = x.Id,
+                    Address = x.Address,
+                    Bedroom = x.Bedroom,
+                    Features = x.Features,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
+                    Toilet = x.Toilet,
+                    BuildingType = x.BuildingType,
+                    BuyerId = x.BuyerId,
+                    LandArea = x.PlotArea,
+                    PropertyPrice = x.Price,
+                    RealtorId = x.RealtorId,
+                    PropertyType = x.PropertyType,
+                    PropertyRegNumber = x.PropertyRegNo,
+                    Action = x.Action,
+                    Status = x.Status,
+                    VerificationStatus = x.VerificationStatus,
+                    IsAvailable = x.IsAvailable,
+                    PropertyRegNo = x.PropertyRegNo,
+                    ImagePath = x.PropertyImages.Select(z=>z.DocumentPath).ToList(),//Possible Error
+                }).ToList();
+            return new BaseResponseModel<IEnumerable<PropertyDto>>()
+            {
+                Status = true,
+                Data =getProperty
+            };
         }
     }
 }

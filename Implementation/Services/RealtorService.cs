@@ -1,7 +1,9 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using RealtyWebApp.DTOs;
 using RealtyWebApp.Entities;
 using RealtyWebApp.Entities.File;
@@ -36,7 +38,7 @@ namespace RealtyWebApp.Implementation.Services
 
         public async Task<BaseResponseModel<RealtorDto>> RegisterRealtor(RealtorRequestModel model)
         {
-            var checkMail = await _userRepository.Exists(x => x.Email == model.Email);
+            var checkMail = await _userRepository.Exists(x => x.Email.ToLower() == model.Email.ToLower());
             if (checkMail)
             {
                 return new BaseResponseModel<RealtorDto>()
@@ -114,6 +116,31 @@ namespace RealtyWebApp.Implementation.Services
                 }
                 
             };
+        }
+
+        public async Task<BaseResponseModel<RealtorDto>> UpdateRealtorInfo(RealtorUpdateRequest model, int id)
+        {
+            var userInfo = await _userRepository.Get(x => x.Id == id);
+            userInfo.FirstName = model.FirstName;
+            userInfo.Password = model.Password;
+            userInfo.FirstName = model.LastName;
+            userInfo.PhoneNumber = model.PhoneNumber;
+            var realtor = await _realtorRepository.Get(x => x.Id == userInfo.Realtor.Id);
+            if (realtor == null)
+            {
+                return new BaseResponseModel<RealtorDto>(){Message = "Failed to update", Status = false};
+            }
+            realtor.Address = model.Address;
+            realtor.BusinessName = model.BusinessName;
+            realtor.CacRegistrationNumber = model.CacNumber;
+            var u = await _userRepository.Update(userInfo);
+            var a = await _realtorRepository.Update(realtor);
+            return new BaseResponseModel<RealtorDto>()
+            {
+                Status = true,
+                Message = "Update Successfully"
+            };
+
         }
 
         public async Task<BaseResponseModel<PropertyDto>> AddProperty(PropertyRequestModel model, int id)

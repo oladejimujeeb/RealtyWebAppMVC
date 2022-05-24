@@ -7,8 +7,11 @@ namespace RealtyWebApp.Interface.IServices
     public interface IPropertyService
     {
         Task<BaseResponseModel<PropertyDto>> GetProperty(int id);
-        Task<BaseResponseModel<IEnumerable<PropertyDto>>> GetAllPropertyWithImage();
+        BaseResponseModel<IEnumerable<PropertyDto>> AllAvailablePropertyWithImage();
         BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByRealtor(int realtyId);
-        Task<BaseResponseModel<IEnumerable<PropertyDto>>> GetPropertyByBuyer(int buyerId);
+        BaseResponseModel<IEnumerable<PropertyDto>> GetSoldPropertyByRealtor(int realtyId);
+        BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByBuyer(int buyerId);
+        BaseResponseModel<IEnumerable<PropertyDto>> GetRealtorApprovedProperty(int Id);
+        BaseResponseModel<IEnumerable<PropertyDto>> AllProperty();
     }
 }
