@@ -2,20 +2,20 @@
 
 @{
     ViewBag.Title = "Add Property";
-    Layout = "_Layout";
+    Layout = "_index";
 }
 
 <br>
 <div class="container">
-    <div class="row justify-content-center">
+    <div  class="row block-9 justify-content-center mb-5">
         <div class=" card col-md-6">
-            <div class="card-body ">
+            <div  class="col-md-8 mb-md-5">
                 <div class="bg-light">
                     <h1 class="tagcolor" style="color:green">Register</h1>
                     <p class="tagcolor" style="color:green">Please fill in this form to create an account.</p>
                     <hr class="tagcolor" style="color:green">
                 </div>
-                <form method="post" enctype="multipart/form-data"  asp-controller="Realtor" asp-action="RealtorRegistration">
+                <form class="bg-light p-5 contact-form" method="post" enctype="multipart/form-data"  asp-controller="Realtor" asp-action="RealtorRegistration">
                      @if(!string.IsNullOrEmpty(ViewBag.Message))
                       {
                              <script > alert('failed')</script>
@@ -79,16 +79,17 @@
                              <span asp-validation-for="Toilet" class="text-danger"></span>
                          </div>
                      </div>
+                     <p class="tagcolor" style="color:green">Property Co-ordinate</p>
+                     <hr class="tagcolor" style="color:green">
                      <div class="form-row">
-                         <p>Building Co-ordinate</p>
                          <div class="form-group col-sm-6">
-                             <label asp-for="Longitude" class="control-label"></label>
-                             <input asp-for="Longitude" type="number" max="99" min="0" class="form-control" required/>
+                             @*<label asp-for="Longitude" class="control-label"></label>*@
+                             <input placeholder="Longitude" asp-for="Longitude" type="number" max="99" min="-99" class="form-control" required/>
                              <span asp-validation-for="Longitude" class="text-danger"></span>
                          </div>
                          <div class="form-group col-sm-6">
-                             <label asp-for="Latitude" class="control-label"></label>
-                             <input asp-for="Latitude" type="number" max="99" min="0" class="form-control" required/>
+                             @*<label asp-for="Latitude" class="control-label"></label>*@
+                             <input placeholder="Latitude" asp-for="Latitude" type="number" max="99" min="-99" class="form-control" required/>
                              <span asp-validation-for="Latitude" class="text-danger"></span>
                          </div>
                      </div>
@@ -101,24 +102,26 @@
                          </div>
                          <div class="form-group col-sm-6">
                              <label class="control-label">Building Type</label>
-                             <input asp-for="BuildingType" type="number" class="form-control" required/>
+                             <input asp-for="BuildingType" type="text" class="form-control" required/>
                              <span asp-validation-for="BuildingType" class="text-danger"></span>
                          </div>
                      </div>
-                     
-                     <div class="form-row">
-                          <p>Upload Property Document</p>
+                     <p class="tagcolor" style="color:green">Upload Property Document</p>
+                       <hr class="tagcolor" style="color:green">
+                      <div class="form-row">
                          <div class="form-group col-sm-6">
                              <input asp-for="FileDescription" placeholder="Document Title" type="text" class="form-control" required/>
                              <span asp-validation-for="FileDescription" class="text-danger"></span>
                          </div>
+                      </div>
+                     <div class="form-row">
                          <div class="form-group col-sm-6">
-                             <label class="control-label">Upload Document</label> 
+                             <label class="control-label">Document</label> 
                              <input asp-for="Files" type="file" class="form-control" multiple required>
                              <span asp-validation-for="Files" class="text-danger"></span>
                          </div>
                          <div class="form-group col-sm-6">
-                              <label class="control-label">Add Property Images</label>
+                              <label class="control-label">Property Images</label>
                               <input asp-for="Images" type="file" class="form-control" multiple required/>
                               <span asp-validation-for="Images" class="text-danger"></span>
                          </div>

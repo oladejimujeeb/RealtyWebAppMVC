@@ -10,13 +10,13 @@ namespace RealtyWebApp.Implementation.Services
     public class UserService:IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IRoleRepository _roleRepository;
+        private readonly IRealtorRepository _realtorRepository;
         private readonly IUserRoleRepository _userRoleRepository;
 
-        public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IUserRoleRepository userRoleRepository)
+        public UserService(IUserRepository userRepository, IRealtorRepository  realtorRepository, IUserRoleRepository userRoleRepository)
         {
             _userRepository = userRepository;
-            _roleRepository = roleRepository;
+            _realtorRepository = realtorRepository;
             _userRoleRepository = userRoleRepository;
         }
         public async Task<BaseResponseModel<UserDto>> GetUser(LoginModel model)
@@ -42,7 +42,7 @@ namespace RealtyWebApp.Implementation.Services
             }
 
             var userRole = await _userRoleRepository.GetUserRole(user.Id);
-            
+            var realtor = await _realtorRepository.Get(x => x.UserId == user.Id);
             return new BaseResponseModel<UserDto>()
             {
                 Message = $"Hi {user.FirstName}",
@@ -53,6 +53,8 @@ namespace RealtyWebApp.Implementation.Services
                     Email = user.Email,
                     Password = user.Password,
                     PhoneNumber = user.PhoneNumber,
+                    RealtorId = realtor.Id,
+                    //BuyerId = user.Buyer.Id,
                     RoleName = userRole.Role.RoleName,
                     UserName = $"{user.FirstName} {user.LastName}"
                 }

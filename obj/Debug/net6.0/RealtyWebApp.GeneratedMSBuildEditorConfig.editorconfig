@@ -35,12 +35,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVhbHRvclxBZGROZXdQcm9wZXJ0eS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Realtor/RealtorDashBoard.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVhbHRvclxSZWFsdG9yRGFzaEJvYXJkLmNzaHRtbA==
+[C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Realtor/DashBoard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVhbHRvclxEYXNoQm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Realtor/RealtorRegistration.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVhbHRvclxSZWFsdG9yUmVnaXN0cmF0aW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Realtor/UnApprovedProperties.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVhbHRvclxVbkFwcHJvdmVkUHJvcGVydGllcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Shared/Error.cshtml]

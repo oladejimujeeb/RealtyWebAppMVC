@@ -126,7 +126,7 @@ namespace RealtyWebApp.Implementation.Services
                     VerificationStatus = x.VerificationStatus,
                     IsAvailable = x.IsAvailable,
                     PropertyRegNo = x.PropertyRegNo,
-                    ImagePath = x.PropertyImages.Select(z=>z.DocumentName).ToList(),//Possible Error
+                    ImagePath = _propertyImage.QueryWhere(y=>y.PropertyRegNo==x.PropertyRegNo).Select(y=>y.DocumentName).ToList()
                 }).ToList();
             
             return new BaseResponseModel<IEnumerable<PropertyDto>>()
@@ -227,7 +227,7 @@ namespace RealtyWebApp.Implementation.Services
                     VerificationStatus = x.VerificationStatus,
                     IsAvailable = x.IsAvailable,
                     PropertyRegNo = x.PropertyRegNo,
-                    //ImagePath = x.PropertyImages.Select(z=>z.DocumentPath).ToList(),//Possible Error
+                    ImagePath = _propertyImage.QueryWhere(y=>y.PropertyRegNo==x.PropertyRegNo).Select(y=>y.DocumentName).ToList()
                 }).ToList();
             return new BaseResponseModel<IEnumerable<PropertyDto>>()
             {

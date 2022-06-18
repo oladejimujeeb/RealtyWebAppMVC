@@ -40,7 +40,7 @@ namespace RealtyWebApp.Controllers
 
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name,$"{login.Data.UserName}"),
+                new Claim(ClaimTypes.Name,$"{login.Data.RealtorId}"),
                 new Claim(ClaimTypes.NameIdentifier, $"{login.Data.UserId}"),
                 new Claim(ClaimTypes.Email, $"{login.Data.Email}"),
                 new Claim(ClaimTypes.Role, $"{login.Data.RoleName}")
@@ -53,7 +53,7 @@ namespace RealtyWebApp.Controllers
             //temporary redirection
             if (login.Data.RoleName == "Realtor")
             {
-                return RedirectToAction("RealtorDashBoard", "Realtor");
+                return RedirectToAction("DashBoard", "Realtor");
             }
             return RedirectToAction("index", "Home");
         }

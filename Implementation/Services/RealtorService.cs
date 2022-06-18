@@ -251,7 +251,7 @@ namespace RealtyWebApp.Implementation.Services
 
         public BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByRealtorId(int realtorId)
         {
-            var getProperty = _propertyRepository.QueryWhere(x => x.RealtorId == realtorId && x.BuyerIdentity==0).
+            var getProperty = _propertyRepository.QueryWhere(x => x.RealtorId == realtorId && x.BuyerIdentity==0 && !x.VerificationStatus).
                 Select(x=>new PropertyDto()
                 {
                     Id = x.Id,
@@ -275,14 +275,14 @@ namespace RealtyWebApp.Implementation.Services
                     PropertyRegNo = x.PropertyRegNo,
                     LGA = x.LGA,
                     State = x.State,
-                    ImagePath = x.PropertyImages.Select(z=>z.DocumentName).ToList(),//Possible Error
+                    ImagePath = _propertyImage.QueryWhere(y=>y.PropertyRegNo==x.PropertyRegNo).Select(y=>y.DocumentName).ToList()
                 }).ToList();
             if (getProperty.Count == 0)
             {
                 return new BaseResponseModel<IEnumerable<PropertyDto>>()
                 {
                     Status = false,
-                    Message = "No information"
+                    Message = "No Unapproved property to list"
                 };
             }
             
@@ -362,7 +362,7 @@ namespace RealtyWebApp.Implementation.Services
                     PropertyRegNo = x.PropertyRegNo,
                     LGA = x.LGA,
                     State = x.State,
-                    //ImagePath = x.PropertyImages.Select(z=>z.DocumentName).ToList(),//Possible Error
+                    ImagePath = _propertyImage.QueryWhere(y=>y.PropertyRegNo==x.PropertyRegNo).Select(y=>y.DocumentName).ToList()
                 }).ToList();
             if (getProperty.Count == 0)
             {

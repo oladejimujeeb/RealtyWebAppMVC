@@ -3,7 +3,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-    <section class="ftco-section">
+    <section  class="ftco-section goto-here">
       <div class="container">
 	      <div class="row justify-content-center">
 		      <div class="col-md-12 heading-section text-center ftco-animate mb-5">
@@ -11,74 +11,44 @@
 			      <h2 class="mb-2">Featured Properties</h2>
 		      </div>
 	      </div>
-	      
-        <div class="row ftco-animate">
-          <div class="col-md-12">
-            <div class="carousel-properties owl-carousel">
-	            @foreach (var property in Model)
-	            {
-		            <div class="item">
-			            <div class="property-wrap ftco-animate">
-				            <a href="#" class="img" style="background-image: url('PropertyImages/@property.ImagePath[0]');">
-					            <div class="rent-sale">
-						            <span class="sale">For Sale</span>
-					            </div>
-					            <p class="price"><span class="orig-price">#@property.PropertyPrice</span></p>
-				            </a>
-				            <div class="text">
-					            <ul class="property_list">
-									<li><span class="flaticon"></span>@property.Features</li>
-						            @*<li><span class="flaticon-bed"></span>Bedroom:@property.Bedroom</li>
-						            <li><span class="flaticon-bathtub"></span>Toilet:@property.Toilet</li>*@
-						            <li><span class="flaticon-floor-plan"></span>Plot area:@property.LandArea</li>
-					            </ul>
-					            <h3><a href="#">@property.Address</a></h3>
-					            <span class="location">@property.LGA, @property.State</span>
-					            <a href="mmmm" class="d-flex align-items-center justify-content-center btn-custom">
-						            <span class="fa fa-link"></span>
-					            </a>
-					            <div class="list-team d-flex align-items-center mt-2 pt-2 border-top">
-						            <div class="d-flex align-items-center">
-										<div class="img" style="background-image: url('images/work-1.jpg');"></div>
-							            <h3 class="ml-2">Registration No:@property.PropertyRegNumber</h3>
-						            </div>
-						            <span class="text-right">Property:@property.PropertyType</span>
-					            </div>
-				            </div>
-			            </div>
-		            </div>
-	            }
-              @*<div class="item">
-	              <div class="property-wrap ftco-animate">
-		              <a href="#" class="img" style="background-image: url('images/work-2.jpg');">
-			              <div class="rent-sale">
-				              <span class="rent">Rent</span>
-			              </div>
-			              <p class="price"><span class="old-price">800,000</span><span class="orig-price">$3,050<small> / mo</small></span></p>
-		              </a>
-		              <div class="text">
-			              <ul class="property_list">
-				              <li><span class="flaticon-bed"></span>3</li>
-				              <li><span class="flaticon-bathtub"></span>2</li>
-				              <li><span class="flaticon-floor-plan"></span>1,878 sqft</li>
-			              </ul>
-			              <h3><a href="#">The Blue Sky Home</a></h3>
-			              <span class="location">Oakland</span>
-			              <a href="#" class="d-flex align-items-center justify-content-center btn-custom">
-				              <span class="fa fa-link"></span>
-			              </a>
-			              <div class="list-team d-flex align-items-center mt-2 pt-2 border-top">
-				              <div class="d-flex align-items-center">
-					              <div class="img" style="background-image: url('images/person_1.jpg');"></div>
-					              <h3 class="ml-2">John Dorf</h3>
-				              </div>
-				              <span class="text-right">2 weeks ago</span>
-			              </div>
-		              </div>
-	              </div>
-	          </div>*@
-            </div>
-          </div>
-        </div>
-      </div>
+	      <div class="row">
+		   @foreach (var property in Model)
+		   {
+			   <div class="col-md-4">
+
+				   <div class="property-wrap ftco-animate">
+					   <a href="#" class="img" style="background-image: url('PropertyImages/@property.ImagePath[0]');">
+						   <div class="rent-sale">
+							   <span class="rent">Sale</span>
+						   </div>
+						   <p class="price"><span class="orig-price">#@property.PropertyPrice</span></p>
+					   </a>
+					   <div class="text">
+						   <ul class="property_list">
+							   <h3 class="heading">@property.Features</h3>
+							   <li><span class="flaticon-bed"></span>Bedroom:@property.Bedroom</li>
+							   <li><span class="flaticon-bathtub"></span>Toilet:@property.Toilet</li>
+							   <li><span class="flaticon-floor-plan"></span>Plot area:@property.LandArea</li>
+						   </ul>
+						   <span>@property.Address</span>
+						   <span class="location">@property.LGA, @property.State</span>
+						   <a href="#" class="d-flex align-items-center justify-content-center btn-custom">
+							   <span class="fa fa-link"></span>
+						   </a>
+						   <div class="list-team d-flex align-items-center mt-2 pt-2 border-top">
+							   <div class="d-flex align-items-center">
+								   <div class="img" style="background-image: url('images/work-1.jpg');"></div>
+								   <h3 class="ml-2">Registration No:@property.PropertyRegNumber</h3>
+							   </div>
+							   <span class="text-right">Property:@property.PropertyType</span>
+						   </div>
+					   </div>
+					      
+				   </div>
+			   </div>
+			     
+		   }
+	   </div>
+	   
+	 </div>
     </section>

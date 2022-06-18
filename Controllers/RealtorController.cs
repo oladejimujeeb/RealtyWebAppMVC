@@ -34,16 +34,11 @@ namespace RealtyWebApp.Controllers
             return View();
         }
         [HttpGet]
-        [Authorize]
-        public IActionResult RealtorDashBoard()
+        [Authorize (Roles = "Realtor")]
+        public IActionResult DashBoard()
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var realtorProperties = _realtorService.GetRealtorApprovedProperty(userId);
-            if (!realtorProperties.Status)
-            {
-                return View(realtorProperties.Message);
-            }
-
+            var realtorId = int.Parse(User.FindFirst(ClaimTypes.Name).Value);
+            var realtorProperties = _realtorService.GetRealtorApprovedProperty(realtorId);
             return View(realtorProperties.Data);
         }
         [Authorize]
@@ -53,13 +48,27 @@ namespace RealtyWebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize (Roles = "Realtor")]
         public async Task<IActionResult> AddNewProperty(PropertyRequestModel model)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var property = await _realtorService.AddProperty(model, userId);
+            var realtorId = int.Parse(User.FindFirst(ClaimTypes.Name).Value);
+            var property = await _realtorService.AddProperty(model, realtorId);
             if (property.Status)
             {
-                return RedirectToAction("RealtorDashBoard");
+                return RedirectToAction("DashBoard");
+            }
+
+            ViewBag.Message = property.Message;
+            return View();
+        }
+        [Authorize (Roles = "Realtor")]
+        public IActionResult UnApprovedProperties()
+        {
+            var realtorId = int.Parse(User.FindFirst(ClaimTypes.Name).Value);
+            var property = _realtorService.GetPropertyByRealtorId(realtorId);
+            if (property.Status)
+            {
+                return View(property.Data);
             }
 
             ViewBag.Message = property.Message;

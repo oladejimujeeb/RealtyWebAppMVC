@@ -4,36 +4,49 @@
     ViewBag.Title = "DashBoard";
     Layout = "_RealtorLayout";
 }
-
-<table class="table">
-    <thead class="thead-dark">
+<div class="card-content">
+<table>
+    <thead>
     <tr>
-        <th scope="col">Property Id</th>
-        <th scope="col">Property Type</th>
-        <th scope="col">Feature</th>
-        <th scope="col">Address</th>
-        <th scope="col">Local Govt</th>
-        <th scope="col">Price</th>
-        <th scope="col">Registration Date</th>
-        <th scope="col">Status</th>
-        <th scope="col">More Info</th>
+        <th>Property Id</th>
+        <th>Property Type</th>
+        <th>Feature</th>
+        <th>Address</th>
+        <th>State</th>
+        <th>Price</th>
+        <th>Registered Date</th>
+        <th>Status</th>
+        <th>More Info</th>
     </tr>
     </thead>
     <tbody>
-    @foreach (var pro in Model)
+    @if(Model!=null)
     {
-        <tr>
-            <th scope="row">@pro.PropertyRegNumber</th>
-            <td>@pro.PropertyType</td>
-            <td>@pro.Features</td>
-            <td>@pro.Address</td>
-            <td>@pro.LGA, @pro.State</td>
-            <td>@pro.PropertyPrice</td>
-            <td>@pro.RegisteredDate</td>
-            <td>@pro.Status</td>
-            <th> <a asp-action="" asp-route-Id="@pro.Id" class="btn btn-secondary">View</a> </th>
-        </tr>
+        @foreach (var pro in Model)
+        {
+            <tr>
+                <td>@pro.PropertyRegNumber</td>
+                <td>@pro.PropertyType</td>
+                <td>@pro.Features</td>
+                <td>@pro.Address</td>
+                <td>@pro.LGA, @pro.State</td>
+                <td>@pro.PropertyPrice</td>
+                <td>@pro.RegisteredDate</td>
+                <td>@pro.Status</td>
+                <td class="actions-cell">
+                    <div  class="buttons right nowrap">
+                        <a class="button small green --jb-modal" type="button" asp-controller="Realtor" asp-action="" asp-route-Id="@pro.Id">
+                            <span class="icon"><i class="mdi mdi-eye"></i></span>
+                        </a>
+                    </div>
+                </td>
+                
+                
+            </tr>
+        }
+
     }
     
     </tbody>
 </table>
+</div>
