@@ -14,8 +14,7 @@ namespace RealtyWebApp.Models.RequestModel
         public string LastName { get; set; }
         
         [Required]
-        [RegularExpression("@ .com")]
-        [DataType(DataType.EmailAddress)]
+        
         public string Email { get; set; }
         
         [Required]

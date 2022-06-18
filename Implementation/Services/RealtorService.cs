@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,8 +25,11 @@ namespace RealtyWebApp.Implementation.Services
         private readonly IPropertyImage _propertyImage;
         private readonly IPropertyDocument _propertyDocument;
         private readonly IPropertyRepository _propertyRepository;
+        private readonly IUserRoleRepository _userRoleRepository;
 
-        public RealtorService(IRealtorRepository realtorRepository, IUserRepository userRepository, IRoleRepository roleRepository, IWebHostEnvironment webHostEnvironment, IPropertyImage propertyImage, IPropertyDocument propertyDocument, IPropertyRepository propertyRepository)
+        public RealtorService(IRealtorRepository realtorRepository, IUserRepository userRepository,
+            IRoleRepository roleRepository, IWebHostEnvironment webHostEnvironment, IPropertyImage propertyImage, 
+            IPropertyDocument propertyDocument, IPropertyRepository propertyRepository,IUserRoleRepository userRoleRepository)
         {
             _realtorRepository = realtorRepository;
             _userRepository = userRepository;
@@ -34,6 +38,7 @@ namespace RealtyWebApp.Implementation.Services
             _propertyImage = propertyImage;
             _propertyDocument = propertyDocument;
             _propertyRepository = propertyRepository;
+            _userRoleRepository = userRoleRepository;
         }
 
         public async Task<BaseResponseModel<RealtorDto>> RegisterRealtor(RealtorRequestModel model)
@@ -82,17 +87,17 @@ namespace RealtyWebApp.Implementation.Services
             {
                 Directory.CreateDirectory(basePath);
             }
-            var fileName = Path.GetFileNameWithoutExtension(model.ProfilePicture.FileName);
+            //var fileName = Path.GetFileNameWithoutExtension(model.ProfilePicture.FileName);
             var filePath = Path.Combine(basePath, model.ProfilePicture.FileName);
             var extension = Path.GetExtension(model.ProfilePicture.FileName);
-            if (!System.IO.File.Exists(filePath))
+            if (!System.IO.File.Exists(filePath)&& extension==".jpg"|| extension ==".png"|| extension==".jpeg")
             {
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await model.ProfilePicture.CopyToAsync(stream);
                 }
 
-                user.ProfilePicture = fileName;
+                user.ProfilePicture = filePath;
                 await _userRepository.Add(user);
             }
 
@@ -125,7 +130,8 @@ namespace RealtyWebApp.Implementation.Services
             userInfo.Password = model.Password;
             userInfo.FirstName = model.LastName;
             userInfo.PhoneNumber = model.PhoneNumber;
-            var realtor = await _realtorRepository.Get(x => x.Id == userInfo.Realtor.Id);
+            var realtor = await _realtorRepository.Get(x => x.UserId == id);
+            //var getRealtorId = await _userRoleRepository.
             if (realtor == null)
             {
                 return new BaseResponseModel<RealtorDto>(){Message = "Failed to update", Status = false};
@@ -145,15 +151,6 @@ namespace RealtyWebApp.Implementation.Services
 
         public async Task<BaseResponseModel<PropertyDto>> AddProperty(PropertyRequestModel model, int id)
         {
-            var getRealtor = await _realtorRepository.Get(x => x.Id == id);
-            if (getRealtor==null)
-            {
-                return new BaseResponseModel<PropertyDto>()
-                {
-                    Status = false,
-                    Message = "Failed"
-                };
-            }
             var addProperty = new Property()
             {
                 VerificationStatus = false,
@@ -166,11 +163,14 @@ namespace RealtyWebApp.Implementation.Services
                 Price = model.Price,
                 BuildingType = model.BuildingType,
                 PropertyType = model.PropertyType,
-                RealtorId = getRealtor.Id,//Possible modification here to realtorId
+                RealtorId = id,
                 IsAvailable = true,
                 Status = Status.UnderReview.ToString(),
                 PlotArea = model.PlotArea,
+                RegisteredDate = DateTime.UtcNow,
                 PropertyRegNo = $"PTY{Guid.NewGuid().ToString().Substring(0, 4)}",
+                LGA = model.LGA,
+                State = model.State,
             };
             //AddingProperty Image
             foreach (var image in model.Images)
@@ -195,7 +195,8 @@ namespace RealtyWebApp.Implementation.Services
                         DocumentName = fileName,
                         Description = model.FileDescription,
                         DocumentPath = filePath,
-                        UploadedBy = getRealtor.Id,
+                        UploadedBy = id,
+                        //PropertyId = addProperty.Id,
                         PropertyRegNo = addProperty.PropertyRegNo
                     };
                     addProperty.PropertyImages.Add(imageModel);
@@ -209,12 +210,13 @@ namespace RealtyWebApp.Implementation.Services
                 var extension = Path.GetExtension(file.FileName);
                 var fileModel = new PropertyDocument()
                 {
-                    CreatedOn = DateTime.UtcNow,
+                    CreatedOn = DateTime.Now,
                     FileType = file.ContentType,
                     Extension = extension,
-                    DocumentName = fileName,
+                    DocumentName = $"{fileName}{extension}",
                     Description = model.FileDescription,
-                    UploadedBy = getRealtor.Id,
+                    UploadedBy = id,
+                    //PropertyId = addProperty.Id,
                     PropertyRegNo = addProperty.PropertyRegNo
                 };
                 using (var dataStream = new MemoryStream())
@@ -229,17 +231,151 @@ namespace RealtyWebApp.Implementation.Services
             var registerProperty = await _propertyRepository.Add(addProperty);
             if (registerProperty != addProperty)
             {
-                
+                return new BaseResponseModel<PropertyDto>()
+                {
+                    Message = "Property Successfully failed",
+                    Status = false,
+                };
             }
             return new BaseResponseModel<PropertyDto>()
             {
                 Message = "Property Successfully Registered",
                 Status = true,
-                Data = new PropertyDto()
+                Data =new PropertyDto()
                 {
-                    PropertyRegNumber = registerProperty.PropertyRegNo
+                    ImagePath = registerProperty.PropertyImages.Select(x=>x.DocumentName).ToList()
                 }
                 
+            };
+        }
+
+        public BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByRealtorId(int realtorId)
+        {
+            var getProperty = _propertyRepository.QueryWhere(x => x.RealtorId == realtorId && x.BuyerIdentity==0).
+                Select(x=>new PropertyDto()
+                {
+                    Id = x.Id,
+                    Address = x.Address,
+                    Bedroom = x.Bedroom,
+                    Features = x.Features,
+                    IsSold = x.IsSold,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
+                    Toilet = x.Toilet,
+                    BuildingType = x.BuildingType,
+                    LandArea = x.PlotArea,
+                    PropertyPrice = x.Price,
+                    RealtorId = x.RealtorId,
+                    PropertyType = x.PropertyType,
+                    PropertyRegNumber = x.PropertyRegNo,
+                    Action = x.Action,
+                    Status = x.Status,
+                    VerificationStatus = x.VerificationStatus,
+                    IsAvailable = x.IsAvailable,
+                    PropertyRegNo = x.PropertyRegNo,
+                    LGA = x.LGA,
+                    State = x.State,
+                    ImagePath = x.PropertyImages.Select(z=>z.DocumentName).ToList(),//Possible Error
+                }).ToList();
+            if (getProperty.Count == 0)
+            {
+                return new BaseResponseModel<IEnumerable<PropertyDto>>()
+                {
+                    Status = false,
+                    Message = "No information"
+                };
+            }
+            
+            return new BaseResponseModel<IEnumerable<PropertyDto>>()
+            {
+                Status = true,
+                Data =getProperty
+            };
+        }
+
+        public BaseResponseModel<IEnumerable<PropertyDto>> GetSoldPropertyByRealtor(int realtorId)
+        {
+            var getProperty = _propertyRepository.QueryWhere(x => x.RealtorId == realtorId && x.IsSold).
+                Select(x=>new PropertyDto()
+                {
+                    Id = x.Id,
+                    Address = x.Address,
+                    Bedroom = x.Bedroom,
+                    Features = x.Features,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
+                    Toilet = x.Toilet,
+                    BuildingType = x.BuildingType,
+                    BuyerId = x.BuyerIdentity,
+                    LandArea = x.PlotArea,
+                    PropertyPrice = x.Price,
+                    RealtorId = x.RealtorId,
+                    PropertyType = x.PropertyType,
+                    PropertyRegNumber = x.PropertyRegNo,
+                    Action = x.Action,
+                    Status = x.Status,
+                    VerificationStatus = x.VerificationStatus,
+                    IsAvailable = x.IsAvailable,
+                    PropertyRegNo = x.PropertyRegNo,
+                    IsSold = x.IsSold,
+                    LGA = x.LGA,
+                    State = x.State,
+                }).ToList();
+            if (getProperty.Count == 0)
+            {
+                return new BaseResponseModel<IEnumerable<PropertyDto>>()
+                {
+                    Status = false,
+                    Message = "No information"
+                };
+            }
+            return new BaseResponseModel<IEnumerable<PropertyDto>>()
+            {
+                Status = true,
+                Data =getProperty
+            };
+        }
+
+        public BaseResponseModel<IEnumerable<PropertyDto>> GetRealtorApprovedProperty(int id)
+        {
+            var getProperty = _propertyRepository.QueryWhere(x => x.RealtorId == id && x.VerificationStatus).
+                Select(x=>new PropertyDto()
+                {
+                    Id = x.Id,
+                    Address = x.Address,
+                    Bedroom = x.Bedroom,
+                    Features = x.Features,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
+                    Toilet = x.Toilet,
+                    BuildingType = x.BuildingType,
+                    BuyerId = x.BuyerIdentity,
+                    LandArea = x.PlotArea,
+                    PropertyPrice = x.Price,
+                    RealtorId = x.RealtorId,
+                    PropertyType = x.PropertyType,
+                    PropertyRegNumber = x.PropertyRegNo,
+                    Action = x.Action,
+                    Status = x.Status,
+                    VerificationStatus = x.VerificationStatus,
+                    IsAvailable = x.IsAvailable,
+                    PropertyRegNo = x.PropertyRegNo,
+                    LGA = x.LGA,
+                    State = x.State,
+                    //ImagePath = x.PropertyImages.Select(z=>z.DocumentName).ToList(),//Possible Error
+                }).ToList();
+            if (getProperty.Count == 0)
+            {
+                return new BaseResponseModel<IEnumerable<PropertyDto>>()
+                {
+                    Status = false,
+                    Message = "No information"
+                };
+            }
+            return new BaseResponseModel<IEnumerable<PropertyDto>>()
+            {
+                Status = true,
+                Data =getProperty
             };
         }
     }

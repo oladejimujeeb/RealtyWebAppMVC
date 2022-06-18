@@ -307,7 +307,10 @@ namespace RealtyWebApp.Migrations
                     b.Property<string>("BuildingType")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("BuyerId")
+                    b.Property<int?>("BuyerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BuyerIdentity")
                         .HasColumnType("int");
 
                     b.Property<string>("Features")
@@ -315,6 +318,12 @@ namespace RealtyWebApp.Migrations
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsSold")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("LGA")
+                        .HasColumnType("longtext");
 
                     b.Property<double>("Latitude")
                         .HasColumnType("double");
@@ -336,6 +345,12 @@ namespace RealtyWebApp.Migrations
 
                     b.Property<int>("RealtorId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("RegisteredDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Status")
                         .HasColumnType("longtext");
@@ -390,6 +405,9 @@ namespace RealtyWebApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("BuyerEmail")
                         .HasColumnType("longtext");
 
@@ -404,6 +422,9 @@ namespace RealtyWebApp.Migrations
 
                     b.Property<int>("PropertyId")
                         .HasColumnType("int");
+
+                    b.Property<string>("PropertyRegNo")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PropertyType")
                         .HasColumnType("longtext");
@@ -444,16 +465,20 @@ namespace RealtyWebApp.Migrations
 
             modelBuilder.Entity("RealtyWebApp.Entities.File.PropertyDocument", b =>
                 {
-                    b.HasOne("RealtyWebApp.Entities.Property", null)
+                    b.HasOne("RealtyWebApp.Entities.Property", "Property")
                         .WithMany("PropertyDocuments")
                         .HasForeignKey("PropertyId");
+
+                    b.Navigation("Property");
                 });
 
             modelBuilder.Entity("RealtyWebApp.Entities.File.PropertyImage", b =>
                 {
-                    b.HasOne("RealtyWebApp.Entities.Property", null)
+                    b.HasOne("RealtyWebApp.Entities.Property", "Property")
                         .WithMany("PropertyImages")
                         .HasForeignKey("PropertyId");
+
+                    b.Navigation("Property");
                 });
 
             modelBuilder.Entity("RealtyWebApp.Entities.Identity.UserRole", b =>
@@ -488,19 +513,15 @@ namespace RealtyWebApp.Migrations
 
             modelBuilder.Entity("RealtyWebApp.Entities.Property", b =>
                 {
-                    b.HasOne("RealtyWebApp.Entities.Buyer", "Buyer")
+                    b.HasOne("RealtyWebApp.Entities.Buyer", null)
                         .WithMany("Properties")
-                        .HasForeignKey("BuyerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BuyerId");
 
                     b.HasOne("RealtyWebApp.Entities.Realtor", "Realtor")
                         .WithMany("Properties")
                         .HasForeignKey("RealtorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Buyer");
 
                     b.Navigation("Realtor");
                 });

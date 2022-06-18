@@ -1,0 +1,39 @@
+@model System.Collections.Generic.IEnumerable<RealtyWebApp.DTOs.PropertyDto>
+
+@{
+    ViewBag.Title = "DashBoard";
+    Layout = "_RealtorLayout";
+}
+
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Property Id</th>
+        <th scope="col">Property Type</th>
+        <th scope="col">Feature</th>
+        <th scope="col">Address</th>
+        <th scope="col">Local Govt</th>
+        <th scope="col">Price</th>
+        <th scope="col">Registration Date</th>
+        <th scope="col">Status</th>
+        <th scope="col">More Info</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var pro in Model)
+    {
+        <tr>
+            <th scope="row">@pro.PropertyRegNumber</th>
+            <td>@pro.PropertyType</td>
+            <td>@pro.Features</td>
+            <td>@pro.Address</td>
+            <td>@pro.LGA, @pro.State</td>
+            <td>@pro.PropertyPrice</td>
+            <td>@pro.RegisteredDate</td>
+            <td>@pro.Status</td>
+            <th> <a asp-action="" asp-route-Id="@pro.Id" class="btn btn-secondary">View</a> </th>
+        </tr>
+    }
+    
+    </tbody>
+</table>

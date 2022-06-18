@@ -11,7 +11,7 @@ namespace RealtyWebApp.Interface.IServices
         BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByRealtor(int realtyId);
         BaseResponseModel<IEnumerable<PropertyDto>> GetSoldPropertyByRealtor(int realtyId);
         BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByBuyer(int buyerId);
-        BaseResponseModel<IEnumerable<PropertyDto>> GetRealtorApprovedProperty(int Id);
-        BaseResponseModel<IEnumerable<PropertyDto>> AllProperty();
+        BaseResponseModel<IEnumerable<PropertyDto>> GetRealtorApprovedProperty(int id);
+        BaseResponseModel<IEnumerable<PropertyDto>> AllUnverifiedProperty();
     }
 }

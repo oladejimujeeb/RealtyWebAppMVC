@@ -12,6 +12,8 @@ namespace RealtyWebApp.Entities
         public string PropertyType{ get; set; }
         public int PropertyId { get; set; }
         public Property Property{ get; set; }
+        public string PropertyRegNo { get; set; }
         public DateTime? RequestDate { get; set; }
+        public string Address { get; set; }
     }
 }

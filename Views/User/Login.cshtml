@@ -1,0 +1,77 @@
+@model RealtyWebApp.Models.RequestModel.LoginModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_Layout";
+}
+<body class="img js-fullheight" style="background-image: url('wwwroot/images/bg_0.jpg');">
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">Login #10</h2>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-6 col-lg-4">
+					<div class="login-wrap p-0">
+		      	<h3 class="mb-4 text-center">Have an account?</h3>
+						<form asp-action="Login" class="signin-form">
+							 @if(!string.IsNullOrEmpty(ViewBag.Message))
+                             {
+                                 <script >alert('Invalid Login Credential')</script>
+                             }
+                                    
+							<div class="form-group">
+								<input asp-for="Email" name="Email" type="email" class="form-control" placeholder="Email" required>
+							</div>
+							<div class="form-group">
+								<input id="password-field" name="Password" type="password" class="form-control" placeholder="Password" required>
+								<span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+							</div>
+							<div class="form-group">
+								<button type="submit" class="form-control btn btn-success ">Sign In</button>
+							</div>
+							<div class="form-group d-md-flex">
+								<div class="w-50">
+									<label class="checkbox-wrap checkbox-primary" style="color: green" >Remember Me
+										<input type="checkbox" checked>
+										<span class="checkmark"></span>
+									</label>
+								</div>
+								<div class="w-50 text-md-right">
+									<a href="#" style="color: green">Forgot Password</a>
+								</div>
+							</div>
+						</form>
+	          <p class="w-100 text-center" style="color: green">&mdash;Sign In Here &mdash;</p>
+		          <div class="text-center">
+	          		<a asp-controller="Realtor" asp-action="RealtorRegistration" class="px-2 py-2 mr-md-1 rounded btn btn-success ">Realtor</a>
+	          		<a asp-controller="Buyer" asp-action="BuyerRegistration" class="px-2 py-2 ml-md-1 rounded btn btn-success">Client</a>
+		          </div>
+		      </div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+@*<div>
+    <form asp-action="Login">
+          @if(!string.IsNullOrEmpty(ViewBag.Message))
+         {
+             <script >alert('Invalid Login Credential')</script>
+         }
+        <div>
+            <label style="padding-right: 90px">Email</label>
+            <input asp-for="Email" type="email" name="Email"  placeholder="email" required>
+        </div>
+        <div>
+            <label style="padding-right: 60px">Password</label>
+            <input type="password" name="Password" placeholder="password" required>
+        </div>
+        <div>
+            <input type="submit" value="submit" class="btn btn-primary">
+        </div>
+    </form>
+</div>
+
+</body>*@

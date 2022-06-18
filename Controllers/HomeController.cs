@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RealtyWebApp.Interface.IServices;
 using RealtyWebApp.Models;
 
 namespace RealtyWebApp.Controllers
@@ -12,15 +13,24 @@ namespace RealtyWebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IPropertyService _propertyService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IPropertyService propertyService)
         {
             _logger = logger;
+            _propertyService = propertyService;
         }
-
+        [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            var allProperty = _propertyService.AllAvailablePropertyWithImage();
+            if (allProperty.Status)
+            {
+                _logger.LogInformation("loading");
+                return View(allProperty.Data);
+            }
+
+            return BadRequest(allProperty.Message);
         }
 
         public IActionResult Privacy()

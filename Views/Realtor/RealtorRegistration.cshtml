@@ -1,0 +1,102 @@
+@model RealtyWebApp.Models.RequestModel.RealtorRequestModel
+
+@{
+    ViewBag.Title = "Create Account";
+    Layout = "_Layout";
+}
+
+<br>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class=" card col-md-6">
+            <div class="card-body ">
+                <div class="bg-light">
+                    <h1 class="tagcolor" style="color:green">Register</h1>
+                    <p class="tagcolor" style="color:green">Please fill in this form to create an account.</p>
+                    <hr class="tagcolor" style="color:green">
+                </div>
+                <form method="post" enctype="multipart/form-data"  asp-controller="Realtor" asp-action="RealtorRegistration">
+                     @if(!string.IsNullOrEmpty(ViewBag.Message))
+                      {
+                             <script > alert('Registration failed')</script>
+                           <div class="alert alert-success" role="alert">
+                              @ViewBag.Message
+                            </div>
+                      }
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-6">
+                            <label asp-for="FirstName" class="control-label"></label>
+                            <input asp-for="FirstName" class="form-control" required/>
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label asp-for="LastName" class="control-label"></label>
+                            <input asp-for="LastName" class="form-control"required/>
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-6">
+                            <label asp-for="PhoneNumber" class="control-label"></label>
+                            <input asp-for="PhoneNumber" type="tel" class="form-control"required/>
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" type="email" class="form-control" required/>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-row">
+                        <div class="form-group col-sm-6">
+                            <label asp-for="Password" class="control-label"></label>
+                            <input asp-for="Password" type="password" class="form-control" required/>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label asp-for="ConfirmPassword" class="control-label"></label>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control"required/>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                     <div class="form-row">
+                         <div class="form-group col-sm-6">
+                             <label asp-for="Address" class="control-label"></label>
+                             <input asp-for="Address" type="text" class="form-control" required/>
+                             <span asp-validation-for="Address" class="text-danger"></span>
+                         </div>
+                         <div class="form-group col-sm-6">
+                             <label asp-for="ProfilePicture" class="control-label">Profile Picture</label>
+                             <input name="ProfilePicture" type="file" class="form-control" required/>
+                             <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                         </div>
+                     </div>
+                     <div class="form-row">
+                         <div class="form-group col-sm-6">
+                             <label asp-for="BusinessName" class="control-label"></label>
+                             <input asp-for="BusinessName" type="text" class="form-control" required/>
+                             <span asp-validation-for="BusinessName" class="text-danger"></span>
+                         </div>
+                         <div class="form-group col-sm-6">
+                             <label asp-for="CacNumber" class="control-label"></label>
+                             <input asp-for="CacNumber" type="text" class="form-control" required/>
+                             <span asp-validation-for="CacNumber" class="text-danger"></span>
+                         </div>
+                     </div>
+                    <div class="form-group ">
+                        <input href="#myModal" type="submit" value="Submit" class="btn btn-success trigger-btn col-sm-12" data-toggle="modal"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

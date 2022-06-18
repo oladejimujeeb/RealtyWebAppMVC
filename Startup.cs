@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +11,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RealtyWebApp.Context;
+using RealtyWebApp.Implementation.Repositories;
+using RealtyWebApp.Implementation.Services;
+using RealtyWebApp.Interface.IRepositories;
+using RealtyWebApp.Interface.IServices;
 
 namespace RealtyWebApp
 {
@@ -26,9 +31,37 @@ namespace RealtyWebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped<IAdminRepository, AdminRepository>();
+            services.AddScoped<IRealtorRepository, RealtorRepository>();
+            services.AddScoped<IBuyerRepository, BuyerRepository>();
+            services.AddScoped<IPropertyRepository, PropertyRepository>();
+            services.AddScoped<IPropertyDocument, PropertyDocumentRepository>();
+            services.AddScoped<IVisitationRepository, VisitationRepository>();
+            services.AddScoped<IPropertyImage, PropertyImageRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleRepository,RoleRepository>();
+            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IBuyerService,BuyerService>();
+            services.AddScoped<IRealtorService, RealtorService>();
+            services.AddScoped<IPropertyImageService,PropertyImageService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IPropertyService, PropertyService>();
+            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
             services.AddDbContext<ApplicationContext>(options => options.UseMySql
                 (Configuration.GetConnectionString("ApplicationContext"),
                 ServerVersion.AutoDetect(Configuration.GetConnectionString("ApplicationContext"))));
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(config =>
+                {
+                    config.LoginPath = "/User/Login";
+                    config.Cookie.Name = "RealtyApp";
+                    config.LogoutPath = "/User/LogOut";
+                    config.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                    config.AccessDeniedPath = "/User/Login";
+    
+                });
+            services.AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,7 +82,9 @@ namespace RealtyWebApp
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            
+            app.UseAuthentication();
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

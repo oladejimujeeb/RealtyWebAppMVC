@@ -22,23 +22,15 @@ namespace RealtyWebApp.DTOs
     public class RealtorUpdateRequest
     {
         
-        [Required]
-        [MaxLength(30)]
         public string FirstName { get; set; }
         
-        [Required]
-        [MaxLength(30)]
         public string LastName { get; set; }
 
-        [Required]
         [MinLength(7)]
         [MaxLength(15)]
         public string Password{get;set;}
+        /*public string ConfirmPassword{get;set;}*/
         
-        [Required]
-        [Compare("Password",ErrorMessage = "Password and the confirm password must be the same")]
-        public string ConfirmPassword{get;set;}
-        [Required]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
         

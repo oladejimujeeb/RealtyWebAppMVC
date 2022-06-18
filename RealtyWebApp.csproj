@@ -14,4 +14,8 @@
       <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="wwwroot\bgImages\ima.jpg" />
+    </ItemGroup>
+
 </Project>
