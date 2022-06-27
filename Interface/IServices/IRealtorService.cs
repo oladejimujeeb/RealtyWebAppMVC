@@ -13,5 +13,8 @@ namespace RealtyWebApp.Interface.IServices
         BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByRealtorId(int realtorId);
         BaseResponseModel<IEnumerable<PropertyDto>> GetSoldPropertyByRealtor(int realtorId);
         BaseResponseModel<IEnumerable<PropertyDto>> GetRealtorApprovedProperty(int id);
+        Task<BaseResponseModel<PropertyDto>> GetProperty(int id);
+        Task<BaseResponseModel<RealtorDto>> GetUser(int id);
+        Task<BaseResponseModel<BaseResponseModel<PropertyDto>>> EditProperty(int propertyId, UpdatePropertyModel updateProperty);
     }
 }

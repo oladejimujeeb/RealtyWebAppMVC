@@ -12,7 +12,9 @@ namespace RealtyWebApp.DTOs
         public string PropertyAddress { get; set; }
         public string PropertyType { get; set; }
         public string PropertyRegNo { get; set; }
-        
+        public  string Message { get; set; }
+        public  string Mail { get; set; }
+        public double PropertyPrice { get; set; }
         public DateTime? RequestDate { get; set; }
     }
 }

@@ -4,6 +4,10 @@
     ViewBag.Title = "DashBoard";
     Layout = "_RealtorLayout";
 }
+ @if(!string.IsNullOrEmpty(ViewBag.Message))
+{
+ <script >alert('Updated Successfully')</script>
+}
 <div class="card-content">
 <table>
     <thead>
@@ -25,14 +29,14 @@
         @foreach (var pro in Model)
         {
             <tr>
-                <td>@pro.PropertyRegNumber</td>
-                <td>@pro.PropertyType</td>
-                <td>@pro.Features</td>
-                <td>@pro.Address</td>
-                <td>@pro.LGA, @pro.State</td>
-                <td>@pro.PropertyPrice</td>
-                <td>@pro.RegisteredDate</td>
-                <td>@pro.Status</td>
+                <td data-label="Property Id">@pro.PropertyRegNumber</td>
+                <td data-label="Property Type">@pro.PropertyType</td>
+                <td data-label="Features">@pro.Features</td>
+                <td data-label="Address">@pro.Address</td>
+                <td data-label="State">@pro.LGA, @pro.State</td>
+                <td data-label="Price">@pro.PropertyPrice.ToString("N")</td>
+                <td datat-label="Price">@pro.RegisteredDate</td>
+                <td data-label="Status">@pro.Status</td>
                 <td class="actions-cell">
                     <div  class="buttons right nowrap">
                         <a class="button small green --jb-modal" type="button" asp-controller="Realtor" asp-action="" asp-route-Id="@pro.Id">

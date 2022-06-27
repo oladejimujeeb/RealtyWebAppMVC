@@ -32,7 +32,7 @@ namespace RealtyWebApp.Context
             modelBuilder.Entity<User>().HasData(
                 new User()
                 {
-                    Id = 1,Email = "oladejimujib@yahoo.com",Password = "password",FirstName = "Mujib",LastName = "Oladeji",
+                    Id = 1,Email = "oladejimujib@yahoo.com",Password = BCrypt.Net.BCrypt.HashPassword("password"),FirstName = "Mujib",LastName = "Oladeji",
                     PhoneNumber = "08136794915",ProfilePicture = null
                 }
             );

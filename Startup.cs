@@ -25,12 +25,14 @@ namespace RealtyWebApp
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            
             services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<IRealtorRepository, RealtorRepository>();
             services.AddScoped<IBuyerRepository, BuyerRepository>();
@@ -57,7 +59,7 @@ namespace RealtyWebApp
                     config.LoginPath = "/User/Login";
                     config.Cookie.Name = "RealtyApp";
                     config.LogoutPath = "/User/LogOut";
-                    config.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                    config.ExpireTimeSpan = TimeSpan.FromMinutes(40);
                     config.AccessDeniedPath = "/User/Login";
     
                 });

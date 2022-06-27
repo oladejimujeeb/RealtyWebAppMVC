@@ -29,11 +29,11 @@
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
-	          <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Privacy" class="nav-link">About</a></li>
-	          <li class="nav-item"><a class="nav-link" >Agent</a></li>
+	          <li class="nav-item active"><a  asp-controller="Home" asp-action="index" class="nav-link">Home</a></li>
+	          <li class="nav-item"><a  asp-controller="Home" asp-action="Privacy" class="nav-link">About</a></li>
+	          <li class="nav-item"><a asp-controller="Realtor" asp-action="DashBoard" class="nav-link" >Agent</a></li>
 	          <li class="nav-item"><a href="" class="nav-link">Services</a></li>
-	          <li class="nav-item"><a href="" class="nav-link">Properties</a></li>
+	          <li class="nav-item"><a asp-controller="Home" asp-action="AllProperties" class="nav-link">Properties</a></li>
 	          <li class="nav-item"><a class="nav-link" asp-controller="User" asp-action="Login" >Login</a></li>
 	          <li class="nav-item"><a href="" class="nav-link">Contact</a></li>
 	        </ul>
@@ -42,7 +42,7 @@
 	  </nav>
     <!-- END nav -->
     
-    <section class="hero-wrap" style="background-image: url('images/bg_1.jpg');" data-stellar-background-ratio="0.5">
+    <section class="hero-wrap" style="background-image: url('/images/bg_1.jpg');" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
       <div class="container">
         <div class="row no-gutters slider-text align-items-center">
@@ -50,7 +50,7 @@
           	<div class="text">
 	            <h1 class="mb-4">Find Perfect <br>House From Your Area.</h1>
 	            <p style="font-size: 18px;">From as low as $20 A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-	            <p><a href="#" class="btn btn-primary py-3 px-4">View all properties</a></p>
+	            <p><a asp-controller="Home" asp-action="AllProperties" class="btn btn-primary py-3 px-4">View all properties</a></p>
             </div>
           </div>
         </div>
@@ -196,7 +196,7 @@
         </div>
     		<div class="row">
     			<div class="col-md-4">
-    				<a href="#" class="search-place img" style="background-image: url('images/place-1.jpg');">
+    				<a href="#" class="search-place img" style="background-image: url('/images/place-1.jpg');">
 							<div class="desc">
 								<h3><span>Ibadan</span></h3>
 								<span>24 Properties</span>
@@ -204,7 +204,7 @@
     				</a>
     			</div>
     			<div class="col-md-4">
-    				<a href="#" class="search-place img" style="background-image: url('images/place-2.jpg');">
+    				<a href="#" class="search-place img" style="background-image: url('/images/place-2.jpg');">
 							<div class="desc">
 								<h3><span>Abuja</span></h3>
 								<span>20 Properties</span>
@@ -212,7 +212,7 @@
     				</a>
     			</div>
     			<div class="col-md-4">
-    				<a href="#" class="search-place img" style="background-image: url('images/place-3.jpg');">
+    				<a href="#" class="search-place img" style="background-image: url('/images/place-3.jpg');">
 							<div class="desc">
 								<h3><span>Lagos</span></h3>
 								<span>15 Properties</span>
@@ -236,7 +236,7 @@
             <div class="media block-6 services services-2">
               <div class="media-body py-md-4 text-center">
               	<div class="icon mb-1 d-flex align-items-center justify-content-center"><span>01</span>
-              	<img src="images/blob.svg" alt="">
+              	<img src="/images/blob.svg" alt="">
               	</div>
                 <h3>Evaluate Property</h3>
                 <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
@@ -247,7 +247,7 @@
             <div class="media block-6 services services-2">
               <div class="media-body py-md-4 text-center">
               	<div class="icon mb-1 d-flex align-items-center justify-content-center"><span>02</span>
-              	<img src="images/blob.svg" alt=""></div>
+              	<img src="/images/blob.svg" alt=""></div>
                 <h3>Meet Your Agent</h3>
                 <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
               </div>
@@ -257,7 +257,7 @@
             <div class="media block-6 services services-2">
               <div class="media-body py-md-4 text-center">
               	<div class="icon mb-1 d-flex align-items-center justify-content-center"><span>03</span>
-              	<img src="images/blob.svg" alt=""></div>
+              	<img src="/images/blob.svg" alt=""></div>
                 <h3>Close the Deal</h3>
                 <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
               </div>
@@ -267,7 +267,7 @@
             <div class="media block-6 services services-2">
               <div class="media-body py-md-4 text-center">
               	<div class="icon mb-1 d-flex align-items-center justify-content-center"><span>04</span>
-              	<img src="images/blob.svg" alt=""></div>
+              	<img src="/images/blob.svg" alt=""></div>
                 <h3>Have Your Property</h3>
                 <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
               </div>
@@ -352,7 +352,7 @@
                   	<span class="fa fa-quote-left"></span>
                     <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
                     <div class="d-flex align-items-center">
-                    	<div class="user-img" style="background-image: url('images/person_1.jpg')"></div>
+                    	<div class="user-img" style="background-image: url('/images/person_1.jpg')"></div>
                     	<div class="pl-3">
 		                    <p class="name">Roger Scott</p>
 		                    <span class="position">Marketing Manager</span>
@@ -367,7 +367,7 @@
                   	<span class="fa fa-quote-left"></span>
                     <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
                     <div class="d-flex align-items-center">
-                    	<div class="user-img" style="background-image: url('images/person_2.jpg')"></div>
+                    	<div class="user-img" style="background-image: url('/images/person_2.jpg')"></div>
                     	<div class="pl-3">
 		                    <p class="name">Roger Scott</p>
 		                    <span class="position">Marketing Manager</span>
@@ -382,7 +382,7 @@
                   	<span class="fa fa-quote-left"></span>
                     <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
                     <div class="d-flex align-items-center">
-                    	<div class="user-img" style="background-image: url(images/person_3.jpg)"></div>
+                    	<div class="user-img" style="background-image: url('/images/person_3.jpg')"></div>
                     	<div class="pl-3">
 		                    <p class="name">Roger Scott</p>
 		                    <span class="position">Marketing Manager</span>
@@ -397,7 +397,7 @@
                   	<span class="fa fa-quote-left"></span>
                     <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
                     <div class="d-flex align-items-center">
-                    	<div class="user-img" style="background-image: url('images/person_1.jpg')"></div>
+                    	<div class="user-img" style="background-image: url('/images/person_1.jpg')"></div>
                     	<div class="pl-3">
 		                    <p class="name">Roger Scott</p>
 		                    <span class="position">Marketing Manager</span>
@@ -412,7 +412,7 @@
                   	<span class="fa fa-quote-left"></span>
                     <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
                     <div class="d-flex align-items-center">
-                    	<div class="user-img" style="background-image: url('images/person_2.jpg')"></div>
+                    	<div class="user-img" style="background-image: url('/images/person_2.jpg')"></div>
                     	<div class="pl-3">
 		                    <p class="name">Roger Scott</p>
 		                    <span class="position">Marketing Manager</span>
@@ -439,7 +439,7 @@
         	<div class="col-md-3 ftco-animate">
         		<div class="agent">
     					<div class="img">
-		    				<img src="images/team-1.jpg" class="img-fluid" alt="Colorlib Template">
+		    				<img src="/images/team-1.jpg" class="img-fluid" alt="Colorlib Template">
 		    				<div class="desc">
 		    					<h3><a href="properties.html">Carlos Henderson</a></h3>
 									<p class="h-info"><span class="location">Listing</span> <span class="details">10 Properties</span></p>
@@ -450,7 +450,7 @@
         	<div class="col-md-3 ftco-animate">
         		<div class="agent">
     					<div class="img">
-		    				<img src="images/team-2.jpg" class="img-fluid" alt="Colorlib Template">
+		    				<img src="/images/team-2.jpg" class="img-fluid" alt="Colorlib Template">
 	    				</div>
 	    				<div class="desc">
 	    					<h3><a href="properties.html">Mike Bochs</a></h3>
@@ -461,7 +461,7 @@
         	<div class="col-md-3 ftco-animate">
         		<div class="agent">
     					<div class="img">
-		    				<img src="images/team-3.jpg" class="img-fluid" alt="Colorlib Template">
+		    				<img src="/images/team-3.jpg" class="img-fluid" alt="Colorlib Template">
 	    				</div>
 	    				<div class="desc">
 	    					<h3><a href="properties.html">Jessica Moore</a></h3>
@@ -472,7 +472,7 @@
         	<div class="col-md-3 ftco-animate">
         		<div class="agent">
     					<div class="img">
-		    				<img src="images/team-4.jpg" class="img-fluid" alt="Colorlib Template">
+		    				<img src="/images/team-4.jpg" class="img-fluid" alt="Colorlib Template">
 	    				</div>
 	    				<div class="desc">
 	    					<h3><a href="properties.html">Sarah Geronimo</a></h3>

@@ -153,12 +153,12 @@ namespace RealtyWebApp.Implementation.Services
 
         public async Task<BaseResponseModel<VisitationRequestDto>> MakeVisitationRequest(int buyerId, int propertyId)
         {
-            var getBuyer =await _userRepository.Get(x => x.Id == buyerId);
+            var getBuyer =await _userRepository.Get(x => x.Buyer.Id == buyerId);
             var getProperty = await _propertyRepository.Get(x => x.Id == propertyId);
             var request = new VisitationRequest()
             {
                 BuyerEmail = getBuyer.Email,
-                BuyerId = getBuyer.Id,
+                BuyerId = buyerId,
                 BuyerName = $"{getBuyer.FirstName } {getBuyer.LastName}",
                 BuyerTelephone = getBuyer.PhoneNumber,
                 PropertyId = getProperty.Id,
@@ -178,7 +178,7 @@ namespace RealtyWebApp.Implementation.Services
                 request.RequestDate = date;
             }
 
-            getProperty.BuyerIdentity = buyerId;
+            //getProperty.BuyerIdentity = buyerId;
             var addVisitation =await _visitationRepository.Add(request);
             if (addVisitation != request)
             {
@@ -190,9 +190,22 @@ namespace RealtyWebApp.Implementation.Services
             }
             var scheduledDate = date;
             string visitDate = scheduledDate.ToString("dddd,dd MMMM yyyy");
+            
             return new BaseResponseModel<VisitationRequestDto>()
             {
-                
+                Data =new VisitationRequestDto()
+                {
+                    Id = request.BuyerId,
+                    PropertyRegNo = request.PropertyRegNo,
+                    PropertyAddress = request.Address,
+                    Message = $"Kind Visit Our office on {visitDate} for Property Inspection," +
+                              $" If Date is not convenient call Our Customer Service on 08136794915 to reschedule" +
+                              $" or Send a mail to us on oladejimujib@gmail.com ",
+                    BuyerName = request.BuyerName,
+                    BuyerPhoneNo = request.BuyerTelephone,
+                    PropertyPrice = getProperty.Price,
+                    Mail = request.BuyerEmail
+                },
                 Status = true,
                 Message = $"Kind Visit Our office on {visitDate} for Property Inspection," +
                           $" If Date is not convenient call Our Customer Service on 08136794915 to reschedule ",

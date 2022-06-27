@@ -138,19 +138,25 @@
       <li class="--set-active-tables-html">
         <a asp-controller="Realtor" asp-action="UnApprovedProperties">
           <span class="icon"><i class="mdi mdi-table"></i></span>
-          <span class="menu-item-label">Unapproved Properties</span>
+          <span class="menu-item-label">My Unapproved Properties</span>
         </a>
       </li>
       <li class="--set-active-forms-html">
-        <a asp-action="AddNewProperty">
+        <a asp-controller="Realtor" asp-action="AddNewProperty">
           <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
           <span class="menu-item-label">Add Property</span>
         </a>
       </li>
+      <li class="--set-active-forms-html">
+        <a asp-controller="Realtor" asp-action="RealtorSoldProperty">
+          <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
+          <span class="menu-item-label">My Sold Property</span>
+        </a>
+      </li>
       <li class="--set-active-profile-html">
-        <a href="profile.html">
+        <a asp-controller="Realtor" asp-action="UpdateProfileInfo">
           <span class="icon"><i class="mdi mdi-account-circle"></i></span>
-          <span class="menu-item-label">Profile</span>
+          <span class="menu-item-label">Edit Profile</span>
         </a>
       </li>
       <li>
@@ -159,7 +165,7 @@
           <span class="menu-item-label">LogOut</span>
         </a>
       </li>
-      <li>
+      @*<li>
         <a class="dropdown">
           <span class="icon"><i class="mdi mdi-view-list"></i></span>
           <span class="menu-item-label">Submenus</span>
@@ -177,16 +183,16 @@
             </a>
           </li>
         </ul>
-      </li>
+      </li>*@
     </ul>
     <p class="menu-label">About</p>
     <ul class="menu-list">
-      <li>
-        <a href="https://justboil.me" onclick="alert('Coming soon'); return false" target="_blank" class="has-icon">
+      @*<li>
+        <a href="https://justboil.me" target="_blank" class="has-icon">
           <span class="icon"><i class="mdi mdi-credit-card-outline"></i></span>
           <span class="menu-item-label">Premium Demo</span>
         </a>
-      </li>
+      </li>*@
       <li>
         <a href="https://justboil.me/tailwind-admin-templates" class="has-icon">
           <span class="icon"><i class="mdi mdi-help-circle"></i></span>
@@ -196,7 +202,7 @@
       <li>
         <a href="https://github.com/justboil/admin-one-tailwind" class="has-icon">
           <span class="icon"><i class="mdi mdi-github-circle"></i></span>
-          <span class="menu-item-label">GitHub</span>
+          <span class="menu-item-label">Chat with Admin</span>
         </a>
       </li>
     </ul>

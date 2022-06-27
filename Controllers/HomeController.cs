@@ -20,8 +20,12 @@ namespace RealtyWebApp.Controllers
             _logger = logger;
             _propertyService = propertyService;
         }
-        [HttpGet]
+       
         public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult AllProperties()
         {
             var allProperty = _propertyService.AllAvailablePropertyWithImage();
             if (allProperty.Status)
@@ -30,7 +34,19 @@ namespace RealtyWebApp.Controllers
                 return View(allProperty.Data);
             }
 
-            return BadRequest(allProperty.Message);
+            return Content("No Available Property");
+        }
+    
+        public async Task<IActionResult> Property(int id)
+        {
+            var property =await _propertyService.GetProperty(id);
+            if (property.Status)
+            {
+                return View(property.Data);
+            }
+
+            ViewBag.Message = property.Message;
+            return View();
         }
 
         public IActionResult Privacy()

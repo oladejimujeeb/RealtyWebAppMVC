@@ -222,18 +222,21 @@ namespace RealtyWebApp.Implementation.Services
                     Message = "Update failed",
                 };
             }
+
+            if (updateProperty.Status == "Approved")
+            {
+                getProperty.IsAvailable =true;
+                getProperty.VerificationStatus = true;
+            }
             getProperty.Address = updateProperty.Address;
             getProperty.Bedroom = updateProperty.Bedroom;
             getProperty.Features = updateProperty.Features;
             getProperty.Latitude = updateProperty.Latitude;
             getProperty.Longitude = updateProperty.Longitude;
             getProperty.Price = updateProperty.Price;
-            getProperty.Status = updateProperty.Status.ToString();
+            getProperty.Status = updateProperty.Status;
             getProperty.Toilet = updateProperty.Toilet;
             getProperty.BuildingType = updateProperty.BuildingType;
-            getProperty.IsAvailable = updateProperty.IsAvailable;
-            getProperty.IsSold = updateProperty.IsSold;
-            getProperty.VerificationStatus = updateProperty.VerificationStatus;
             getProperty.PlotArea = updateProperty.PlotArea;
             getProperty.PropertyType = updateProperty.PropertyType;
             getProperty.LGA = updateProperty.LGA;

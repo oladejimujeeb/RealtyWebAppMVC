@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using RealtyWebApp.DTOs;
@@ -52,7 +54,9 @@ namespace RealtyWebApp.Implementation.Services
                     Status = getProperty.Status,
                     VerificationStatus = getProperty.VerificationStatus,
                     IsAvailable = getProperty.IsAvailable,
-                    //ImagePath = getProperty.PropertyImages.Select(z=>z.DocumentPath).ToList(),
+                    LGA = getProperty.LGA,
+                    State = getProperty.State,
+                    ImagePath = _propertyImage.QueryWhere(y=>y.PropertyRegNo==getProperty.PropertyRegNo).Select(y=>y.DocumentName).ToList(),
                 },
                 Message = "load successfully"
             };
@@ -86,6 +90,7 @@ namespace RealtyWebApp.Implementation.Services
                     State = x.State,
                     ImagePath = _propertyImage.QueryWhere(y=>y.PropertyRegNo==x.PropertyRegNo).Select(y=>y.DocumentName).ToList()
                 }).ToList();
+            
             if (getProperty.Count == 0)
             {
                 return new BaseResponseModel<IEnumerable<PropertyDto>>()

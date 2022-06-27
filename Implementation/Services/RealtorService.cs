@@ -26,10 +26,11 @@ namespace RealtyWebApp.Implementation.Services
         private readonly IPropertyDocument _propertyDocument;
         private readonly IPropertyRepository _propertyRepository;
         private readonly IUserRoleRepository _userRoleRepository;
+        private readonly IPaymentRepository _paymentRepository;
 
-        public RealtorService(IRealtorRepository realtorRepository, IUserRepository userRepository,
-            IRoleRepository roleRepository, IWebHostEnvironment webHostEnvironment, IPropertyImage propertyImage, 
-            IPropertyDocument propertyDocument, IPropertyRepository propertyRepository,IUserRoleRepository userRoleRepository)
+        public RealtorService(IRealtorRepository realtorRepository, IUserRepository userRepository, IRoleRepository roleRepository, 
+            IWebHostEnvironment webHostEnvironment, IPropertyImage propertyImage, IPropertyDocument propertyDocument, 
+            IPropertyRepository propertyRepository, IUserRoleRepository userRoleRepository, IPaymentRepository paymentRepository)
         {
             _realtorRepository = realtorRepository;
             _userRepository = userRepository;
@@ -39,6 +40,7 @@ namespace RealtyWebApp.Implementation.Services
             _propertyDocument = propertyDocument;
             _propertyRepository = propertyRepository;
             _userRoleRepository = userRoleRepository;
+            _paymentRepository = paymentRepository;
         }
 
         public async Task<BaseResponseModel<RealtorDto>> RegisterRealtor(RealtorRequestModel model)
@@ -127,7 +129,7 @@ namespace RealtyWebApp.Implementation.Services
         {
             var userInfo = await _userRepository.Get(x => x.Id == id);
             userInfo.FirstName = model.FirstName;
-            userInfo.Password = model.Password;
+            userInfo.Password = BCrypt.Net.BCrypt.HashPassword(model.Password);
             userInfo.FirstName = model.LastName;
             userInfo.PhoneNumber = model.PhoneNumber;
             var realtor = await _realtorRepository.Get(x => x.UserId == id);
@@ -144,7 +146,8 @@ namespace RealtyWebApp.Implementation.Services
             return new BaseResponseModel<RealtorDto>()
             {
                 Status = true,
-                Message = "Update Successfully"
+                Message = "Update Successfully",
+               
             };
 
         }
@@ -273,6 +276,7 @@ namespace RealtyWebApp.Implementation.Services
                     VerificationStatus = x.VerificationStatus,
                     IsAvailable = x.IsAvailable,
                     PropertyRegNo = x.PropertyRegNo,
+                    RegisteredDate = x.RegisteredDate,
                     LGA = x.LGA,
                     State = x.State,
                     ImagePath = _propertyImage.QueryWhere(y=>y.PropertyRegNo==x.PropertyRegNo).Select(y=>y.DocumentName).ToList()
@@ -295,6 +299,7 @@ namespace RealtyWebApp.Implementation.Services
 
         public BaseResponseModel<IEnumerable<PropertyDto>> GetSoldPropertyByRealtor(int realtorId)
         {
+            
             var getProperty = _propertyRepository.QueryWhere(x => x.RealtorId == realtorId && x.IsSold).
                 Select(x=>new PropertyDto()
                 {
@@ -312,12 +317,8 @@ namespace RealtyWebApp.Implementation.Services
                     RealtorId = x.RealtorId,
                     PropertyType = x.PropertyType,
                     PropertyRegNumber = x.PropertyRegNo,
-                    Action = x.Action,
-                    Status = x.Status,
-                    VerificationStatus = x.VerificationStatus,
-                    IsAvailable = x.IsAvailable,
                     PropertyRegNo = x.PropertyRegNo,
-                    IsSold = x.IsSold,
+                    RegisteredDate = x.RegisteredDate,
                     LGA = x.LGA,
                     State = x.State,
                 }).ToList();
@@ -326,7 +327,7 @@ namespace RealtyWebApp.Implementation.Services
                 return new BaseResponseModel<IEnumerable<PropertyDto>>()
                 {
                     Status = false,
-                    Message = "No information"
+                    Message = "We have not sold any of your properties, You many contact the Admin for more infomation"
                 };
             }
             return new BaseResponseModel<IEnumerable<PropertyDto>>()
@@ -362,6 +363,7 @@ namespace RealtyWebApp.Implementation.Services
                     PropertyRegNo = x.PropertyRegNo,
                     LGA = x.LGA,
                     State = x.State,
+                    RegisteredDate = x.RegisteredDate,
                     ImagePath = _propertyImage.QueryWhere(y=>y.PropertyRegNo==x.PropertyRegNo).Select(y=>y.DocumentName).ToList()
                 }).ToList();
             if (getProperty.Count == 0)
@@ -376,6 +378,111 @@ namespace RealtyWebApp.Implementation.Services
             {
                 Status = true,
                 Data =getProperty
+            };
+        }
+
+        public async Task<BaseResponseModel<PropertyDto>> GetProperty(int id)
+        {
+            var x = await _propertyRepository.Get(y => y.Id == id);
+            if (x != null)
+            {
+                return new BaseResponseModel<PropertyDto>()
+                {
+                    Status = true,
+                    Data = new PropertyDto()
+                    {
+                        Id = x.Id,
+                        Address = x.Address,
+                        Bedroom = x.Bedroom,
+                        Features = x.Features,
+                        Latitude = x.Latitude,
+                        Longitude = x.Longitude,
+                        Toilet = x.Toilet,
+                        BuildingType = x.BuildingType,
+                        BuyerId = x.BuyerIdentity,
+                        LandArea = x.PlotArea,
+                        PropertyPrice = x.Price,
+                        RealtorId = x.RealtorId,
+                        RegisteredDate = x.RegisteredDate,
+                        PropertyType = x.PropertyType,
+                        PropertyRegNumber = x.PropertyRegNo,
+                        LGA = x.LGA,
+                        State = x.State,
+                    }
+                };
+            }
+
+            return new BaseResponseModel<PropertyDto>()
+            {
+                Status = false,
+                Message = "Could not retrieved property"
+            };
+        }
+
+        public async Task<BaseResponseModel<RealtorDto>> GetUser(int id)
+        {
+            var userInfo = await _userRepository.Get(x => x.Id == id);
+            var realtor = await _realtorRepository.Get(x => x.UserId == userInfo.Id);
+            if (userInfo == null)
+            {
+                return new BaseResponseModel<RealtorDto>()
+                {
+                    Status = false,
+                    Message = "failed"
+                };
+            }
+
+            return new BaseResponseModel<RealtorDto>()
+            {
+                Status = true,
+                Data = new RealtorDto()
+                {
+                  Mail  = userInfo.Email,
+                  PhoneNumber = userInfo.PhoneNumber,
+                  Address = realtor.Address,
+                  BusinessName = realtor.BusinessName,
+                  FName = userInfo.FirstName,
+                  LName = userInfo.LastName,
+                }
+            };
+        }
+
+        public async Task<BaseResponseModel<BaseResponseModel<PropertyDto>>> EditProperty(int propertyId, UpdatePropertyModel updateProperty)
+        {
+            var getProperty = await _propertyRepository.Get(x => x.Id == propertyId);
+            if (getProperty == null)
+            {
+                return new BaseResponseModel<BaseResponseModel<PropertyDto>>()
+                {
+                    Status = false,
+                    Message = "Update failed",
+                };
+            }
+            getProperty.Address = updateProperty.Address;
+            getProperty.Bedroom = updateProperty.Bedroom;
+            getProperty.Features = updateProperty.Features;
+            getProperty.Latitude = updateProperty.Latitude;
+            getProperty.Longitude = updateProperty.Longitude;
+            getProperty.Price = updateProperty.Price;
+            getProperty.Toilet = updateProperty.Toilet;
+            getProperty.BuildingType = updateProperty.BuildingType;
+            getProperty.PlotArea = updateProperty.PlotArea;
+            getProperty.PropertyType = updateProperty.PropertyType;
+            getProperty.LGA = updateProperty.LGA;
+            getProperty.State = updateProperty.State;
+            var upDate = await _propertyRepository.Update(getProperty);
+            if (upDate == null)
+            {
+                return new BaseResponseModel<BaseResponseModel<PropertyDto>>()
+                {
+                    Status = false,
+                    Message = "Update failed",
+                };
+            }
+            return new BaseResponseModel<BaseResponseModel<PropertyDto>>()
+            {
+                Status = true,
+                Message = $"Property {upDate.PropertyRegNo} updated successfully"
             };
         }
     }

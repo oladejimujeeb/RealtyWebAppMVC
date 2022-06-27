@@ -37,15 +37,15 @@ namespace RealtyWebApp.Controllers
                 ViewBag.Message = login.Message;
                 return View();
             }
-
-            var claims = new List<Claim>()
+            
+            var claim = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name,$"{login.Data.RealtorId}"),
+                new Claim(ClaimTypes.Name,$"{login.Data.AppUserId}"),
                 new Claim(ClaimTypes.NameIdentifier, $"{login.Data.UserId}"),
                 new Claim(ClaimTypes.Email, $"{login.Data.Email}"),
                 new Claim(ClaimTypes.Role, $"{login.Data.RoleName}")
             };
-            var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimIdentity = new ClaimsIdentity(claim, CookieAuthenticationDefaults.AuthenticationScheme);
             var authenticationProperty = new AuthenticationProperties();
             var principal = new ClaimsPrincipal(claimIdentity);
             var signIn = HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal,
@@ -55,6 +55,7 @@ namespace RealtyWebApp.Controllers
             {
                 return RedirectToAction("DashBoard", "Realtor");
             }
+            
             return RedirectToAction("index", "Home");
         }
         public IActionResult LogOut()

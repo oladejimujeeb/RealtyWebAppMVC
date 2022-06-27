@@ -8,8 +8,8 @@ namespace RealtyWebApp.DTOs
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
         public string ProfilePicture { get; set; }
-        public int RealtorId { get; set; }
-        public int BuyerId { get; set; }
+        public int AppUserId { get; set; }
+        
         public string RoleName { get; set; }
     }
 }

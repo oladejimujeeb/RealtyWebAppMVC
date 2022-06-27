@@ -39,4 +39,20 @@ namespace RealtyWebApp.DTOs
         public string BusinessName { get; set; }
         public string CacNumber { get; set; }
     }
+
+    public class EditPropertyRequest
+    {
+        public string PropertyType { get; set; }
+        public double Price { get; set; }
+        public double PlotArea { get; set; }
+        public int Toilet { get; set; }
+        public int Bedroom { get; set; }
+        public string Features { get; set; }
+        public string Address { get; set; }
+        public string BuildingType { get; set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
+        public string Lga { get; set; }
+        public string State { get; set; }
+    }
 }

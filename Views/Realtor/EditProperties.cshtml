@@ -1,0 +1,78 @@
+@model RealtyWebApp.DTOs.PropertyDto
+
+@{
+    ViewBag.Title = "Edit Property";
+    Layout = "_RealtorLayout";
+}
+
+<section class="ftco-section ftco-no-pt">
+	<div class="container">
+		<div class="row justify-content-center">
+			<form method="post" asp-controller="Realtor" asp-action="EditProperties">
+				<table class="table ">
+					<thead>
+					<tr>
+						<th scope="col">Edit Property</th>
+						<th scope="col"></th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td>Property Type:</td>
+						<td>
+							<select name="PropertyType" required class="form-control">
+								<option selected>Choose...</option>
+								<option>Building</option>
+								<option>Land</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>Description:</td>
+						<td><input name="Features" type="text" required value="@Model.Features"></td>
+					</tr>
+					<tr>
+						<td>Address:</td>
+						<td><input name="Address" type="text" required value="@Model.Address"></td>
+					</tr><tr>
+						<td>Local Govt Area:</td>
+						<td><input name="LGA" type="text" required value="@Model.LGA"></td>
+					</tr><tr>
+						<td>State:</td>
+						<td><input name="State" type="text" required value="@Model.State"></td>
+					</tr>
+					<tr>
+						<td>Price:</td>
+						<td> <input name="Price" type="number" required value="@Model.PropertyPrice"></td>
+					</tr>
+					<tr>
+						<td>Building Type</td>
+						<td><input name="BuildingType" type="text" required value="@Model.BuildingType"></td>
+					</tr>
+					<tr>
+						<td>Bedroom</td>
+						<td><input name="Bedroom" type="number" required value="@Model.Bedroom"></td>
+					</tr>
+					<tr>
+						<td>Toilet:</td>
+						<td><input name="Toilet" type="number" required value="@Model.Toilet"></td>
+					</tr><tr>
+						<td>Longitute:</td>
+						<td><input name="Longitude" type="number" required value="@Model.Longitude"></td>
+					</tr><tr>
+						<td>Latitude:</td>
+						<td><input name="Latitude" type="number" required value="@Model.Latitude"></td>
+					</tr>
+					<tr>
+						<td>Plot Area:</td>
+						<td><input name="PlotArea" type="number" required value="@Model.LandArea"></td>
+					</tr>
+					</tbody>
+				</table>
+				<div >
+                    <input style="color: white; background-color: green; border-radius: 5px"  type="submit" value="Update Property"/>
+                </div>
+			</form>
+		</div>
+	</div>
+</section>

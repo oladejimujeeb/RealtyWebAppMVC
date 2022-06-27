@@ -13,6 +13,7 @@ namespace RealtyWebApp.DTOs
         public bool IsAvailable { get; set; }
         public bool VerificationStatus { get; set; }
         public double PropertyPrice { get; set; }
+        //public string ProPrice { get; set; }
         public double LandArea { get; set; }
         public int Toilet { get; set; }
         public bool IsSold { get; set; }
@@ -30,16 +31,17 @@ namespace RealtyWebApp.DTOs
         public DateTime? RegisteredDate { get; set; }
         public string LGA { get; set; }
         public string State { get; set; }
+        public DateTime SoldDate { get; set; }
     }
 
     public class UpdatePropertyModel
     {
         public string PropertyType { get; set; }
-        public Status Status { get; set; }
+        public string Status { get; set; }
         public string Action { get; set; }
-        public bool IsAvailable { get; set; }
+        /*public bool IsAvailable { get; set; }
         public bool VerificationStatus { get; set; }
-        public bool IsSold { get; set; }
+        public bool IsSold { get; set; }*/
         public double Price { get; set; }
         public double PlotArea { get; set; }
         public int Toilet { get; set; }
@@ -51,5 +53,7 @@ namespace RealtyWebApp.DTOs
         public double Latitude { get; set; }
         public string LGA { get; set; }
         public string State { get; set; }
+        
+        
     }
 }
