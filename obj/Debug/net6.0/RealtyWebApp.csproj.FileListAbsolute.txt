@@ -31,3 +31,6 @@ C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\obj\Debug\net6
 C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\MySqlConnector.dll
 C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\Pomelo.EntityFrameworkCore.MySql.dll
 C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\BCrypt.Net-Next.dll
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\MailKit.dll
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\MimeKit.dll
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\BouncyCastle.Crypto.dll

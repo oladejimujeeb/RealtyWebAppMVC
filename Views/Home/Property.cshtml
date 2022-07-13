@@ -52,13 +52,13 @@
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item active"><a href="" class="nav-link">Home</a></li>
+	          <li class="nav-item active"><a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link">Home</a></li>
 	          <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Privacy" class="nav-link">About</a></li>
-	          <li class="nav-item"><a class="nav-link" >Agent</a></li>
-	          <li class="nav-item"><a href="" class="nav-link">Services</a></li>
-	          <li class="nav-item"><a href="" class="nav-link">Properties</a></li>
+	          <li class="nav-item"><a asp-controller="Realtor" asp-action="DashBoard" class="nav-link" >Agent</a></li>
+	          <li class="nav-item"><a  class="nav-link">Services</a></li>
+	          <li class="nav-item"><a asp-controller="Home" asp-action="AllProperties" class="nav-link">Properties</a></li>
 	          <li class="nav-item"><a class="nav-link" asp-controller="User" asp-action="Login" >Login</a></li>
-	          <li class="nav-item"><a href="" class="nav-link">Contact</a></li>
+	          <li class="nav-item"><a class="nav-link">Contact</a></li>
 	        </ul>
 	      </div>
 	    </div>
@@ -134,10 +134,10 @@
 			</tr>
 			</tbody>
 		</table>
-		<div class="row">
+		<div class="row" style="padding: 7px" >
 			@foreach (var img in Model.ImagePath)
 			{
-				<div class="col-md-4">
+				<div class="col-md-6" >
 					<div class="search-place img" style="background-image: url('/PropertyImages/@img');">
 						<div class="desc">
 							<h3><span>#@Model.PropertyPrice.ToString("N")</span></h3>
@@ -165,8 +165,8 @@
                  id: 'mapbox/satellite-v9',
              }).addTo(map);
   const marker =  L.marker([20, 20]).addTo(map).bindPopup('@Model.Address.<br> Property Id:@Model.PropertyRegNumber').openPopup();
-  marker.setLatLng([@Model.Latitude,@Model.Longitude ]);
-  map.setView([@Model.Latitude,@Model.Longitude ],3)
+  marker.setLatLng([@Model.Longitude,@Model.Latitude]);
+  map.setView([@Model.Longitude,@Model.Latitude],3)
  </script>
 
 

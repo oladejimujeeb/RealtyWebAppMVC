@@ -1,8 +1,114 @@
-@model System.Collections.Generic.IEnumerable<RealtyWebApp.DTOs.PropertyDto>
+@*@model System.Collections.Generic.IEnumerable<RealtyWebApp.DTOs.PropertyDto>*@
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewBag.Title = "AllProperties";
+    Layout = "_AdminLayout";
 }
 
-<h2>title</h2>
+
+<div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <h1 class="title">
+        All Verified Properties
+    </h1>
+</div>
+<div class="card has-table">
+    <div class="card-content">
+        <table id="myTable"  class="table">
+            <thead>
+            <tr>
+                <th>Property Id</th>
+                <th>Property Type</th>
+                <th>Building Type</th>
+                <th>Feature</th>
+                <th>Address</th>
+                <th>Price</th>
+                <th>Registered Date</th>
+                <th>Status</th>
+                <th>Land Area</th>
+            </tr>
+            </thead>
+            @*<tbody>
+            @if (Model != null)
+            {
+                @foreach (var pro in Model)
+                {
+                    <tr>
+                        <td data-label="Property Id">@pro.PropertyRegNumber</td>
+                         <td data-label="Property Type">@pro.PropertyType</td>
+                         <td data-label="Building Type">@pro.BuildingType</td>
+                         <td data-label="Features">@pro.Features</td>
+                         <td data-label="Address">@pro.Address, @pro.LGA, @pro.State</td>
+                         <td data-label="Price">@pro.PropertyPrice.ToString("N")</td>
+                         <td datat-label="Price">@pro.RegisteredDate</td>
+                         <td data-label="Status">@pro.Status</td>
+                         <td data-label="Status">@pro.LandArea</td>
+                        <td class="actions-cell">
+                            
+                            <div class="buttons right nowrap">
+                                <a class="button small green --jb-modal" type="button" asp-controller="Admin" asp-action="ViewProperty" asp-route-Id="@pro.Id">
+                                    <span class="icon"><i class="mdi mdi-eye"></i></span>
+                                </a>
+                            </div>
+                            <div class="buttons right nowrap">
+                               
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+
+            </tbody>*@
+            
+        </table>
+        @if(!string.IsNullOrEmpty(ViewBag.Message))
+        {
+            <span style="color: green; justify-content: center">@ViewBag.Message</span>
+        }
+    </div>
+</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+    
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+<script>
+    $( function () {
+        $.ajax({
+            "url":"/Admin/Property/",
+            data: '{}',
+            contentType: "application/json; charset=utf-8",
+            "type":"POST",
+            "datatype":"json",
+            success: OnSuccess,
+            failure: function (response) {
+            alert(response.d);
+          },
+          error: function (response) {
+              alert(response.d);
+            }
+        
+        });
+    } ); 
+    function OnSuccess(response) {
+                $("#myTable").DataTable(
+                {
+                    bLengthChange: true,
+                    lengthMenu: [[5, 10, -1], [5, 10, "All"]],
+                    bFilter: true,
+                    bSort: true,
+                    bPaginate: true,
+                    data: response,
+                   "columns": [
+                                {"data":"propertyRegNumber", "name": "Property Id"},
+                                {"data":"propertyType", "name": "Property Type"},
+                                {"data":"buildingType", "name": "Building Type"},
+                                {"data":"features", "name": "Feature"},
+                                {"data":"address", "name": "Address"},
+                                {"data":"propertyPrice", "name": "Price"},
+                                {"data":"registeredDate", "name": "Registered Date"},
+                                {"data":"status", "name": "Status"},
+                                {"data":"landArea", "name": "Land Area"},
+                           ]
+                });
+                console.log(response);
+                }
+</script> 

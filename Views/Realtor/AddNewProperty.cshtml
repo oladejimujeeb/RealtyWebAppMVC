@@ -13,6 +13,13 @@
                 <p class="tagcolor" style="color:green">Please fill in this form to create an account.</p>
                 <hr class="tagcolor" style="color:green">
             </div>
+             @if(!string.IsNullOrEmpty(ViewBag.Message))
+                  {
+                         <script > alert('failed')</script>
+                       <div class="alert alert-success" role="alert">
+                          @ViewBag.Message
+                        </div>
+                  }
             <form class="bg-light p-5 contact-form" method="post" enctype="multipart/form-data"  asp-controller="Realtor" asp-action="AddNewProperty">
                 
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>

@@ -42,8 +42,10 @@ namespace RealtyWebApp.Controllers
             {
                 new Claim(ClaimTypes.Name,$"{login.Data.AppUserId}"),
                 new Claim(ClaimTypes.NameIdentifier, $"{login.Data.UserId}"),
-                new Claim(ClaimTypes.Email, $"{login.Data.Email}"),
-                new Claim(ClaimTypes.Role, $"{login.Data.RoleName}")
+                new Claim(ClaimTypes.GivenName, $"{login.Data.ProfilePicture}"),
+                new Claim(ClaimTypes.Surname,$"{login.Data.UserName}"),
+                new Claim(ClaimTypes.Role, $"{login.Data.RoleName}"),
+                
             };
             var claimIdentity = new ClaimsIdentity(claim, CookieAuthenticationDefaults.AuthenticationScheme);
             var authenticationProperty = new AuthenticationProperties();
@@ -54,6 +56,10 @@ namespace RealtyWebApp.Controllers
             if (login.Data.RoleName == "Realtor")
             {
                 return RedirectToAction("DashBoard", "Realtor");
+            }
+            if (login.Data.RoleName == "Administrator")
+            {
+                return RedirectToAction("AdminDashBoard", "Admin");
             }
             
             return RedirectToAction("index", "Home");

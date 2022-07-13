@@ -9,5 +9,6 @@ namespace RealtyWebApp.Interface.IServices
     {
         Task<BaseResponseModel<UserDto>> GetUser(LoginModel model);
         Task<BaseResponseModel<UserDto>> GetUserById(int id);
+        
     }
 }

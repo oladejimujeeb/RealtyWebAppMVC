@@ -43,6 +43,7 @@ namespace RealtyWebApp.Controllers
             var realtorProperties = _realtorService.GetRealtorApprovedProperty(realtorId);
             return View(realtorProperties.Data);
         }
+        [Authorize (Roles = "Realtor")]
         public IActionResult AddNewProperty()
         {
             return View();
@@ -59,7 +60,8 @@ namespace RealtyWebApp.Controllers
                 return RedirectToAction("DashBoard");
             }
 
-            return BadRequest("Property failed to add");
+            ViewBag.Message = property.Message;
+            return View();
         }
         [Authorize (Roles = "Realtor")]
         public IActionResult UnApprovedProperties()
@@ -99,7 +101,12 @@ namespace RealtyWebApp.Controllers
         {
             var realtorId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var realtorInfo = await _realtorService.GetUser(realtorId);
-            if(realtorInfo.Status) return View(realtorInfo.Data);
+            if (realtorInfo.Status)
+            {
+                
+                return View(realtorInfo.Data);
+            }
+
             return NotFound(realtorInfo.Message);
 
         }

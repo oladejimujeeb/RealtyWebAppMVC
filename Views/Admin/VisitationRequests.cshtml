@@ -1,8 +1,51 @@
 @model System.Collections.Generic.IEnumerable<RealtyWebApp.DTOs.VisitationRequestDto>
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewBag.Title = "Inspection Request";
+    Layout = "_AdminLayout";
 }
+<h1 class="title">
+    Property Inspection Requests
+</h1>
+<div class="card has-table">
+    <div class="card-content">
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Property Type</th>
+            <th>Property Address</th>
+            <th>Property Price</th>
+            <th>Property Id</th>
+            <th>Inspection Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model != null)
+        {
+            @foreach (var pro in Model)
+            {
+                <tr>
+                    <td data-label="Name">@pro.BuyerName</td>
+                    <td data-label="Phone Number">@pro.BuyerPhoneNo</td>
+                    <td data-label="Email">@pro.Mail</td>
+                    <td data-label="Property Type">@pro.PropertyType</td>
+                    <td data-label="Address">@pro.PropertyAddress</td>
+                    <td data-label="Price">@pro.PropertyPrice.ToString("N")</td>
+                    <td datat-label="Property Id">@pro.PropertyRegNo</td>
+                    <td data-label="Inspection Date">@pro.RequestDate</td>
+                </tr>
+            }
+        }
+        </tbody>
+                
+        @if (!string.IsNullOrEmpty(ViewBag.request))
+        {
+            <p>@ViewBag.request</p>
+        }
+    </table>
+    </div>
+</div>
 
-<h2>title</h2>

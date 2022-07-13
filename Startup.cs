@@ -15,6 +15,8 @@ using RealtyWebApp.Implementation.Repositories;
 using RealtyWebApp.Implementation.Services;
 using RealtyWebApp.Interface.IRepositories;
 using RealtyWebApp.Interface.IServices;
+using RealtyWebApp.MailFolder.EmailService;
+using RealtyWebApp.MailFolder.EmailSettings;
 
 namespace RealtyWebApp
 {
@@ -32,7 +34,7 @@ namespace RealtyWebApp
         {
             services.AddControllersWithViews();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
-            
+            services.AddScoped<IMailService,MailService>();
             services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<IRealtorRepository, RealtorRepository>();
             services.AddScoped<IBuyerRepository, BuyerRepository>();
@@ -50,6 +52,7 @@ namespace RealtyWebApp
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IPropertyService, PropertyService>();
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+            services.Configure<MailSetting>(Configuration.GetSection("MailSetting"));
             services.AddDbContext<ApplicationContext>(options => options.UseMySql
                 (Configuration.GetConnectionString("ApplicationContext"),
                 ServerVersion.AutoDetect(Configuration.GetConnectionString("ApplicationContext"))));

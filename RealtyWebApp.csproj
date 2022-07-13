@@ -6,16 +6,22 @@
 
     <ItemGroup>
       <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+      <PackageReference Include="MailKit" Version="3.1.1" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+      <PackageReference Include="MimeKit" Version="3.1.1" />
       <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.0" />
     </ItemGroup>
 
     <ItemGroup>
       <None Include="wwwroot\bgImages\ima.jpg" />
+      <None Include="wwwroot\ProfilePictures\imaes.jpeg" />
+      <None Include="wwwroot\ProfilePictures\IMG-20200613-WA0020.jpg" />
+      <None Include="wwwroot\ProfilePictures\shimawa 3.jpg" />
+      <None Include="wwwroot\ProfilePictures\shimawa 4.jpg" />
     </ItemGroup>
 
 </Project>

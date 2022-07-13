@@ -1,8 +1,75 @@
 @model RealtyWebApp.DTOs.PropertyDto
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "ViewProperty";
     Layout = "_Layout";
 }
-
-<h2>title</h2>
+@*<style>
+    .viewProperty{
+    display: grid;
+    /*flex-wrap: wrap;
+    padding: 5px;
+    justify-content: space-around;*/
+    }
+    .center{
+    margin: 5px;
+    display: inline-grid;
+    }
+    .item>img{
+    height: 240px;
+    width: 320px;
+    
+    }
+</style>*@
+<div class="card-content">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Property Type</th>
+            <th>Feature</th>
+            <th>Address</th>
+            <th>State</th>
+            <th>Price</th>
+            <th>Registered Date</th>
+            <th>Status</th>
+            <th>Action</th>
+            <th>Toilet</th>
+            <th>Bedroom</th>
+            <th>Plot Area</th>
+            
+        </tr>
+        </thead>
+        <tbody>
+      
+        <tr>
+            <td>@Model.PropertyType</td>
+            <td>@Model.Features</td>
+            <td>@Model.Address</td>
+            <td>@Model.LGA, @Model.State</td>
+            <td>@Model.PropertyPrice.ToString("N")</td>
+            <td>@Model.RegisteredDate</td>
+            <td>@Model.Status</td>
+            <td>@Model.Action</td>
+            <td>@Model.Toilet</td>
+            <td>@Model.Bedroom</td>
+            <td>@Model.LandArea</td>
+        </tr>
+        </tbody>
+    </table>
+    <div  class="container">
+        <div class="row row-cols-3">
+            @foreach (var img in Model.ImagePath)
+            {
+                <img style="width: 460px; height: 320px; padding: 5px" class="col" src="/PropertyImages/@img"  alt="...">
+       
+            }
+        </div>
+    </div>
+    <div class="container text-center" style="padding: 20px">
+        <a asp-action="AdminDashBoard" class="btn btn-success align-items-lg-center">Goto DashBoard</a>
+    </div>
+    @if(!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <span style="color: green; justify-content: center">@ViewBag.Message</span>
+    }
+</div>

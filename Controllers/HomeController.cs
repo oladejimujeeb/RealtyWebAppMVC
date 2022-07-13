@@ -34,7 +34,7 @@ namespace RealtyWebApp.Controllers
                 return View(allProperty.Data);
             }
 
-            return Content("No Available Property");
+            return NoContent();
         }
     
         public async Task<IActionResult> Property(int id)
@@ -44,9 +44,9 @@ namespace RealtyWebApp.Controllers
             {
                 return View(property.Data);
             }
-
+            
             ViewBag.Message = property.Message;
-            return View();
+            return NoContent();
         }
 
         public IActionResult Privacy()

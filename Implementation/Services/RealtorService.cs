@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using RealtyWebApp.DTOs;
 using RealtyWebApp.Entities;
 using RealtyWebApp.Entities.File;
@@ -12,6 +11,8 @@ using RealtyWebApp.Entities.Identity;
 using RealtyWebApp.Entities.Identity.Enum;
 using RealtyWebApp.Interface.IRepositories;
 using RealtyWebApp.Interface.IServices;
+using RealtyWebApp.MailFolder.EmailService;
+using RealtyWebApp.MailFolder.MailEntities;
 using RealtyWebApp.Models.RequestModel;
 
 namespace RealtyWebApp.Implementation.Services
@@ -27,10 +28,11 @@ namespace RealtyWebApp.Implementation.Services
         private readonly IPropertyRepository _propertyRepository;
         private readonly IUserRoleRepository _userRoleRepository;
         private readonly IPaymentRepository _paymentRepository;
+        private readonly IMailService _mailService;
 
         public RealtorService(IRealtorRepository realtorRepository, IUserRepository userRepository, IRoleRepository roleRepository, 
             IWebHostEnvironment webHostEnvironment, IPropertyImage propertyImage, IPropertyDocument propertyDocument, 
-            IPropertyRepository propertyRepository, IUserRoleRepository userRoleRepository, IPaymentRepository paymentRepository)
+            IPropertyRepository propertyRepository, IUserRoleRepository userRoleRepository, IPaymentRepository paymentRepository, IMailService mailService)
         {
             _realtorRepository = realtorRepository;
             _userRepository = userRepository;
@@ -41,6 +43,7 @@ namespace RealtyWebApp.Implementation.Services
             _propertyRepository = propertyRepository;
             _userRoleRepository = userRoleRepository;
             _paymentRepository = paymentRepository;
+            _mailService = mailService;
         }
 
         public async Task<BaseResponseModel<RealtorDto>> RegisterRealtor(RealtorRequestModel model)
@@ -83,45 +86,55 @@ namespace RealtyWebApp.Implementation.Services
             };
             user.UserRoles.Add(userRole);
             
-            var basePath = Path.Combine(Directory.GetCurrentDirectory() + "\\ProfilePictures\\");
-            bool basePathExists = System.IO.Directory.Exists(basePath);
+            var basePath = Path.Combine(_webHostEnvironment.WebRootPath, "\\ProfilePictures\\");
+            bool basePathExists = Directory.Exists(basePath);
             if (!basePathExists)
             {
                 Directory.CreateDirectory(basePath);
             }
-            //var fileName = Path.GetFileNameWithoutExtension(model.ProfilePicture.FileName);
+            var fileName = Path.GetFileNameWithoutExtension(model.ProfilePicture.FileName);
             var filePath = Path.Combine(basePath, model.ProfilePicture.FileName);
             var extension = Path.GetExtension(model.ProfilePicture.FileName);
-            if (!System.IO.File.Exists(filePath)&& extension==".jpg"|| extension ==".png"|| extension==".jpeg")
+            if (!File.Exists(filePath)&& extension==".jpg"|| extension ==".png"|| extension==".jpeg")
             {
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                await using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await model.ProfilePicture.CopyToAsync(stream);
                 }
 
-                user.ProfilePicture = filePath;
+                user.ProfilePicture = fileName+extension;
                 await _userRepository.Add(user);
-            }
-
-            var realtor = new Realtor()
-            {
-                Address = model.Address,
-                BusinessName = model.BusinessName,
-                CacRegistrationNumber = model.CacNumber,
-                AgentId = $"REG/{Guid.NewGuid().ToString().Substring(0, 4)}",
-                UserId = user.Id,
-                User = user,
-            };
-            var addRealtor = await _realtorRepository.Add(realtor);
-            return new BaseResponseModel<RealtorDto>
-            {
-                Status = true,
-                Message = "Account Created Successfully",
-                Data = new RealtorDto()
+                var realtor = new Realtor()
                 {
-                    AgentId = addRealtor.AgentId
+                    Address = model.Address,
+                    BusinessName = model.BusinessName,
+                    CacRegistrationNumber = model.CacNumber,
+                    AgentId = $"REG/{Guid.NewGuid().ToString().Substring(0, 4)}",
+                    UserId = user.Id,
+                    User = user,
+                };
+                var addRealtor = await _realtorRepository.Add(realtor);
+                if (addRealtor == realtor)
+                {//sending mail upon registration
+                    WelcomeMessage sendMail = new WelcomeMessage()
+                    {
+                        Email = user.Email,
+                        FullName = $"{user.FirstName} {user.LastName}",
+                        Id = addRealtor.AgentId
+                    };
+                    //send mail
+                    //await _mailService.WelcomeMail(sendMail);
+                    return new BaseResponseModel<RealtorDto>
+                    {
+                        Status = true,
+                        Message = "Account Created Successfully",
+                    };
                 }
-                
+            }
+            return new BaseResponseModel<RealtorDto>()
+            {
+                Message = "Registration failed, upload only image for profile picture ",
+                Status = false
             };
         }
 
@@ -141,15 +154,13 @@ namespace RealtyWebApp.Implementation.Services
             realtor.Address = model.Address;
             realtor.BusinessName = model.BusinessName;
             realtor.CacRegistrationNumber = model.CacNumber;
-            var u = await _userRepository.Update(userInfo);
-            var a = await _realtorRepository.Update(realtor);
+            await _userRepository.Update(userInfo);
+            await _realtorRepository.Update(realtor);
             return new BaseResponseModel<RealtorDto>()
             {
                 Status = true,
                 Message = "Update Successfully",
-               
             };
-
         }
 
         public async Task<BaseResponseModel<PropertyDto>> AddProperty(PropertyRequestModel model, int id)
@@ -179,14 +190,15 @@ namespace RealtyWebApp.Implementation.Services
             foreach (var image in model.Images)
             {
                 var basePath = Path.Combine(_webHostEnvironment.WebRootPath, "PropertyImages");
-                bool basePathExists = System.IO.Directory.Exists(basePath);
+                bool basePathExists = Directory.Exists(basePath);
                 if (!basePathExists) Directory.CreateDirectory(basePath);
-                var fileName = Path.GetFileNameWithoutExtension(image.FileName);
-                var filePath = Path.Combine(basePath, image.FileName);
                 var extension = Path.GetExtension(image.FileName);
-                if (!System.IO.File.Exists(filePath))
+                var fileName =  $"IMG{Guid.NewGuid().ToString().Substring(0,4)}{extension}";
+                var filePath = Path.Combine(basePath, fileName);
+                
+                if (!File.Exists(filePath) && extension==".jpg"|| extension ==".png"|| extension==".jpeg")
                 {
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    await using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await image.CopyToAsync(stream);
                     }
@@ -204,6 +216,14 @@ namespace RealtyWebApp.Implementation.Services
                     };
                     addProperty.PropertyImages.Add(imageModel);
                     await _propertyImage.Add(imageModel);
+                }
+                else
+                {
+                    return new BaseResponseModel<PropertyDto>()
+                    {
+                        Status = false,
+                        Message = "Failed, Upload only image for property images"
+                    };
                 }
             }
             //Adding PropertyDocument
@@ -244,10 +264,10 @@ namespace RealtyWebApp.Implementation.Services
             {
                 Message = "Property Successfully Registered",
                 Status = true,
-                Data =new PropertyDto()
+                /*Data =new PropertyDto()
                 {
                     ImagePath = registerProperty.PropertyImages.Select(x=>x.DocumentName).ToList()
-                }
+                }*/
                 
             };
         }

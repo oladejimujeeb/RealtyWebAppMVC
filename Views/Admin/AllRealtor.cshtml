@@ -1,8 +1,78 @@
-@model System.Collections.Generic.IEnumerable<RealtyWebApp.DTOs.RealtorDto>
-
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewBag.Title = "AllRegisteredRealtor";
+    Layout = "_AdminLayout";
 }
 
-<h2>title</h2>
+
+<div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <h1 class="title">
+        All Registered Realtor
+    </h1>
+</div>
+<div class="card has-table">
+    <div class="card-content">
+        <table id="myTable"  class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Registration Id</th>
+                <th>Address</th>
+                <th>Business Name</th>
+                <th>CAC Number</th>
+                
+            </thead>
+        </table>
+        @if(!string.IsNullOrEmpty(ViewBag.Message))
+        {
+            <span style="color: green; justify-content: center">@ViewBag.Message</span>
+        }
+    </div>
+</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+    
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+<script>
+    $( function () {
+        $.ajax({
+            "url":"/Admin/ViewAllRealtor/",
+            data: '{}',
+            contentType: "application/json; charset=utf-8",
+            "type":"POST",
+            "datatype":"json",
+            success: OnSuccess,
+            failure: function (response) {
+            alert(response.d);
+          },
+          error: function (response) 
+          {
+              alert(response.d);
+          }
+        
+        });
+    } ); 
+    function OnSuccess(response) {
+                $("#myTable").DataTable(
+                {
+                    bLengthChange: true,
+                    lengthMenu: [[5, 10, -1], [5, 10, "All"]],
+                    bFilter: true,
+                    bSort: true,
+                    bProcessing:true,
+                    bPaginate: true,
+                    data: response,
+                   "columns": [
+                                {"data":"fName", "name": "Name"},
+                                {"data":"mail", "name": "Email"},
+                                {"data":"phoneNumber", "name": "Phone number"},
+                                {"data":"agentId", "name": "Registration ID"},
+                                {"data":"address", "name": "Address"},
+                                {"data":"businessName", "name": "Business Name"},
+                                {"data":"cacNo", "name": "CAC Number"},
+                           ]
+                });
+                
+    }
+</script> 

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+
 using RealtyWebApp.DTOs;
 using RealtyWebApp.Entities;
 using RealtyWebApp.Entities.Identity;
 using RealtyWebApp.Interface.IRepositories;
 using RealtyWebApp.Interface.IServices;
+using RealtyWebApp.MailFolder.EmailService;
+using RealtyWebApp.MailFolder.MailEntities;
 using RealtyWebApp.Models.RequestModel;
 
 namespace RealtyWebApp.Implementation.Services
@@ -22,8 +24,8 @@ namespace RealtyWebApp.Implementation.Services
         private readonly IVisitationRepository _visitationRepository;
         private readonly IPropertyImage _propertyImage;
         private readonly IPropertyDocument _propertyDocument;
-
-        public BuyerService(IBuyerRepository buyerRepository, IRoleRepository roleRepository, IUserRepository userRepository, IPropertyRepository propertyRepository, IVisitationRepository visitationRepository, IPropertyImage propertyImage, IPropertyDocument propertyDocument)
+        private readonly IMailService _mailService;
+        public BuyerService(IBuyerRepository buyerRepository,IMailService mailService, IRoleRepository roleRepository, IUserRepository userRepository, IPropertyRepository propertyRepository, IVisitationRepository visitationRepository, IPropertyImage propertyImage, IPropertyDocument propertyDocument)
         {
             _buyerRepository = buyerRepository;
             _roleRepository = roleRepository;
@@ -32,6 +34,7 @@ namespace RealtyWebApp.Implementation.Services
             _visitationRepository = visitationRepository;
             _propertyImage = propertyImage;
             _propertyDocument = propertyDocument;
+            _mailService = mailService;
         }
         public async Task<BaseResponseModel<BuyerDto>> RegisterBuyer(BuyerRequestModel model)
         {
@@ -62,7 +65,7 @@ namespace RealtyWebApp.Implementation.Services
             };
             user.UserRoles.Add(userRole);
             var basePath = Path.Combine(Directory.GetCurrentDirectory() + "\\ProfilePictures\\");
-            bool basePathExists = System.IO.Directory.Exists(basePath);
+            bool basePathExists = Directory.Exists(basePath);
             if (!basePathExists)
             {
                 Directory.CreateDirectory(basePath);
@@ -70,14 +73,14 @@ namespace RealtyWebApp.Implementation.Services
             var fileName = Path.GetFileNameWithoutExtension(model.ProfilePicture.FileName);
             var filePath = Path.Combine(basePath, model.ProfilePicture.FileName);
             var extension = Path.GetExtension(model.ProfilePicture.FileName);
-            if (!System.IO.File.Exists(filePath)&& extension==".jpg"|| extension ==".png"|| extension==".jpeg")
+            if (!File.Exists(filePath)&& extension==".jpg"|| extension ==".png"|| extension==".jpeg")
             {
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                await using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await model.ProfilePicture.CopyToAsync(stream);
                 }
 
-                user.ProfilePicture = filePath;
+                user.ProfilePicture = fileName+extension;
                 await _userRepository.Add(user);
             }
 
@@ -97,6 +100,14 @@ namespace RealtyWebApp.Implementation.Services
                     Message = "Registration  failed"
                 };
             }
+            WelcomeMessage sendMail = new WelcomeMessage()
+            {
+                Email = user.Email,
+                FullName = $"{user.FirstName} {user.LastName}",
+                Id = buyer.RegId
+            };
+            //send mail
+            //await _mailService.WelcomeMail(sendMail);
             return new BaseResponseModel<BuyerDto>()
             {
                 Status = true,
@@ -164,7 +175,7 @@ namespace RealtyWebApp.Implementation.Services
                 PropertyId = getProperty.Id,
                 PropertyType = getProperty.PropertyType,
                 PropertyRegNo = getProperty.PropertyRegNo,
-                Address = $"{getProperty.Address} {getProperty.LGA} {getProperty.State}"
+                Address = $"{getProperty.Address} {getProperty.LGA} {getProperty.State}",
             };
             var date = DateTime.Now.AddDays(3);
             

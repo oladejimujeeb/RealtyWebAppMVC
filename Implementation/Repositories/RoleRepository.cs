@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using RealtyWebApp.Context;
 using RealtyWebApp.Entities.Identity;
 using RealtyWebApp.Interface.IRepositories;
@@ -10,5 +12,7 @@ namespace RealtyWebApp.Implementation.Repositories
         {
             Context = context;
         }
+
+       
     }
 }
