@@ -1,8 +1,283 @@
 @model RealtyWebApp.DTOs.PropertyDto
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title> Property- RealtyWebApp</title>
+	<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+        integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+        crossorigin="" />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+        integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+        crossorigin="">
+    </script>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="~/tem/css/animate.css">
+    
+    <link rel="stylesheet" href="~/tem/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/tem/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/tem/css/magnific-popup.css">
+    
+    <link rel="stylesheet" href="~/tem/css/flaticon.css">
+    <link rel="stylesheet" href="~/tem/css/style.css">
+    <style>
+		#propertyMap {
+			margin: 50px 200px;
+			height: 350px;
+			width: 70%;
+		}
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+	    <div class="container">
+	      <a class="navbar-brand" href="">Realty Mulad</a>
+	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="oi oi-menu"></span> Menu
+	      </button>
+
+	      <div class="collapse navbar-collapse" id="ftco-nav">
+	        <ul class="navbar-nav ml-auto">
+	          <li class="nav-item active"><a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link">Home</a></li>
+	          <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Privacy" class="nav-link">About</a></li>
+	          <li class="nav-item"><a asp-controller="Realtor" asp-action="DashBoard" class="nav-link" >Agent</a></li>
+	          <li class="nav-item"><a  class="nav-link">Services</a></li>
+	          <li class="nav-item"><a asp-controller="Home" asp-action="AllProperties" class="nav-link">Properties</a></li>
+	          <li class="nav-item"><a class="nav-link" asp-controller="User" asp-action="Login" >Login</a></li>
+	          <li class="nav-item"><a class="nav-link">Contact</a></li>
+	        </ul>
+	      </div>
+	    </div>
+	  </nav>
+    <!-- END nav -->
+    
+<section class="hero-wrap" style="background-image: url('/images/bg_2.jpg');" data-stellar-background-ratio="0.5">
+	<div class="overlay"></div>
+	<div class="container">
+		<div class="row no-gutters slider-text align-items-center">
+			<div class="col-lg-7 col-md-6 ftco-animate d-flex align-items-end">
+				<div class="text">
+					<h1 class="mb-4">List Your <br>Property With Us.</h1>
+					<p style="font-size: 18px;">Get specialist advice from local experts across all types of residential, commercial and rural property</p>
+					<p><a href="#" class="btn btn-primary py-3 px-4">Register Your Property</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+	<br>
+	<br>
+	<br>
+	<br>
+	
+	<div class="col-md-12 heading-section text-center ftco-animate mb-5">
+		<span class="subheading">@ViewBag.Message</span>
+		
+	</div>
+	<br>
+	<br>
+}
+@if (string.IsNullOrEmpty(ViewBag.Message))
+{
+	<section class="ftco-section ftco-no-pt">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-12 heading-section text-center ftco-animate mb-5">
+					<span class="subheading">Stop Searching</span>
+					<h2 class="mb-2">You Made a Good choice</h2>
+				</div>
+			</div>
+
+			<table class="table table-borderless">
+				<thead>
+				<tr>
+					<th scope="col">Property Details</th>
+					<th scope="col"></th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td>Property ID:</td>
+					<td>@Model.PropertyRegNumber</td>
+				</tr>
+				<tr>
+					<td>Property Type:</td>
+					<td>@Model.PropertyType</td>
+				</tr>
+				<tr>
+					<td>Description:</td>
+					<td>@Model.Features</td>
+				</tr>
+				<tr>
+					<td>Address:</td>
+					<td>@Model.Address, @Model.LGA, @Model.State</td>
+				</tr>
+				<tr>
+					<td>Price:</td>
+					<td># @Model.PropertyPrice.ToString("N")</td>
+				</tr>
+				<tr>
+					<td>Building Type</td>
+					<td>@Model.BuildingType:</td>
+				</tr>
+				<tr>
+					<td>Bedroom:</td>
+					<td>@Model.Bedroom</td>
+				</tr>
+				<tr>
+					<td>Toilet:</td>
+					<td>@Model.Toilet</td>
+				</tr>
+				<tr>
+					<td>PlotArea:</td>
+					<td>@Model.LandArea Square Meter</td>
+				</tr>
+				</tbody>
+			</table>
+			<div class="row" style="padding: 7px">
+				@foreach (var img in Model.ImagePath)
+				{
+					<div class="col-md-6">
+						<div class="search-place img" style="background-image: url('/PropertyImages/@img');">
+							<div class="desc">
+								<h3><span>#@Model.PropertyPrice.ToString("N")</span></h3>
+								<span>@Model.Features</span>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+			<div class=" row justify-content-center">
+				<a asp-route-Id="@Model.Id" asp-action="BookInspectionDate" asp-controller="Buyer" class="btn btn-success btn-lg" style="padding: 10px; margin-right: 20px;margin-top: 30px">Book Inspection Date</a>
+				<a asp-action="PaymentBreakDown" asp-controller="Buyer" asp-route-Id="@Model.Id" class="btn btn-success btn-lg" style="padding: 10px; margin-left: 20px;margin-top: 30px">Proceed To Payment</a>
+				<a asp-route-Id="@Model.Id" asp-controller="Buyer" asp-action="DownloadPropertyDocument" class="btn btn-success btn-lg" style="padding: 10px; margin-left: 20px;margin-top: 30px">Download Property Document</a>
+			</div>
+		</div>
+		<div id="propertyMap"></div>
+	</section>
+
+
+	<script >
+ const map =L.map('propertyMap').setView([0,0],2);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                 attribution: 'Realty Mulad &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                 maxZoom: 19,
+                 id: 'mapbox/satellite-v9',
+             }).addTo(map);
+  const marker =  L.marker([20, 20]).addTo(map).bindPopup('@Model.Address.<br> Property Id:@Model.PropertyRegNumber').openPopup();
+  marker.setLatLng([@Model.Longitude,@Model.Latitude]);
+  map.setView([@Model.Longitude,@Model.Latitude],3)
+ </script>
+                                               
 }
 
-<h2>title</h2>
+
+<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+    <footer class="ftco-footer ftco-section">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Ecoverde</h2>
+              <p>Far far away, behind the word mountains, far from the countries.</p>
+              <ul class="ftco-footer-social list-unstyled mt-5">
+                <li class="ftco-animate"><a href="#"><span class="fa fa-twitter"></span></a></li>
+                <li class="ftco-animate"><a href="#"><span class="fa fa-facebook"></span></a></li>
+                <li class="ftco-animate"><a href="#"><span class="fa fa-instagram"></span></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4 ml-md-4">
+              <h2 class="ftco-heading-2">Community</h2>
+              <ul class="list-unstyled">
+                <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Search Properties</a></li>
+                <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>For Agents</a></li>
+                <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Reviews</a></li>
+                <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>FAQs</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4 ml-md-4">
+              <h2 class="ftco-heading-2">About Us</h2>
+              <ul class="list-unstyled">
+                <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Our Story</a></li>
+                <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Meet the team</a></li>
+                <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Careers</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+             <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Company</h2>
+              <ul class="list-unstyled">
+                <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>About Us</a></li>
+                <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Press</a></li>
+                <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Contact</a></li>
+                <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Careers</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4">
+            	<h2 class="ftco-heading-2">Have a Questions?</h2>
+            	<div class="block-23 mb-3">
+	              <ul>
+	                <li><span class="icon fa fa-map"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
+	                <li><a href="#"><span class="icon fa fa-phone"></span><span class="text">+2 392 3929 210</span></a></li>
+	                <li><a href="#"><span class="icon fa fa-envelope pr-4"></span><span class="text">info@yourdomain.com</span></a></li>
+	              </ul>
+	            </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-center">
+	
+            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Mulad</a>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+
+
+  <script src="~/tem/js/jquery.min.js"></script>
+  <script src="~/tem/js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="~/tem/js/popper.min.js"></script>
+  <script src="~/tem/js/bootstrap.min.js"></script>
+  <script src="~/tem/js/jquery.easing.1.3.js"></script>
+  <script src="~/tem/js/jquery.waypoints.min.js"></script>
+  <script src="~/tem/js/jquery.stellar.min.js"></script>
+  <script src="~/tem/js/owl.carousel.min.js"></script>
+  <script src="~/tem/js/jquery.magnific-popup.min.js"></script>
+  <script src="~/tem/js/jquery.animateNumber.min.js"></script>
+  <script src="~/tem/js/scrollax.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="~/tem/js/google-map.js"></script>
+<script src="~/tem/js/main.js"></script>
+
+</body>
+    
+	  

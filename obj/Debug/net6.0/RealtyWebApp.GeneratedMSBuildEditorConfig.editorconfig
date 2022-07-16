@@ -67,6 +67,22 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnV5ZXJcQnV5ZXJSZWdpc3RyYXRpb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Buyer/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnV5ZXJcRGFzaGJvYXJkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Buyer/GetProperty.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnV5ZXJcR2V0UHJvcGVydHkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Buyer/PaymentBreakDown.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnV5ZXJcUGF5bWVudEJyZWFrRG93bi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Buyer/UpdateProfileInfo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnV5ZXJcVXBkYXRlUHJvZmlsZUluZm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Home/AllProperties.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBbGxQcm9wZXJ0aWVzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -117,6 +133,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Shared/_AdminLayout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9BZG1pbkxheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Shared/_BuyerLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9CdXllckxheW91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Shared/_index.cshtml]

@@ -1,8 +1,63 @@
 @model RealtyWebApp.DTOs.BuyerDto
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Update Profile";
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+
+<br>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class=" card col-md-6">
+            <div class="card-body ">
+                <div class="bg-light">
+                    <h1 class="tagcolor" style="color:green">Update Your Profile</h1>
+                    <p class="tagcolor" style="color:green">Please fill in this form to Edit your account.</p>
+                    <hr class="tagcolor" style="color:green">
+                </div>
+                <form method="post" enctype="multipart/form-data"  asp-controller="Buyer" asp-action="UpdateProfileInfo">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-6">
+                            <label  class="control-label">First Name</label>
+                            <input name="FirstName" class="form-control" required value="@Model.FName"/>
+                            <span asp-validation-for="FName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label class="control-label">Last Name</label>
+                            <input name="LastName" class="form-control" required  value="@Model.LName"/>
+                            <span asp-validation-for="LName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-6">
+                            <label asp-for="PhoneNumber" class="control-label"></label>
+                            <input asp-for="PhoneNumber" type="tel" class="form-control" required  value="@Model.PhoneNumber"/>
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                         <div class="form-group col-sm-12">
+                            <label asp-for="Address" class="control-label"></label>
+                            <input asp-for="Address" type="text" class="form-control" required  value="@Model.Address"/>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                       
+                    </div>
+                    
+                    <div class="form-group ">
+                        <input  type="submit" value="Submit" class="btn btn-success trigger-btn col-sm-12" data-toggle="modal"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

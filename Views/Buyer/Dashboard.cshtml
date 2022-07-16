@@ -1,8 +1,74 @@
 @model System.Collections.Generic.IEnumerable<RealtyWebApp.DTOs.VisitationRequestDto>
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewBag.Title = "DashBoard";
+    Layout = "_BuyerLayout";
 }
 
-<h2>title</h2>
+<div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    @if (!string.IsNullOrEmpty(@ViewBag.Name))
+    {
+        <h1 class="title">Hi @ViewBag.Name</h1>
+        <h1 class="title">Date: @DateTime.Now.ToString("f")</h1>
+    }
+   
+</div >
+<div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+     <h1 class="title">
+            My Inspected Properties
+     </h1>
+</div>
+<div class="card has-table">
+    <div class="card-content">
+        <table>
+            <thead>
+            <tr>
+                <th>Client Name</th>
+                <th>Client Mail</th>
+                <th>Client Phone Number</th>
+                <th>Property Type</th>
+                <th>Property Price</th>
+                <th>Property Address</th>
+                <th>Inspection Date</th>
+                <th>Property Id</th>
+                <th>View Property</th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (Model != null)
+            {
+                @foreach (var pro in Model)
+                {
+                    <tr>
+                        <td data-label="Client Name">@pro.BuyerName</td>
+                        <td data-label="Client Email">@pro.BuyerEmail</td>
+                        <td data-label="Client Phone Number">@pro.BuyerPhoneNo</td>
+                        <td data-label="Property Type">@pro.PropertyType</td>
+                        <td data-label="Property Price">@pro.PropertyPrice</td>
+                        <td data-label="Property Address">@pro.PropertyAddress</td>
+                        <td datat-label="Inspection Date">@pro.RequestDate</td>
+                        <td data-label="Property Id">@pro.PropertyRegNo</td>
+                        <td class="actions-cell">
+
+                            <div class="buttons right nowrap">
+                                <a class="button small green --jb-modal" type="button" asp-controller="Buyer" asp-action="GetProperty" asp-route-id="@pro.PropertyRegNo">
+                                    <span class="icon"><i class="mdi mdi-eye"></i></span>
+                                </a>
+
+                            </div>
+                            <div class="buttons right nowrap">
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+
+            </tbody>
+        </table>
+        @if(!string.IsNullOrEmpty(ViewBag.Message))
+        {
+            <span style="color: green; justify-content: center">@ViewBag.Message</span>
+        }
+    </div>
+</div>

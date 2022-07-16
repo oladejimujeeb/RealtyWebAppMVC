@@ -220,7 +220,7 @@ namespace RealtyWebApp.Migrations
                             Email = "oladejimujib@yahoo.com",
                             FirstName = "Mujib",
                             LastName = "Oladeji",
-                            Password = "password",
+                            Password = "$2a$11$n/d0SmlBmNb0AOWRabM3/.qxWMoNGIcuTNpgeLG/EqEOM3CQ73EXu",
                             PhoneNumber = "08136794915"
                         });
                 });
@@ -279,6 +279,15 @@ namespace RealtyWebApp.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PropertyType")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("double");
+
+                    b.Property<string>("TransactionId")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");

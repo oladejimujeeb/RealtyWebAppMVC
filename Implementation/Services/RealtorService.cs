@@ -11,6 +11,7 @@ using RealtyWebApp.Entities.Identity;
 using RealtyWebApp.Entities.Identity.Enum;
 using RealtyWebApp.Interface.IRepositories;
 using RealtyWebApp.Interface.IServices;
+using RealtyWebApp.Interface.IServices.IPropertyMethod;
 using RealtyWebApp.MailFolder.EmailService;
 using RealtyWebApp.MailFolder.MailEntities;
 using RealtyWebApp.Models.RequestModel;
@@ -29,10 +30,12 @@ namespace RealtyWebApp.Implementation.Services
         private readonly IUserRoleRepository _userRoleRepository;
         private readonly IPaymentRepository _paymentRepository;
         private readonly IMailService _mailService;
+        private readonly IPropertyServiceMethod _propertyServiceMethod;
 
         public RealtorService(IRealtorRepository realtorRepository, IUserRepository userRepository, IRoleRepository roleRepository, 
             IWebHostEnvironment webHostEnvironment, IPropertyImage propertyImage, IPropertyDocument propertyDocument, 
-            IPropertyRepository propertyRepository, IUserRoleRepository userRoleRepository, IPaymentRepository paymentRepository, IMailService mailService)
+            IPropertyRepository propertyRepository, IUserRoleRepository userRoleRepository, IPropertyServiceMethod propertyServiceMethod,
+            IPaymentRepository paymentRepository, IMailService mailService)
         {
             _realtorRepository = realtorRepository;
             _userRepository = userRepository;
@@ -44,6 +47,7 @@ namespace RealtyWebApp.Implementation.Services
             _userRoleRepository = userRoleRepository;
             _paymentRepository = paymentRepository;
             _mailService = mailService;
+            _propertyServiceMethod = propertyServiceMethod;
         }
 
         public async Task<BaseResponseModel<RealtorDto>> RegisterRealtor(RealtorRequestModel model)
@@ -115,7 +119,8 @@ namespace RealtyWebApp.Implementation.Services
                 };
                 var addRealtor = await _realtorRepository.Add(realtor);
                 if (addRealtor == realtor)
-                {//sending mail upon registration
+                {
+                    //sending mail upon registration
                     WelcomeMessage sendMail = new WelcomeMessage()
                     {
                         Email = user.Email,
@@ -123,7 +128,7 @@ namespace RealtyWebApp.Implementation.Services
                         Id = addRealtor.AgentId
                     };
                     //send mail
-                    //await _mailService.WelcomeMail(sendMail);
+                    await _mailService.WelcomeMail(sendMail);
                     return new BaseResponseModel<RealtorDto>
                     {
                         Status = true,
@@ -141,19 +146,17 @@ namespace RealtyWebApp.Implementation.Services
         public async Task<BaseResponseModel<RealtorDto>> UpdateRealtorInfo(RealtorUpdateRequest model, int id)
         {
             var userInfo = await _userRepository.Get(x => x.Id == id);
-            userInfo.FirstName = model.FirstName;
-            userInfo.Password = BCrypt.Net.BCrypt.HashPassword(model.Password);
-            userInfo.FirstName = model.LastName;
-            userInfo.PhoneNumber = model.PhoneNumber;
             var realtor = await _realtorRepository.Get(x => x.UserId == id);
-            //var getRealtorId = await _userRoleRepository.
-            if (realtor == null)
+            if (realtor == null || userInfo == null)
             {
                 return new BaseResponseModel<RealtorDto>(){Message = "Failed to update", Status = false};
             }
+            
+            userInfo.FirstName = model.FirstName;
+            userInfo.LastName = model.LastName;
+            userInfo.PhoneNumber = model.PhoneNumber;
             realtor.Address = model.Address;
             realtor.BusinessName = model.BusinessName;
-            realtor.CacRegistrationNumber = model.CacNumber;
             await _userRepository.Update(userInfo);
             await _realtorRepository.Update(realtor);
             return new BaseResponseModel<RealtorDto>()
@@ -403,39 +406,22 @@ namespace RealtyWebApp.Implementation.Services
 
         public async Task<BaseResponseModel<PropertyDto>> GetProperty(int id)
         {
-            var x = await _propertyRepository.Get(y => y.Id == id);
-            if (x != null)
+            var property = await _propertyServiceMethod.GetPropertyById(id);
+            if (property.Status)
             {
                 return new BaseResponseModel<PropertyDto>()
                 {
-                    Status = true,
-                    Data = new PropertyDto()
-                    {
-                        Id = x.Id,
-                        Address = x.Address,
-                        Bedroom = x.Bedroom,
-                        Features = x.Features,
-                        Latitude = x.Latitude,
-                        Longitude = x.Longitude,
-                        Toilet = x.Toilet,
-                        BuildingType = x.BuildingType,
-                        BuyerId = x.BuyerIdentity,
-                        LandArea = x.PlotArea,
-                        PropertyPrice = x.Price,
-                        RealtorId = x.RealtorId,
-                        RegisteredDate = x.RegisteredDate,
-                        PropertyType = x.PropertyType,
-                        PropertyRegNumber = x.PropertyRegNo,
-                        LGA = x.LGA,
-                        State = x.State,
-                    }
+                    Message = property.Message,
+                    Status = property.Status,
+                    Data = property.Data
                 };
             }
 
             return new BaseResponseModel<PropertyDto>()
             {
-                Status = false,
-                Message = "Could not retrieved property"
+                Data = property.Data,
+                Status = property.Status,
+                Message = property.Message
             };
         }
 

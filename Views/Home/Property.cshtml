@@ -73,7 +73,7 @@
 				<div class="text">
 					<h1 class="mb-4">List Your <br>Property With Us.</h1>
 					<p style="font-size: 18px;">Get specialist advice from local experts across all types of residential, commercial and rural property</p>
-					<p><a href="#" class="btn btn-primary py-3 px-4">Register Your Property</a></p>
+					<p><a asp-controller="Realtor" asp-action="AddNewProperty" class="btn btn-primary py-3 px-4">Register Your Property</a></p>
 				</div>
 			</div>
 		</div>
@@ -149,7 +149,7 @@
 		</div>
 		<div class=" row justify-content-center">
           <a  asp-route-Id="@Model.Id" asp-action="BookInspectionDate" asp-controller="Buyer" class="btn btn-success btn-lg" style="padding: 10px; margin-right: 20px;margin-top: 30px">Book Inspection Date</a>
-          <a href="" class="btn btn-success btn-lg" style="padding: 10px; margin-left: 20px;margin-top: 30px">Make Outright Payment</a>
+          <a asp-action="PaymentBreakDown" asp-controller="Buyer" asp-route-Id="@Model.Id" class="btn btn-success btn-lg" style="padding: 10px; margin-left: 20px;margin-top: 30px">Proceed To Payment</a>
           <a asp-route-Id="@Model.Id" asp-controller="Buyer" asp-action="DownloadPropertyDocument"  class="btn btn-success btn-lg" style="padding: 10px; margin-left: 20px;margin-top: 30px">Download Property Document</a>
         </div>
 	</div>

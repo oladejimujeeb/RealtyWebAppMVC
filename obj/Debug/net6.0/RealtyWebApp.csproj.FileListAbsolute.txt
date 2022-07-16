@@ -34,3 +34,6 @@ C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6
 C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\MailKit.dll
 C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\MimeKit.dll
 C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\BouncyCastle.Crypto.dll
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\System.Net.Http.Formatting.dll
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll

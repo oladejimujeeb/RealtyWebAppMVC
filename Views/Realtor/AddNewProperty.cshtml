@@ -4,6 +4,17 @@
     ViewBag.Title = "Add Property";
     Layout = "_Layout";
 }
+<style>
+    #value{
+    
+    }
+    #set{
+    
+    }
+    #buildingType{
+    
+    }
+</style>
 <br>
 <div class="container">
     <div  class="row block-9 justify-content-center mb-5">
@@ -26,7 +37,7 @@
                 <div class="form-group">
                     <div>
                         <label class="control-label">Property Type</label>
-                        <select required class="form-control">
+                        <select onchange="check()" id="value" required class="form-control">
                             <option selected>Choose...</option>
                             <option>Building</option>
                             <option>Land</option>
@@ -65,19 +76,11 @@
                         <span asp-validation-for="State" class="text-danger"></span>
                     </div>
                 </div>
-
-                 <div class="form-group">
-                     <div>
-                         <label class="control-label">Number of Bedroom</label>
-                         <input asp-for="Bedroom" type="number" class="form-control" required/>
-                         <span asp-validation-for="Bedroom" class="text-danger"></span>
-                     </div>
-                     <div>
-                         <label asp-for="Toilet" class="control-label">No of Toilet</label>
-                         <input asp-for="Toilet" type="number" class="form-control" required/>
-                         <span asp-validation-for="Toilet" class="text-danger"></span>
-                     </div>
-                 </div>
+                
+                <div id="set" class="form-group">
+                    
+                </div>
+                
                  <p class="tagcolor" style="color:green">Property Co-ordinate</p>
                  <hr class="tagcolor" style="color:green">
                  <div class="form-group">
@@ -93,16 +96,16 @@
                      </div>
                  </div>
                  
+                 
+                 
                  <div class="form-group">
                      <div>
                          <label class="control-label">Plot Area</label>
                          <input asp-for="PlotArea" type="number" class="form-control" required/>
                          <span asp-validation-for="PlotArea" class="text-danger"></span>
                      </div>
-                     <div>
-                         <label class="control-label">Building Type</label>
-                         <input asp-for="BuildingType" type="text" class="form-control" required/>
-                         <span asp-validation-for="BuildingType" class="text-danger"></span>
+                     <div id="buildingType">
+                         
                      </div>
                  </div>
                  <p class="tagcolor" style="color:green">Upload Property Document</p>
@@ -134,6 +137,39 @@
 
     </div>
 </div>
+
+<script >
+
+
+function check(){
+let select = document.getElementById("value").value; 
+console.log(select);
+let newField = document.getElementById("set"); 
+let setType = document.getElementById('buildingType');
+if (select==="Building")
+    {
+       newField.innerHTML =`<div> <label class="control-label">Number of Bedroom</label> 
+                                <input asp-for="Bedroom" type="number" class="form-control" required>
+                                <span asp-validation-for="Bedroom" class="text-danger"></span>
+                            </div>
+                             <div>
+                               <label asp-for="Toilet" class="control-label">No of Toilet</label>
+                               <input asp-for="Toilet" type="number" class="form-control" required/>
+                               <span asp-validation-for="Toilet" class="text-danger"></span>
+                             </div>`;
+       
+       setType.innerHTML=`<label class="control-label">Building Type</label>
+                       <input asp-for="BuildingType" type="text" class="form-control" required/>
+                       <span asp-validation-for="BuildingType" class="text-danger"></span>`;
+    }
+else{
+      newField.innerHTML = "";
+      setType.innerHTML = "";
+}
+}
+
+                      
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

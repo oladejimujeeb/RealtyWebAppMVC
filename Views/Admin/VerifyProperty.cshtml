@@ -3,76 +3,75 @@
 @{
     ViewBag.Title = "property verification";
     Layout = "_AdminLayout";
-    var message ="";
+    var message = ViewData["UpdateMessage"] as string;
 }
-@if (TempData.ContainsKey("verify"))  
-      {  
-            message =TempData["verify"] as string;
-            <script >
-                alert(@message)
-            </script>
-      } 
-
-<div class="card-content">
-    <form method="post" asp-controller="Admin" asp-action="VerifyProperty">
-        <div class="field">
-            <label class="label">Building Type</label>
-            <input name="BuildingType" class="input" type="text" required value="@Model.BuildingType">
-        </div>
-        <div class="field">
-            <label class="label">Address</label>
-            <input name="Address" class="input" type="text" required value="@Model.Address">
-        </div>
-        <div class="field">
-            <label class="label">Bedroom</label>
-            <input name="Bedroom"  class="input" type="number" required value="@Model.Bedroom">
-        </div>
-        <div class="field">
-            <label class="label">Toilet</label>
-            <input name="Toilet" class="input" type="number" required value="@Model.Toilet">
-        </div>
-        <div class="field">
-            <label class="label">Land Area</label>
-            <input name="PlotArea" class="input" type="number" required value="@Model.LandArea">
-        </div>
-        <div class="field">
-            <label class="label">Price</label>
-            <input name="Price"  class="input" type="number" required value="@Model.PropertyPrice">
-        </div>
-        <div class="field">
-            <label class="label">Property Type</label>
-            <div class="control">
-                <div class="select">
-                    <select name="PropertyType" >
-                        <option >@Model.PropertyType</option>
-                        <option>Building</option>
-                        <option>Land</option>
-                    </select>
+@if (!string.IsNullOrEmpty(message))
+{
+	<div class="alert alert-danger">@message</div>
+}
+@if (Model != null)
+{
+    <div class="card-content">
+        <form method="post" asp-controller="Admin" asp-action="VerifyProperty">
+            <div class="field">
+                <label class="label">Building Type</label>
+                <input name="BuildingType" class="input" type="text" required value="@Model.BuildingType">
+            </div>
+            <div class="field">
+                <label class="label">Address</label>
+                <input name="Address" class="input" type="text" required value="@Model.Address">
+            </div>
+            <div class="field">
+                <label class="label">Bedroom</label>
+                <input name="Bedroom" class="input" type="number" required value="@Model.Bedroom">
+            </div>
+            <div class="field">
+                <label class="label">Toilet</label>
+                <input name="Toilet" class="input" type="number" required value="@Model.Toilet">
+            </div>
+            <div class="field">
+                <label class="label">Land Area</label>
+                <input name="PlotArea" class="input" type="number" required value="@Model.LandArea">
+            </div>
+            <div class="field">
+                <label class="label">Price</label>
+                <input name="Price" class="input" type="number" required value="@Model.PropertyPrice">
+            </div>
+            <div class="field">
+                <label class="label">Property Type</label>
+                <div class="control">
+                    <div class="select">
+                        <select name="PropertyType">
+                            <option >@Model.PropertyType</option>
+                            <option>Building</option>
+                            <option>Land</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="field">
-            <label class="label">Description</label>
-            <textarea name="Features"  class="textarea" placeholder="Description">@Model.Features</textarea>
-        </div> 
-        <div class="field">
-            <label class="label">Action To Be Taken</label>
-            <textarea name="Action"  class="textarea" value ="@Model.Action"></textarea>
-        </div>
-        <div class="field">
-            <label class="label">Set Status</label>
-            <div class="control">
-                <div class="select">
-                    <select name="Status">
-                        <option>@Model.Status</option>
-                        <option>Approved</option>
-                        <option>Rejected</option>
-                    </select>
+            <div class="field">
+                <label class="label">Description</label>
+                <textarea name="Features"  class="textarea" placeholder="Description">@Model.Features</textarea>
+            </div>
+            <div class="field">
+                <label class="label">Action To Be Taken</label>
+                <textarea name="Action"  class="textarea" value ="@Model.Action"></textarea>
+            </div>
+            <div class="field">
+                <label class="label">Set Status</label>
+                <div class="control">
+                    <div class="select">
+                        <select name="Status">
+                            <option>@Model.Status</option>
+                            <option>Approved</option>
+                            <option>Rejected</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group ">
-            <input  type="submit" value="Submit" class="btn btn-success trigger-btn col-sm-12" data-toggle="modal"/>
-        </div>
-    </form>
-</div>
+            <div class="form-group ">
+                <input type="submit" value="Submit" class="btn btn-success trigger-btn col-sm-12" data-toggle="modal"/>
+            </div>
+        </form>
+    </div>
+}

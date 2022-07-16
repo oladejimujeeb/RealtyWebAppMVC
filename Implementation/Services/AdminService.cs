@@ -11,6 +11,7 @@ using RealtyWebApp.Entities.Identity;
 using RealtyWebApp.Interface.IRepositories;
 using RealtyWebApp.Interface.IServices;
 using RealtyWebApp.Models.RequestModel;
+using RealtyWebApp.Interface.IServices.IPropertyMethod;
 
 namespace RealtyWebApp.Implementation.Services
 {
@@ -25,10 +26,13 @@ namespace RealtyWebApp.Implementation.Services
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IRealtorRepository _realtorRepository;
         private readonly IBuyerRepository _buyerRepository;
+        private readonly IPropertyServiceMethod _propertyServiceMethod;
+        private readonly IPaymentRepository _paymentRepository;
 
         public AdminService(IAdminRepository adminRepository, IRoleRepository roleRepository,
             IUserRepository userRepository, IPropertyRepository propertyRepository,
             IVisitationRepository visitationRepository, IPropertyImage propertyImage,
+            IPropertyServiceMethod propertyServiceMethod, IPaymentRepository paymentRepository,
             IWebHostEnvironment webHostEnvironment,IRealtorRepository realtorRepository, IBuyerRepository buyerRepository)
         {
             _adminRepository = adminRepository;
@@ -40,6 +44,8 @@ namespace RealtyWebApp.Implementation.Services
             _webHostEnvironment = webHostEnvironment;
             _realtorRepository = realtorRepository;
             _buyerRepository = buyerRepository;
+            _propertyServiceMethod = propertyServiceMethod;
+            _paymentRepository = paymentRepository;
         }
 
         public async Task<BaseResponseModel<AdminDto>> RegisterAdmin(AdminRequestModel model)
@@ -121,46 +127,42 @@ namespace RealtyWebApp.Implementation.Services
 
         public async Task<BaseResponseModel<PropertyDto>> GetPropertyById(int id)
         {
-            var getProperty = await _propertyRepository.Get(x => x.Id == id);
-            if (getProperty == null)
+            var property = await _propertyServiceMethod.GetPropertyById(id);
+            if (property.Status)
             {
-                return new BaseResponseModel<PropertyDto>
+                return new BaseResponseModel<PropertyDto>()
                 {
-                    Status = false, Message = "Not found",
+                    Message = property.Message,
+                    Status = property.Status,
+                    Data = property.Data
                 };
             }
 
-            return new BaseResponseModel<PropertyDto>
+            return new BaseResponseModel<PropertyDto>()
             {
-                Status = true,
-                Data = new PropertyDto()
+                Data = property.Data,
+                Status = property.Status,
+                Message = property.Message
+            };
+        }
+        public async Task<BaseResponseModel<PropertyDocumentDto>> DownloadPropertyDocument(int documentId)
+        {
+            var document = await _propertyServiceMethod.DownloadPropertyDocument(documentId);
+            if (document.Status)
+            {
+                return new BaseResponseModel<PropertyDocumentDto>()
                 {
-                    Id = getProperty.Id,
-                    Address = getProperty.Address,
-                    Bedroom = getProperty.Bedroom,
-                    Features = getProperty.Features,
-                    Latitude = getProperty.Latitude,
-                    Longitude = getProperty.Longitude,
-                    Toilet = getProperty.Toilet,
-                    BuildingType = getProperty.BuildingType,
-                    BuyerId = getProperty.BuyerIdentity,
-                    IsSold = getProperty.IsSold,
-                    LandArea = getProperty.PlotArea,
-                    PropertyPrice = getProperty.Price,
-                    RealtorId = getProperty.RealtorId,
-                    PropertyType = getProperty.PropertyType,
-                    PropertyRegNumber = getProperty.PropertyRegNo,
-                    Action = getProperty.Action,
-                    Status = getProperty.Status,
-                    VerificationStatus = getProperty.VerificationStatus,
-                    IsAvailable = getProperty.IsAvailable,
-                    LGA = getProperty.LGA,
-                    State = getProperty.State,
-                    ImagePath = _propertyImage.QueryWhere(y => y.PropertyRegNo == getProperty.PropertyRegNo)
-                        .Select(y => y.DocumentName)
-                        .ToList() //getProperty.PropertyImages.Select(z=>z.DocumentPath).ToList(),
-                },
-                Message = "load successfully"
+                    Status = document.Status,
+                    Message = document.Message,
+                    Data = document.Data
+                };
+            }
+
+            return new BaseResponseModel<PropertyDocumentDto>()
+            {
+                Data = document.Data,
+                Status = document.Status,
+                Message = document.Message
             };
         }
 
@@ -449,7 +451,15 @@ namespace RealtyWebApp.Implementation.Services
         public async Task<BaseResponseModel<IEnumerable<BuyerDto>>> AllBuyers()
         {
             var buyers = await _buyerRepository.GetAllBuyers();
-            List<BuyerDto> buyerDtos = new List<BuyerDto>();
+            if (!buyers.Any())
+            {
+                return new BaseResponseModel<IEnumerable<BuyerDto>>()
+                {
+                    Status = false,
+                    Message = "No Registered Client"
+                };
+            }
+            var buyerDtos = new List<BuyerDto>();
             
             foreach (var x in buyers)
             {
@@ -463,15 +473,6 @@ namespace RealtyWebApp.Implementation.Services
                     Address = x.Address,
                     ProfilePicture = x.User.ProfilePicture,
                 });
-            }
-            
-            if (buyerDtos.Count == 0)
-            {
-                return new BaseResponseModel<IEnumerable<BuyerDto>>()
-                {
-                    Status = false,
-                    Message = "No Information"
-                };
             }
 
             return new BaseResponseModel<IEnumerable<BuyerDto>>()
@@ -512,6 +513,42 @@ namespace RealtyWebApp.Implementation.Services
             {
                 Status = true,
                 Data = visitationRequests
+            };
+        }
+
+        public async Task<BaseResponseModel<IEnumerable<PaymentDto>>> AllPayment()
+        {
+            var allPayment =await _paymentRepository.GetAllPayment();
+            if (!allPayment.Any())
+            {
+                return new BaseResponseModel<IEnumerable<PaymentDto>>()
+                {
+                    Status = false,
+                    Message = "No Payment Yet"
+                };
+            }
+            var paymentDtos = new List<PaymentDto>();
+            foreach (var payment in allPayment)
+            {
+                paymentDtos.Add(new PaymentDto()
+                {
+                    Id = payment.Id,
+                    AgentId = payment.Property.Realtor.AgentId,
+                    BuyerEmail = payment.BuyerEmail,
+                    BuyerName = payment.BuyerName,
+                    BuyerTelephone = payment.BuyerTelephone,
+                    PaymentDate = payment.PaymentDate,
+                    PropertyPrice = payment.Amount,
+                    TotalPrice = payment.TotalPrice,
+                    PropertyType = payment.PropertyType,
+                    TransactionId = payment.TransactionId,
+                });
+            }
+
+            return new BaseResponseModel<IEnumerable<PaymentDto>>()
+            {
+                Status = true,
+                Data = paymentDtos
             };
         }
     }

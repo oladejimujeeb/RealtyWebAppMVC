@@ -70,12 +70,12 @@ namespace RealtyWebApp.Controllers
             var property = await _adminService.UpdateRealtorPropertyForSale(id, updateProperty);
             if (property.Status)
             {
-                TempData["verify"] = "Done...";
-                return RedirectToAction("AdminDashBoard");
+                ViewData["UpdateMessage"] = property.Message;
+                return View("VerifyProperty");
             }
 
-            TempData["verify"] = "Verification failed";
-            return RedirectToAction("VerifyProperty");
+            ViewData["UpdateMessage"] = "Verification failed";
+            return View("VerifyProperty");
         }
         
         [Authorize(Roles = "Administrator")]
@@ -89,7 +89,19 @@ namespace RealtyWebApp.Controllers
 
             return NotFound(property.Message);
         }
-        
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> DownloadPropertyDocument(int id)
+        {
+            var file = await _adminService.DownloadPropertyDocument(id);
+            if (file.Status)
+            {
+                return File(file.Data.Data, file.Data.FileType, file.Data.DocumentPath + file.Data.Extension);
+                
+            }
+
+            ViewBag.download = file.Message;
+            return null;
+        }
         [Authorize(Roles = "Administrator")]
         public IActionResult VisitationRequests()
         {
@@ -190,5 +202,24 @@ namespace RealtyWebApp.Controllers
         {
             return View();
         }
+
+
+        [HttpPost]
+        public async Task<JsonResult> ViewAllPayments()
+        {
+            var allPayment = await _adminService.AllPayment();
+            if (!allPayment.Status)
+            {
+                ViewBag.Message = allPayment.Message;
+            }
+            return Json(allPayment.Data);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public IActionResult AllPayments()
+        {
+            return View();
+        }
+        
     }
 }

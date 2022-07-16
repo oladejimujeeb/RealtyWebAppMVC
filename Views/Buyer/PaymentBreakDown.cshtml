@@ -1,8 +1,75 @@
 @model RealtyWebApp.DTOs.PaymentBreakDown
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    Layout ="_BuyerLayout";
+	ViewBag.Title = "Payment Breakdown";
+	var error = ViewData["PaymentError"] as string;
+	var succeed =  ViewData["PaymentSucceed"] as string;
+}
+@if (!string.IsNullOrEmpty(error))
+{
+	<div class="alert alert-danger">@error</div>
+}
+@if (!string.IsNullOrEmpty(succeed))
+{
+	<div class="alert alert-danger">@succeed</div>
 }
 
-<h2>title</h2>
+@if (Model != null)
+{
+	<div class="card-content">
+		<form method="post" asp-controller="Buyer" asp-action="ProcessPayment">
+			<div class="field">
+				<label class="label">Client Name</label>
+				<input name="BuyerName" class="input" type="text" readonly value="@Model.BuyerName">
+			</div>
+			<div class="field">
+				<label class="label">Client Email</label>
+				<input name="BuyerEmail" class="input" type="text" readonly value="@Model.BuyerEmail">
+			</div>
+			<div class="field">
+				<label class="label">Client Phone Number</label>
+				<input name="BuyerTelephone" class="input" type="text" readonly value="@Model.BuyerTelephone">
+			</div>
+			<div class="field">
+				<label class="label">Property Type</label>
+				<input name="PropertyType" class="input" type="text" readonly value="@Model.PropertyType">
+			</div>
+			<div class="field">
+				<label class="label">Property Registration Id</label>
+				<input name="PropertyRegNumber" class="input" type="text" readonly value="@Model.PropertyRegNumber">
+			</div>
+			<div class="field">
+				<label class="label">Property Price</label>
+				<input name="Amount" class="input" type="number" readonly value="@Model.PropertyPrice">
+			</div>
+			<div class="field">
+				<label class="label">Agency Fees</label>
+				<input type="number" readonly class="input" value="@Model.AgencyFees">
+			</div>
+			<div class="field">
+				<label class="label">Deed Of Assignment Fees</label>
+				<input type="number" readonly class="input" value="@Model.AgreementFees">
+			</div>
+			<div class="field">
+				<label class="label">Total Amount Payable</label>
+				<input name="TotalPrice" type="number" readonly class="input" value="@Model.TotalPrice">
+			</div>
+
+			<div class="form-group ">
+				<input type="submit" value="Make Payment" class="button small green --jb-modal"  data-toggle="modal"/>
+			</div>
+		</form>
+	</div>
+}
+
+<br>
+<br>
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+	<div class=" row justify-content-center">
+		<p style="color: red; padding-top: 50px">@ViewBag.Message</p>
+	</div>
+}
+
+    

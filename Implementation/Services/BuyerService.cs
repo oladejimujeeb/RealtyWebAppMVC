@@ -2,13 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using RealtyWebApp.DTOs;
+using RealtyWebApp.DTOs.PayStack;
 using RealtyWebApp.Entities;
 using RealtyWebApp.Entities.Identity;
 using RealtyWebApp.Interface.IRepositories;
 using RealtyWebApp.Interface.IServices;
+using RealtyWebApp.Interface.IServices.IPropertyMethod;
 using RealtyWebApp.MailFolder.EmailService;
 using RealtyWebApp.MailFolder.MailEntities;
 using RealtyWebApp.Models.RequestModel;
@@ -17,24 +24,31 @@ namespace RealtyWebApp.Implementation.Services
 {
     public class BuyerService:IBuyerService
     {
+        private readonly IConfiguration _configuration;
         private readonly IBuyerRepository _buyerRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IUserRepository _userRepository;
         private readonly IPropertyRepository _propertyRepository;
         private readonly IVisitationRepository _visitationRepository;
         private readonly IPropertyImage _propertyImage;
-        private readonly IPropertyDocument _propertyDocument;
+        private readonly IPropertyServiceMethod _propertyServiceMethod;
         private readonly IMailService _mailService;
-        public BuyerService(IBuyerRepository buyerRepository,IMailService mailService, IRoleRepository roleRepository, IUserRepository userRepository, IPropertyRepository propertyRepository, IVisitationRepository visitationRepository, IPropertyImage propertyImage, IPropertyDocument propertyDocument)
+        private readonly IPaymentRepository _paymentRepository;
+
+        public BuyerService(IConfiguration configuration, IBuyerRepository buyerRepository, IRoleRepository roleRepository, IUserRepository userRepository, 
+            IPropertyRepository propertyRepository, IVisitationRepository visitationRepository, IPropertyServiceMethod propertyServiceMethod,
+            IPropertyImage propertyImage, IMailService mailService, IPaymentRepository paymentRepository)
         {
+            _configuration = configuration;
             _buyerRepository = buyerRepository;
             _roleRepository = roleRepository;
             _userRepository = userRepository;
             _propertyRepository = propertyRepository;
             _visitationRepository = visitationRepository;
             _propertyImage = propertyImage;
-            _propertyDocument = propertyDocument;
+            _propertyServiceMethod = propertyServiceMethod;
             _mailService = mailService;
+            _paymentRepository = paymentRepository;
         }
         public async Task<BaseResponseModel<BuyerDto>> RegisterBuyer(BuyerRequestModel model)
         {
@@ -166,6 +180,26 @@ namespace RealtyWebApp.Implementation.Services
         {
             var getBuyer =await _userRepository.Get(x => x.Buyer.Id == buyerId);
             var getProperty = await _propertyRepository.Get(x => x.Id == propertyId);
+            if (getProperty == null || getBuyer == null)
+            {
+                return new BaseResponseModel<VisitationRequestDto>()
+                {
+                    Status = false,
+                    Message = "Failed",
+                };
+            }
+            var alreadyMakeRequest = await _visitationRepository.Get(x => x.BuyerEmail == getBuyer.Email &&
+                                                                   x.PropertyRegNo == getProperty.PropertyRegNo);
+            if (alreadyMakeRequest != null)
+            {
+                return new BaseResponseModel<VisitationRequestDto>()
+                {
+                    Status = false,
+                    Message = $"A date has already been scheduled for you for inspection of this particular property with Id: {alreadyMakeRequest.PropertyRegNo}." +
+                              $"Call or mail our customer service if you need to reschedule the date"
+                };
+            }
+            
             var request = new VisitationRequest()
             {
                 BuyerEmail = getBuyer.Email,
@@ -225,47 +259,48 @@ namespace RealtyWebApp.Implementation.Services
 
         public async Task<BaseResponseModel<PropertyDocumentDto>> DownloadPropertyDocument(int documentId)
         {
-            var file = await _propertyDocument.Get(x => x.Property.Id == documentId);//Possible Error
-            if (file == null)
+            var document = await _propertyServiceMethod.DownloadPropertyDocument(documentId);
+            if (document.Status)
             {
                 return new BaseResponseModel<PropertyDocumentDto>()
                 {
-                    Status = false,
-                    Message = "File failed to download"
+                    Status = document.Status,
+                    Message = document.Message,
+                    Data = document.Data
                 };
             }
 
-            return new BaseResponseModel<PropertyDocumentDto>
+            return new BaseResponseModel<PropertyDocumentDto>()
             {
-                Data = new PropertyDocumentDto()
-                {
-                    Extension = file.Extension,
-                    DocumentPath = file.DocumentName,
-                    FileType = file.FileType,
-                    Data = file.Data,
-                    PropertyRegNo = file.PropertyRegNo
-                },
-                Status = true
+                Data = document.Data,
+                Status = document.Status,
+                Message = document.Message
             };
         }
 
-        public BaseResponseModel<IEnumerable<VisitationRequestDto>> ListOfRequestedProperties(int buyerId)
+        public async Task< BaseResponseModel<IEnumerable<VisitationRequestDto>>>ListOfBuyerVisitedProperty(int buyerId)
         {
-            var visitationRequest = _visitationRepository.QueryWhere(x => x.BuyerId == buyerId).
-                Select(x=>new VisitationRequestDto
+            IList<VisitationRequestDto> visitationRequests = new List<VisitationRequestDto>();
+            var propertyInspected = await _visitationRepository.BuyerInspectedProperty(buyerId);
+            foreach (var x in propertyInspected)
+            {
+                visitationRequests.Add(new VisitationRequestDto()
                 {
-                    Id = x.Id,
-                    BuyerId = x.BuyerId,
                     BuyerName = x.BuyerName,
+                    BuyerPhoneNo = x.BuyerTelephone,
                     PropertyAddress = x.Address,
-                    PropertyId = x.PropertyId,
                     RequestDate = x.RequestDate,
                     PropertyRegNo = x.PropertyRegNo,
+                    BuyerEmail = x.BuyerEmail,
+                    PropertyPrice = x.Property.Price,
+                    Mail = x.BuyerEmail,
+                    PropertyId = x.PropertyId,
                     PropertyType = x.PropertyType,
-                    BuyerPhoneNo = x.BuyerTelephone
-                }).ToList();
+                    BuyerId = x.BuyerId
+                });
+            }
             
-            if (visitationRequest.Count == 0)
+            if (visitationRequests.Count == 0)
             {
                 return new BaseResponseModel<IEnumerable<VisitationRequestDto>>
                 {
@@ -276,9 +311,297 @@ namespace RealtyWebApp.Implementation.Services
             return new BaseResponseModel<IEnumerable<VisitationRequestDto>>
             {
                 Status = true,
-                Data = visitationRequest
+                Data = visitationRequests
             };
             
+        }
+
+        public async Task<BaseResponseModel<PropertyDto>> GetProperty(string propertyId)
+        {
+            var property = await _propertyRepository.GetWhere(propertyId);
+            if (property == null)
+            {
+                return new BaseResponseModel<PropertyDto>()
+                {
+                    Status = false,
+                    Message = "The Property You Are Looking Has been Sold to Another Client, We Are sorry About That."
+                };
+            }
+
+            return new BaseResponseModel<PropertyDto>()
+            {
+                Status = true,
+                Data = new PropertyDto()
+                {
+                    Id = property.Id,
+                    Address = property.Address,
+                    Bedroom = property.Bedroom,
+                    Features = property.Features,
+                    Latitude = property.Latitude,
+                    Longitude = property.Longitude,
+                    Toilet = property.Toilet,
+                    BuildingType = property.BuildingType,
+                    BuyerId = property.BuyerIdentity,
+                    IsSold = property.IsSold,
+                    LandArea = property.PlotArea,
+                    PropertyPrice = property.Price,
+                    RealtorId = property.RealtorId,
+                    PropertyType = property.PropertyType,
+                    PropertyRegNumber = property.PropertyRegNo,
+                    LGA = property.LGA,
+                    State = property.State,
+                    ImagePath = _propertyImage.QueryWhere(y=>y.PropertyRegNo==property.PropertyRegNo).Select(y=>y.DocumentName).ToList()
+                }
+            };
+        }
+
+        public async Task<BaseResponseModel<BuyerDto>> GetBuyer(int id)
+        {
+            var buyerInfo = await _userRepository.GetUserBuyer(id);
+            if (buyerInfo == null)
+            {
+                return new BaseResponseModel<BuyerDto>()
+                {
+                    Status = false,
+                    Message = "Failed"
+                };
+            }
+
+            return new BaseResponseModel<BuyerDto>()
+            {
+                Status = true,
+                Data = new BuyerDto()
+                {
+                    Id = buyerInfo.Id,
+                    Address = buyerInfo.Buyer.Address,
+                    FName = buyerInfo.FirstName,
+                    LName = buyerInfo.LastName,
+                    PhoneNumber = buyerInfo.PhoneNumber,
+                }
+            };
+        }
+
+        public async Task<BaseResponseModel<BuyerDto>> UpdateBuyer(int id,UpdateBuyerModel model)
+        {
+            var userInfo = await _userRepository.Get(x => x.Id == id);
+            var buyer = await _buyerRepository.Get(x => x.UserId == id);
+            if (userInfo == null || buyer == null)
+            {
+                return new BaseResponseModel<BuyerDto>()
+                {
+                    Status = false,
+                    Message = "Failed"
+                };
+            }
+
+            userInfo.FirstName = model.FirstName;
+            userInfo.LastName = model.LastName;
+            userInfo.PhoneNumber = model.PhoneNumber;
+            buyer.Address = model.Address;
+            var updateUser = await _userRepository.Update(userInfo);
+            var updateBuyer = await _buyerRepository.Update(buyer);
+            if (updateBuyer == null || updateUser == null)
+            {
+                return new BaseResponseModel<BuyerDto>()
+                {
+                    Status = false,
+                    Message = "Failed to Update"
+                };
+            }
+
+            return new BaseResponseModel<BuyerDto>()
+            {
+                Status = true,
+                Message = "Update Successfully"
+            };
+        }
+
+        public async Task<BaseResponseModel<PaymentBreakDown>> PaymentBreakDown(int propertyId, int buyerId)
+        {
+            var property = await _propertyRepository.Get(propertyId);
+            var getBuyer =await _userRepository.Get(x => x.Id == buyerId);
+            if (property == null || getBuyer==null)
+            {
+                return new BaseResponseModel<PaymentBreakDown>()
+                {
+                    Status = false,
+                    Message = "Failed!! The Property You Are Looking Has been Sold to Another Client, We Are sorry About That."
+                };
+            }
+
+            var paymentBreakDown = new PaymentBreakDown()
+            {
+                PropertyId = property.Id,
+                PropertyPrice = property.Price,
+                PropertyType = property.PropertyType,
+                BuyerName = $"{getBuyer.LastName} {getBuyer.FirstName}",
+                BuyerEmail = getBuyer.Email,
+                BuyerTelephone = getBuyer.PhoneNumber,
+                PropertyRegNumber = property.PropertyRegNo
+            };
+            if (property.Price <= 750000)
+            {
+                paymentBreakDown.AgencyFees = property.Price * 0.10;
+                paymentBreakDown.AgreementFees = 30000;
+                paymentBreakDown.TotalPrice = paymentBreakDown.AgencyFees + paymentBreakDown.AgreementFees + property.Price; 
+            }
+            else if (property.Price >750000 && property.Price <=5000000)
+            {
+                paymentBreakDown.AgencyFees = property.Price * 0.05;
+                paymentBreakDown.AgreementFees = property.Price * 0.04;
+                paymentBreakDown.TotalPrice = paymentBreakDown.AgencyFees + paymentBreakDown.AgreementFees + property.Price;
+            }
+            else
+            {
+                paymentBreakDown.AgencyFees = property.Price * 0.04;
+                paymentBreakDown.AgreementFees = property.Price * 0.05;
+                paymentBreakDown.TotalPrice = paymentBreakDown.AgencyFees + paymentBreakDown.AgreementFees + property.Price;
+            }
+
+            return new BaseResponseModel<PaymentBreakDown>()
+            {
+                Status = true,
+                Data = new PaymentBreakDown()
+                {
+                    PropertyId = paymentBreakDown.PropertyId,
+                    AgencyFees = paymentBreakDown.AgencyFees,
+                    AgreementFees = paymentBreakDown.AgreementFees,
+                    BuyerEmail = paymentBreakDown.BuyerEmail,
+                    BuyerName = paymentBreakDown.BuyerName,
+                    BuyerTelephone = paymentBreakDown.BuyerTelephone,
+                    PropertyPrice = paymentBreakDown.PropertyPrice,
+                    PropertyType = paymentBreakDown.PropertyType,
+                    TotalPrice = paymentBreakDown.TotalPrice,
+                    PropertyRegNumber = paymentBreakDown.PropertyRegNumber
+                }
+            };
+        }
+
+        public async Task<BaseResponse> MakePayment(int buyerId, PaymentRequestModel paymentRequest)
+        {
+            var property = await _propertyRepository.GetWhere(paymentRequest.PropertyRegNumber);
+            var payment = new Payment()
+            {
+                Amount = paymentRequest.Amount,
+                BuyerEmail = paymentRequest.BuyerEmail,
+                BuyerName = paymentRequest.BuyerName,
+                BuyerTelephone = paymentRequest.BuyerTelephone,
+                TotalPrice = paymentRequest.TotalPrice,
+                PropertyType = paymentRequest.PropertyType,
+                PropertyId = property.Id,
+                TransactionId = $"REALTY-PRTY-{Guid.NewGuid().ToString().Substring(0,9)}" ,
+            };
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.BaseAddress = new Uri("https://api.paystack.co/transaction/initialize");
+            httpClient.DefaultRequestHeaders.Authorization = 
+                new AuthenticationHeaderValue("Bearer",_configuration["PayStack:SecretKey"]);
+            
+            var content = new StringContent(JsonConvert.SerializeObject( new
+            {
+                amount = paymentRequest.TotalPrice * 100,
+                email = paymentRequest.BuyerEmail,
+                reference =payment.TransactionId,
+                currency = "NGN",
+                callback_url = "https://localhost:5001/Buyer/VerifyPayment"
+                
+            }), Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync("https://api.paystack.co/transaction/initialize", content);
+            var responseToString = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode==System.Net.HttpStatusCode.OK)
+            {
+                payment.PaymentDate = DateTime.Now;
+                //var savePayment =  await _paymentRepository.Add(payment);
+                /*property.BuyerIdentity = buyerId;
+                property.IsSold = true;
+                property.IsAvailable = false;
+                var updatePropertySale = await _propertyRepository.Update(property);
+                if (savePayment == null && updatePropertySale == null)
+                {
+                    return new BaseResponse()
+                    {
+                        Status = true,
+                        Message = "Payment Failed"
+                    };
+                }*/
+
+                var responseObject = JsonConvert.DeserializeObject<PayStackResponse>(responseToString);
+                if (responseObject.status)
+                {
+                    return new BaseResponse()
+                    {
+                        Status = true,
+                        Message = responseObject.data.authorization_url
+                    };
+                    
+                }
+                return new BaseResponse()
+                {
+                    Status = false,
+                    Message = responseObject.message
+                };
+            }
+            else
+            {
+                return new BaseResponse()
+                {
+                    Status = false,
+                    Message = response.ReasonPhrase
+                };
+            }
+        }
+
+        public async Task<BaseResponse> VerifyPayment(string transactionReference)
+        {
+            var verify = await _paymentRepository.Get(x => x.TransactionId == transactionReference);
+            if (verify == null)
+            {
+                return new BaseResponse()
+                {
+                    Status = false,
+                    Message = "Payment Not Completed"
+                };
+            }
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.BaseAddress = new Uri("https://api.paystack.co/transaction/verify/");
+            httpClient.DefaultRequestHeaders.Authorization = 
+                new AuthenticationHeaderValue("Bearer",_configuration["PayStack:SecretKey"]);
+            var response = await httpClient.GetAsync(transactionReference);
+            var responseToString = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                var responseObject = JsonConvert.DeserializeObject<PayStackResponse>(responseToString);
+                if (responseObject.data.status == "success")
+                {
+                    /*verify.Status = PaymentStatus.Success;
+                    var updatePayment = await _paymentRepository.Update(verify);
+                    if (updatePayment == null)
+                    {
+                        return new BaseResponse()
+                        {
+                            Status = false,
+                            Message = "Something Went Wrong"
+                        };
+                    }*/
+
+                    return new BaseResponse()
+                    {
+                        Status = true,
+                        Message = "Payment Received Successfully"
+                    };
+                }
+            }
+
+            return new BaseResponse()
+            {
+                Status = false,
+                Message = "Payment Was Not Successful"
+            };
+
         }
     }
 }

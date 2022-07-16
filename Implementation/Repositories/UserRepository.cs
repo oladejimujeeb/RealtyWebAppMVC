@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RealtyWebApp.Context;
 using RealtyWebApp.DTOs;
@@ -15,6 +16,11 @@ namespace RealtyWebApp.Implementation.Repositories
             Context = context;
         }
 
-       
+
+        public async Task<User> GetUserBuyer(int id)
+        {
+            var buyer = await Context.Users.Include(x => x.Buyer).FirstOrDefaultAsync(x => x.Id == id);
+            return buyer;
+        }
     }
 }

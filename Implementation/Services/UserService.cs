@@ -55,21 +55,13 @@ namespace RealtyWebApp.Implementation.Services
             var userRole = await _userRoleRepository.GetUserRole(user.Id);
             /*var realtor = await _realtorRepository.Get(x => x.UserId == user.Id);
             var buyer = await _buyerRepository.Get(x => x.UserId == user.Id);*/
-            /*var mail = new WelcomeMessage()
+            var mail = new WelcomeMessage()
             {
                 Email = "oladejimujib@gmail.com",
                 Id = "mujib007",
                 FullName = "Oladeji mujib"
             };
-            try
-            {
-                await _mailService.WelcomeMail(mail);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }*/
+            await _mailService.WelcomeMail(mail);
            
             return new BaseResponseModel<UserDto>()
             {

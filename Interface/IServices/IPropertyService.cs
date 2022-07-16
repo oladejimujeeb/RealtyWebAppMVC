@@ -8,10 +8,10 @@ namespace RealtyWebApp.Interface.IServices
     {
         Task<BaseResponseModel<PropertyDto>> GetProperty(int id);
         BaseResponseModel<IEnumerable<PropertyDto>> AllAvailablePropertyWithImage();
-        BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByRealtor(int realtyId);
+        /*BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByRealtor(int realtyId);
         BaseResponseModel<IEnumerable<PropertyDto>> GetSoldPropertyByRealtor(int realtyId);
         BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByBuyer(int buyerId);
         BaseResponseModel<IEnumerable<PropertyDto>> GetRealtorApprovedProperty(int id);
-        BaseResponseModel<IEnumerable<PropertyDto>> AllUnverifiedProperty();
+        BaseResponseModel<IEnumerable<PropertyDto>> AllUnverifiedProperty();*/
     }
 }

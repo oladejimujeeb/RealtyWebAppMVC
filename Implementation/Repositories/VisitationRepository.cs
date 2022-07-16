@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RealtyWebApp.Context;
+using RealtyWebApp.DTOs;
 using RealtyWebApp.Entities;
 using RealtyWebApp.Interface.IRepositories;
 
@@ -21,6 +22,13 @@ namespace RealtyWebApp.Implementation.Repositories
             var visit = Context.VisitationRequests.Include(x => x.Property)
                 .Where(x => x.RequestDate > DateTime.Now.AddDays(-5)).ToList();
             return visit;
+        }
+
+        public async Task<IEnumerable<VisitationRequest>> BuyerInspectedProperty(int buyerId)
+        {
+            var inspect = await Context.VisitationRequests.Include(x => x.Property)
+                .Where(x => x.BuyerId == buyerId).ToListAsync();
+            return inspect;
         }
     }
 }

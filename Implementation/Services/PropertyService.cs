@@ -4,8 +4,10 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using RealtyWebApp.DTOs;
+using RealtyWebApp.Implementation.Services.PropertyMethod;
 using RealtyWebApp.Interface.IRepositories;
 using RealtyWebApp.Interface.IServices;
+using RealtyWebApp.Interface.IServices.IPropertyMethod;
 
 namespace RealtyWebApp.Implementation.Services
 {
@@ -13,52 +15,32 @@ namespace RealtyWebApp.Implementation.Services
     {
         private readonly IPropertyRepository _propertyRepository;
         private readonly IPropertyImage _propertyImage;
+        private readonly IPropertyServiceMethod _propertyServiceMethod;
 
-        public PropertyService(IPropertyRepository propertyRepository, IPropertyImage propertyImage)
+        public PropertyService(IPropertyRepository propertyRepository, IPropertyImage propertyImage, IPropertyServiceMethod propertyServiceMethod)
         {
             _propertyRepository = propertyRepository;
             _propertyImage = propertyImage;
+            _propertyServiceMethod = propertyServiceMethod;
         }
         public async Task<BaseResponseModel<PropertyDto>> GetProperty(int id)
         {
-            var getProperty = await _propertyRepository.Get(x => x.Id == id);
-            if (getProperty == null)
+            var property = await _propertyServiceMethod.GetPropertyById(id);
+            if (property.Status)
             {
-                return new BaseResponseModel<PropertyDto>
+                return new BaseResponseModel<PropertyDto>()
                 {
-                    Status = false,Message = "Not found",
+                    Message = property.Message,
+                    Status = property.Status,
+                    Data = property.Data
                 };
             }
 
-            return new BaseResponseModel<PropertyDto>
+            return new BaseResponseModel<PropertyDto>()
             {
-                Status = true,
-                Data = new PropertyDto()
-                {
-                    Id = getProperty.Id,
-                    Address = getProperty.Address,
-                    Bedroom = getProperty.Bedroom,
-                    Features = getProperty.Features,
-                    Latitude = getProperty.Latitude,
-                    Longitude = getProperty.Longitude,
-                    Toilet = getProperty.Toilet,
-                    BuildingType = getProperty.BuildingType,
-                    BuyerId = getProperty.BuyerIdentity,
-                    IsSold = getProperty.IsSold,
-                    LandArea = getProperty.PlotArea,
-                    PropertyPrice = getProperty.Price,
-                    RealtorId = getProperty.RealtorId,
-                    PropertyType = getProperty.PropertyType,
-                    PropertyRegNumber = getProperty.PropertyRegNo,
-                    Action = getProperty.Action,
-                    Status = getProperty.Status,
-                    VerificationStatus = getProperty.VerificationStatus,
-                    IsAvailable = getProperty.IsAvailable,
-                    LGA = getProperty.LGA,
-                    State = getProperty.State,
-                    ImagePath = _propertyImage.QueryWhere(y=>y.PropertyRegNo==getProperty.PropertyRegNo).Select(y=>y.DocumentName).ToList(),
-                },
-                Message = "load successfully"
+                Data = property.Data,
+                Status = property.Status,
+                Message = property.Message
             };
         }
 
@@ -107,7 +89,7 @@ namespace RealtyWebApp.Implementation.Services
             };
         }
 
-        public  BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByRealtor(int realtorId)
+        /*public  BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByRealtor(int realtorId)
         {
             var getProperty = _propertyRepository.QueryWhere(x => x.RealtorId == realtorId && x.BuyerIdentity==0).
                 Select(x=>new PropertyDto()
@@ -273,6 +255,6 @@ namespace RealtyWebApp.Implementation.Services
                 Status = true,
                 Data =getProperty
             };
-        }
+        }*/
     }
 }

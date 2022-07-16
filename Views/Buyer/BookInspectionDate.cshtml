@@ -8,7 +8,7 @@
 
 <html xmlns="http://www.w3.org/1999/html">
 <head>
-    <title>title</title>
+    <title>Book Inspection</title>
     <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         
@@ -105,65 +105,77 @@
 			</div>
 		</div>
 	</div>
-	</section>
-<section id="print" class="ftco-section ftco-no-pt">
-	<div class="container">
-		<div class="row justify-content-center">
-			<div class="col-md-12 heading-section text-center ftco-animate mb-5">
-				<span class="subheading">Property Inspection Request</span>
-				@*<h2 class="mb-2">You Made a Good choice</h2>*@
-			</div>
-		</div>
-		 
-		<table  class="table table-borderless">
-			<thead>
-			<tr>
-				<th scope="col" style="padding-right: 50px" >Inspection	Details</th>
-				<th scope="col" > </th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr>
-				<td>Name:</td>
-				<td>@Model.BuyerName</td>
-			</tr>
-			<tr>
-				<td>Phone:</td>
-				<td>@Model.BuyerPhoneNo</td>
-			</tr>
-			<tr>
-				<td>Email:</td>
-				<td>@Model.Mail</td>
-			</tr>
-			<tr>
-				<td>Property Type:</td>
-				<td>@Model.PropertyType</td>
-			</tr>
-			<tr>
-				<td>Property Id:</td>
-				<td>@Model.PropertyRegNo</td>
-			</tr>
-			<tr>
-				<td>Property Price:</td>
-				<td>@Model.PropertyPrice.ToString("N")</td>
-			</tr>
-			<tr>
-				<td>Property Address:</td>
-				<td>@Model.PropertyAddress</td>
-			</tr>
-			
-			<tr>
-				<td>Inspection Date:</td>
-				<td>@Model.Message</td>
-			</tr>
-			
-			</tbody>
-		</table>
-	</div>
-	<div class=" row justify-content-center">
-		<input type="button" value="Print Inspection Page" onclick="printPage('print');">
-	</div>
 </section>
+@if (@Model != null)
+{
+	<section id="print" class="ftco-section ftco-no-pt">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-12 heading-section text-center ftco-animate mb-5">
+					<span class="subheading">Property Inspection Request</span>
+					@*<h2 class="mb-2">You Made a Good choice</h2>*@
+				</div>
+			</div>
+
+			<table class="table table-borderless">
+				<thead>
+				<tr>
+					<th scope="col" style="padding-right: 50px">Inspection Details</th>
+					<th scope="col"> </th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td>Name:</td>
+					<td>@Model.BuyerName</td>
+				</tr>
+				<tr>
+					<td>Phone:</td>
+					<td>@Model.BuyerPhoneNo</td>
+				</tr>
+				<tr>
+					<td>Email:</td>
+					<td>@Model.Mail</td>
+				</tr>
+				<tr>
+					<td>Property Type:</td>
+					<td>@Model.PropertyType</td>
+				</tr>
+				<tr>
+					<td>Property Id:</td>
+					<td>@Model.PropertyRegNo</td>
+				</tr>
+				<tr>
+					<td>Property Price:</td>
+					<td>@Model.PropertyPrice.ToString("N")</td>
+				</tr>
+				<tr>
+					<td>Property Address:</td>
+					<td>@Model.PropertyAddress</td>
+				</tr>
+
+				<tr>
+					<td>Inspection Date:</td>
+					<td>@Model.Message</td>
+				</tr>
+
+				</tbody>
+			</table>
+
+
+		</div>
+		<div class=" row justify-content-center">
+			<input type="button" value="Print Inspection Page" onclick="printPage('print');">
+		</div>
+
+	</section>
+}
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+	<div class=" row justify-content-center">
+		<p style="color: red; padding-top: 50px">@ViewBag.Message</p>
+	</div>
+}
 <section class="ftco-section contact-section">
       <div class="container">
         

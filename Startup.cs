@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,8 +14,10 @@ using Microsoft.Extensions.Hosting;
 using RealtyWebApp.Context;
 using RealtyWebApp.Implementation.Repositories;
 using RealtyWebApp.Implementation.Services;
+using RealtyWebApp.Implementation.Services.PropertyMethod;
 using RealtyWebApp.Interface.IRepositories;
 using RealtyWebApp.Interface.IServices;
+using RealtyWebApp.Interface.IServices.IPropertyMethod;
 using RealtyWebApp.MailFolder.EmailService;
 using RealtyWebApp.MailFolder.EmailSettings;
 
@@ -33,8 +36,9 @@ namespace RealtyWebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped<IPropertyServiceMethod, PropertyServiceMethod>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
-            services.AddScoped<IMailService,MailService>();
+            services.AddTransient<IMailService,MailService>();
             services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<IRealtorRepository, RealtorRepository>();
             services.AddScoped<IBuyerRepository, BuyerRepository>();
@@ -94,9 +98,13 @@ namespace RealtyWebApp
 
             app.UseEndpoints(endpoints =>
             {
+                /*endpoints.MapControllerRoute("Buyer",
+                    "{controller=Buyer}/{action=VerifyPayment}/{reference?}");*/
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}"
+                    );
+                
             });
         }
     }

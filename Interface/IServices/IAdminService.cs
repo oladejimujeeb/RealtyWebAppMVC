@@ -19,5 +19,7 @@ namespace RealtyWebApp.Interface.IServices
         BaseResponseModel<IEnumerable<RealtorDto>> AllRealtors();
         Task<BaseResponseModel<IEnumerable<BuyerDto>>> AllBuyers();
         Task<BaseResponseModel<IEnumerable<VisitationRequestDto>>> AllInspectionRequest();
+        Task<BaseResponseModel<PropertyDocumentDto>> DownloadPropertyDocument(int documentId);
+        Task<BaseResponseModel<IEnumerable<PaymentDto>>> AllPayment();
     }
 }

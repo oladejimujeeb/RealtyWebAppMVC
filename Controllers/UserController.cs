@@ -62,7 +62,7 @@ namespace RealtyWebApp.Controllers
                 return RedirectToAction("AdminDashBoard", "Admin");
             }
             
-            return RedirectToAction("index", "Home");
+            return RedirectToAction("DashBoard", "Buyer");
         }
         public IActionResult LogOut()
         {
