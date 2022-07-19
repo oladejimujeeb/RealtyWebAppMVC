@@ -121,14 +121,14 @@ namespace RealtyWebApp.Implementation.Services
                 if (addRealtor == realtor)
                 {
                     //sending mail upon registration
-                    WelcomeMessage sendMail = new WelcomeMessage()
+                    /*WelcomeMessage sendMail = new WelcomeMessage()
                     {
                         Email = user.Email,
                         FullName = $"{user.FirstName} {user.LastName}",
                         Id = addRealtor.AgentId
                     };
                     //send mail
-                    await _mailService.WelcomeMail(sendMail);
+                    await _mailService.WelcomeMail(sendMail);*/
                     return new BaseResponseModel<RealtorDto>
                     {
                         Status = true,
@@ -245,7 +245,7 @@ namespace RealtyWebApp.Implementation.Services
                     //PropertyId = addProperty.Id,
                     PropertyRegNo = addProperty.PropertyRegNo
                 };
-                using (var dataStream = new MemoryStream())
+                await using (var dataStream = new MemoryStream())
                 {
                     await file.CopyToAsync(dataStream);
                     fileModel.Data = dataStream.ToArray();

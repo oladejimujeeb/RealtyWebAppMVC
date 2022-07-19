@@ -21,5 +21,6 @@ namespace RealtyWebApp.Interface.IServices
         Task<BaseResponseModel<IEnumerable<VisitationRequestDto>>> AllInspectionRequest();
         Task<BaseResponseModel<PropertyDocumentDto>> DownloadPropertyDocument(int documentId);
         Task<BaseResponseModel<IEnumerable<PaymentDto>>> AllPayment();
+        Task<BaseResponse> DeleteProperty(int propertyId);
     }
 }

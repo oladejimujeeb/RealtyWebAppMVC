@@ -537,11 +537,13 @@ namespace RealtyWebApp.Implementation.Services
                     BuyerEmail = payment.BuyerEmail,
                     BuyerName = payment.BuyerName,
                     BuyerTelephone = payment.BuyerTelephone,
-                    PaymentDate = payment.PaymentDate,
+                    PaymentDate = payment.PaymentDate.ToString("g"),
                     PropertyPrice = payment.Amount,
                     TotalPrice = payment.TotalPrice,
                     PropertyType = payment.PropertyType,
                     TransactionId = payment.TransactionId,
+                    PropertyRegNum = payment.Property.PropertyRegNo,
+                    AgentEmail = payment.Property.Realtor.User.Email
                 });
             }
 
@@ -551,5 +553,37 @@ namespace RealtyWebApp.Implementation.Services
                 Data = paymentDtos
             };
         }
+        
+        public async Task<BaseResponse> DeleteProperty(int propertyId)
+        {
+            var property = await  _propertyRepository.Get(propertyId);
+            if (property == null)
+            {
+                return new BaseResponse()
+                {
+                    Status = false,
+                    Message = "Failed to delete"
+                };
+            }
+
+            var deleteProperty = await _propertyRepository.Delete(property);
+            if (deleteProperty)
+            {
+                return new BaseResponse()
+                {
+                    Status = true,
+                    Message = "Delete Successfully"
+                };
+            }
+            else
+            {
+                return new BaseResponse()
+                {
+                    Status = false,
+                    Message = "Failed to delete"
+                };
+            }
+        }
+
     }
 }

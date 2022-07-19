@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RealtyWebApp.Interface.IServices;
 using RealtyWebApp.Models;
+using RealtyWebApp.Models.RequestModel;
 
 namespace RealtyWebApp.Controllers
 {
@@ -34,7 +35,8 @@ namespace RealtyWebApp.Controllers
                 return View(allProperty.Data);
             }
 
-            return NoContent();
+            ViewBag.Message = "No Available Property";
+            return View();
         }
     
         public async Task<IActionResult> Property(int id)
@@ -46,7 +48,19 @@ namespace RealtyWebApp.Controllers
             }
             
             ViewBag.Message = property.Message;
-            return NoContent();
+            return NotFound("The property you are looking does not exit");
+        }
+
+        public async Task<IActionResult> Search(SearchRequest request)
+        {
+            var searchResult = await _propertyService.SearchProperty(request);
+            if (searchResult.Status)
+            {
+                return View(searchResult.Data);
+            }
+
+            ViewBag.Message = searchResult.Message;
+            return View();
         }
 
         public IActionResult Privacy()

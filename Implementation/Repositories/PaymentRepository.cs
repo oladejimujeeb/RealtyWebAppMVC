@@ -16,7 +16,8 @@ namespace RealtyWebApp.Implementation.Repositories
         }
         public async Task<IList<Payment>> GetAllPayment()
         {
-            var payment = await Context.Payments.Where(x=>x.Status==PaymentStatus.Success).Include(x => x.Property).Include(x=>x.Property.Realtor).ToListAsync();
+            var payment = await Context.Payments.Where(x=>x.Status==PaymentStatus.Success).Include(x => x.Property).Include(x=>x.Property.Realtor)
+                .Include(x=>x.Property.Realtor.User).ToListAsync();
             return payment;
         }
     }

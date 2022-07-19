@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using RealtyWebApp.DTOs;
+using RealtyWebApp.Models.RequestModel;
 
 namespace RealtyWebApp.Interface.IServices
 {
@@ -13,5 +14,6 @@ namespace RealtyWebApp.Interface.IServices
         BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByBuyer(int buyerId);
         BaseResponseModel<IEnumerable<PropertyDto>> GetRealtorApprovedProperty(int id);
         BaseResponseModel<IEnumerable<PropertyDto>> AllUnverifiedProperty();*/
+        Task<BaseResponseModel<IEnumerable<PropertyDto>>> SearchProperty(SearchRequest model);
     }
 }

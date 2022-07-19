@@ -40,7 +40,15 @@ namespace RealtyWebApp.Controllers
         public IActionResult DashBoard()
         {
             var realtorId = int.Parse(User.FindFirst(ClaimTypes.Name).Value);
+            string name = User.FindFirst(ClaimTypes.Surname)?.Value;
+            ViewBag.Name = name;
+            TempData["profilePic"] = User.FindFirst(ClaimTypes.GivenName).Value;
             var realtorProperties = _realtorService.GetRealtorApprovedProperty(realtorId);
+            if (!realtorProperties.Status)
+            {
+                ViewBag.Message = realtorProperties.Message;
+                return View();
+            }
             return View(realtorProperties.Data);
         }
         [Authorize (Roles = "Realtor")]

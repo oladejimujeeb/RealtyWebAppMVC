@@ -27,6 +27,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWxsSW5zcGVjdGlvblJlcXVlc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Admin/AllPayments.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWxsUGF5bWVudHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Admin/AllRealtor.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWxsUmVhbHRvci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -75,6 +79,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnV5ZXJcR2V0UHJvcGVydHkuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Buyer/Myproperty.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnV5ZXJcTXlwcm9wZXJ0eS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Buyer/PaymentBreakDown.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnV5ZXJcUGF5bWVudEJyZWFrRG93bi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -97,6 +105,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Home/Property.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcm9wZXJ0eS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Home/Search.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTZWFyY2guY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/User/Desktop/code learners hub/RealtyWebApp/RealtyWebApp/Views/Realtor/AddNewProperty.cshtml]

@@ -4,53 +4,67 @@
     ViewBag.Title = "DashBoard";
     Layout = "_RealtorLayout";
 }
- @*@if(!string.IsNullOrEmpty(ViewBag.Message))
-{
- <script >alert('Updated Successfully')</script>
-}*@
-<div class="card-content">
-<table>
-    <thead>
-    <tr>
-        <th>Property Id</th>
-        <th>Property Type</th>
-        <th>Feature</th>
-        <th>Address</th>
-        <th>State</th>
-        <th>Price</th>
-        <th>Registered Date</th>
-        <th>Status</th>
-        <th>More Info</th>
-    </tr>
-    </thead>
-    <tbody>
-    @if(Model!=null)
-    {
-        @foreach (var pro in Model)
-        {
-            <tr>
-                <td data-label="Property Id">@pro.PropertyRegNumber</td>
-                <td data-label="Property Type">@pro.PropertyType</td>
-                <td data-label="Features">@pro.Features</td>
-                <td data-label="Address">@pro.Address</td>
-                <td data-label="State">@pro.LGA, @pro.State</td>
-                <td data-label="Price">@pro.PropertyPrice.ToString("N")</td>
-                <td datat-label="Price">@pro.RegisteredDate</td>
-                <td data-label="Status">@pro.Status</td>
-                <td class="actions-cell">
-                    <div  class="buttons right nowrap">
-                        <a class="button small green --jb-modal" type="button" asp-controller="Realtor" asp-action="" asp-route-Id="@pro.Id">
-                            <span class="icon"><i class="mdi mdi-eye"></i></span>
-                        </a>
-                    </div>
-                </td>
-                
-                
-            </tr>
-        }
 
+<div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    @if (!string.IsNullOrEmpty(@ViewBag.Name))
+    {
+        <h1 class="title">Hi @ViewBag.Name</h1>
+        <h1 class="title">Date: @DateTime.Now.ToString("f")</h1>
     }
+</div >
+
+<div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+     <h1 class="title">
+            Verified Properties
+     </h1>
+</div>
+<div class="card-content">
+    <table>
+        <thead>
+        <tr>
+            <th>Property Id</th>
+            <th>Property Type</th>
+            <th>Feature</th>
+            <th>Address</th>
+            <th>State</th>
+            <th>Price</th>
+            <th>Registered Date</th>
+            <th>Status</th>
+            <th>More Info</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if(Model!=null)
+        {
+            @foreach (var pro in Model)
+            {
+                <tr>
+                    <td data-label="Property Id">@pro.PropertyRegNumber</td>
+                    <td data-label="Property Type">@pro.PropertyType</td>
+                    <td data-label="Features">@pro.Features</td>
+                    <td data-label="Address">@pro.Address</td>
+                    <td data-label="State">@pro.LGA, @pro.State</td>
+                    <td data-label="Price">@pro.PropertyPrice.ToString("N")</td>
+                    <td datat-label="Price">@pro.RegisteredDate</td>
+                    <td data-label="Status">@pro.Status</td>
+                    <td class="actions-cell">
+                        <div  class="buttons right nowrap">
+                            <a class="button small green --jb-modal" type="button" asp-controller="Realtor" asp-action="" asp-route-Id="@pro.Id">
+                                <span class="icon"><i class="mdi mdi-eye"></i></span>
+                            </a>
+                        </div>
+                    </td>
+                
+                
+                </tr>
+            }
+
+        }
     
-    </tbody>
-</table>
+        </tbody>
+    </table>
+     @if(!string.IsNullOrEmpty(ViewBag.Message))
+        {
+         <p>@ViewBag.Message</p>
+        }
 </div>

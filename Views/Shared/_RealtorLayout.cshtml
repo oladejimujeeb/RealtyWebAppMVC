@@ -36,6 +36,13 @@
   
 </head>
 <body>
+@{
+  string pic = "";
+  @if (TempData.ContainsKey("profilePic"))  
+      {  
+          pic = TempData["profilePic"] as string;  
+      } 
+}
 <div id="app">
 @*<header id="navbar-main" class="navbar is-fixed-top">
     <nav class="navbar-brand" >
@@ -206,6 +213,11 @@
         </a>
       </li>
     </ul>
+    <div>
+       <img width="100px" height="100px" src="/ProfilePictures/@pic" alt="...">
+       <br>
+       <br>
+      </div>
   </div>
 </aside>
 

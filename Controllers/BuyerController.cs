@@ -138,7 +138,7 @@ namespace RealtyWebApp.Controllers
             ViewBag.Message = breakdown.Message;
             return View();
         }
-
+        [Authorize(Roles = "Buyer")]
         public async Task<IActionResult> ProcessPayment(PaymentRequestModel model)
         {
             var buyerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -162,6 +162,23 @@ namespace RealtyWebApp.Controllers
             }
             ViewData["PaymentError"] = verify.Message;
             return View("PaymentBreakDown");
+        }
+
+        [Authorize(Roles = "Buyer")]
+        public IActionResult Myproperty()
+        {
+            var buyerId = int.Parse(User.FindFirst(ClaimTypes.Name).Value);
+            var inspectedProperty =  _buyerService.GetPropertyByBuyer(buyerId);
+            string name = User.FindFirst(ClaimTypes.Surname)?.Value;
+            ViewBag.Name = name;
+            TempData["profilePic"] = User.FindFirst(ClaimTypes.GivenName).Value;
+            if (inspectedProperty.Status)
+            {
+                return View(inspectedProperty.Data);
+            }
+
+            ViewBag.Message = inspectedProperty.Message;
+            return View();
         }
     }
 }

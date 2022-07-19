@@ -220,6 +220,19 @@ namespace RealtyWebApp.Controllers
         {
             return View();
         }
-        
+
+        [Authorize(Roles = "Administrator")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteProperty(int propertyId)
+        {
+            var delete = await _adminService.DeleteProperty(propertyId);
+            if (delete.Status)
+            {
+                ViewData["deleteStatus"] = delete.Message;
+                return View("ApprovedProperties");
+            }
+            ViewData["deleteStatus"] = delete.Message;
+            return View("ApprovedProperties");
+        }
     }
 }

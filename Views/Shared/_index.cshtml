@@ -17,6 +17,11 @@
     
     <link rel="stylesheet" href="~/tem/css/flaticon.css">
     <link rel="stylesheet" href="~/tem/css/style.css">
+    <style>
+	    #state{
+	    
+	    }
+    </style>
   </head>
   <body>
     
@@ -32,7 +37,7 @@
 	          <li class="nav-item active"><a  asp-controller="Home" asp-action="index" class="nav-link">Home</a></li>
 	          <li class="nav-item"><a  asp-controller="Home" asp-action="Privacy" class="nav-link">About</a></li>
 	          <li class="nav-item"><a asp-controller="Realtor" asp-action="DashBoard" class="nav-link" >Agent</a></li>
-	          <li class="nav-item"><a href="" class="nav-link">Services</a></li>
+	          <li class="nav-item"><a asp-controller="Buyer" asp-action="Dashboard" class="nav-link">Client</a></li>
 	          <li class="nav-item"><a asp-controller="Home" asp-action="AllProperties" class="nav-link">Properties</a></li>
 	          <li class="nav-item"><a class="nav-link" asp-controller="User" asp-action="Login" >Login</a></li>
 	          <li class="nav-item"><a  class="nav-link">Contact</a></li>
@@ -49,9 +54,13 @@
           <div class="col-lg-7 col-md-6 ftco-animate d-flex align-items-end">
           	<div class="text">
 	            <h1 class="mb-4">Find Perfect <br>House From Your Area.</h1>
-	            <p style="font-size: 18px;">From as low as $20 A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-	            <p><a asp-controller="Home" asp-action="AllProperties" class="btn btn-primary py-3 px-4">View all properties</a></p>
-            </div>
+	            <p style="font-size: 18px;">From as low as #100,000. No matter the dynamics, when its its come to buying and sell of properies of any kinds by their place , we are trusted ally.</p>
+	            <div class=" row ">
+					<p><a asp-controller="Home" asp-action="AllProperties"  style=" margin-right: 50px;" class="btn btn-primary py-3 px-4">View all properties</a></p>
+		           
+		            <p><a asp-controller="Realtor" asp-action="RealtorRegistration" class="btn btn-primary py-3 px-4">List Your Property</a></p>
+		        </div>    
+	            </div>
           </div>
         </div>
       </div>
@@ -59,82 +68,76 @@
 
     <section class="ftco-section ftco-no-pb ftco-no-pt search-bg">
     	<div class="container">
-	    	<div class="row">
-					<div class="col-md-12">
-						<div class="search-wrap-1 ftco-animate p-4">
-							<form action="#" class="search-property-1">
-		        		<div class="row">
-		        			<div class="col-lg align-items-end">
-		        				<div class="form-group">
-		        					<label for="#">Keyword</label>
-		          				<div class="form-field">
-		          					<div class="icon"><span class="fa fa-search"></span></div>
-				                <input type="text" class="form-control" placeholder="Enter Keyword">
-				              </div>
-			              </div>
-		        			</div>
-		        			<div class="col-lg align-items-end">
-		        				<div class="form-group">
-		        					<label for="#">Property Type</label>
-		        					<div class="form-field">
-		          					<div class="select-wrap">
-		                      <div class="icon"><span class="fa fa-chevron-down"></span></div>
-		                      <select name="" id="" class="form-control">
-		                        <option value="">Residence</option>
-		                        <option value="">Offices</option>
-		                        <option value="">Commercial</option>
-		                      </select>
-		                    </div>
-				              </div>
-			              </div>
-		        			</div>
-		        			<div class="col-lg align-items-end">
-		        				<div class="form-group">
-		        					<label for="#">Location</label>
-		          				<div class="form-field">
-		          					<div class="icon"><span class="fa fa-search"></span></div>
-				                <input type="text" class="form-control" placeholder="Location">
-				              </div>
-			              </div>
-		        			</div>
-		        			<div class="col-lg align-items-end">
-		        				<div class="form-group">
-		        					<label for="#">Price Limit</label>
-		        					<div class="form-field">
-		          					<div class="select-wrap">
-		                      <div class="icon"><span class="fa fa-chevron-down"></span></div>
-		                      <select name="" id="" class="form-control" >
-		                        <option value="">$5,000</option>
-		                        <option value="">$10,000</option>
-		                        <option value="">$50,000</option>
-		                        <option value="">$100,000</option>
-		                        <option value="">$200,000</option>
-		                        <option value="">$300,000</option>
-		                        <option value="">$400,000</option>
-		                        <option value="">$500,000</option>
-		                        <option value="">$600,000</option>
-		                        <option value="">$700,000</option>
-		                        <option value="">$800,000</option>
-		                        <option value="">$900,000</option>
-		                        <option value="">$1,000,000</option>
-		                        <option value="">$2,000,000</option>
-		                      </select>
-		                    </div>
-				              </div>
-			              </div>
-		        			</div>
-		        			<div class="col-lg align-self-end">
-		        				<div class="form-group">
-		        					<div class="form-field">
-				                <input type="submit" value="Search" class="form-control btn btn-primary">
-				              </div>
-			              </div>
-		        			</div>
-		        		</div>
-		        	</form>
+	        <div class="row">
+		        <div class="col-md-12">
+			        <div class="search-wrap-1 ftco-animate p-4">
+				        <form asp-controller="Home" asp-action="Search" class="search-property-1">
+					        <div class="row">
+						        <div class="col-lg align-items-end">
+							        <div class="form-group">
+								        <label for="#">Keyword</label>
+								        <div class="form-field">
+									        <div class="icon"><span class="fa fa-search"></span></div>
+									        <input required name="KeyWord" type="text" class="form-control" placeholder="Enter Keyword">
+								        </div>
+							        </div>
+						        </div>
+						        <div class="col-lg align-items-end">
+							        <div class="form-group">
+								        <label for="#">Property Type</label>
+								        <div class="form-field">
+									        <div class="select-wrap">
+										        <div class="icon"><span class="fa fa-chevron-down"></span></div>
+										        <select name="PropertyType" required   class="form-control">
+											        <option value="Building">Building</option>
+											        <option value="Land">Land</option>
+										        </select>
+									        </div>
+								        </div>
+							        </div>
+						        </div>
+						        <div class="col-lg align-items-end">
+							        <div class="form-group">
+								        <label for="#">State</label>
+								        <div class="form-field">
+									        <div class="select-wrap">
+										        <div class="icon"><span class="fa fa-chevron-down"></span></div>
+										        <select id="state" required  name="Price" class="form-control"></select>
+									        </div>
+										</div>
+							        </div>
+						        </div>
+						        <div class="col-lg align-items-end">
+							        <div class="form-group">
+								        <label for="#">Price Limit</label>
+								        <div class="form-field">
+									        <div class="select-wrap">
+										        <div class="icon"><span class="fa fa-chevron-down"></span></div>
+										        <select required  name="Price" class="form-control">
+											        <option value=100000>#100,000</option>
+											        <option value=500000>#500,000</option>
+											        <option value=1000000>#1,000,000</option>
+											        <option value=2500000>#2,500,000</option>
+											        <option value=5000000>#5,000,000</option>
+											        <option value=7500000>#7,500,000</option>
+											        <option value=10000000>#10,000,000</option>
+										        </select>
+									        </div>
+								        </div>
+							        </div>
+						        </div>
+						        <div class="col-lg align-self-end">
+							        <div class="form-group">
+								        <div class="form-field">
+									        <input type="submit" value="Search" class="form-control btn btn-primary">
+								        </div>
+							        </div>
+						        </div>
+					        </div>
+				        </form>
+			        </div>
 		        </div>
-					</div>
-	    	</div>
+	        </div>
 	    </div>
     </section>
 
@@ -146,7 +149,7 @@
             	<div class="icon d-flex justify-content-center align-items-center"><span class="flaticon-business"></span></div>
               <div class="media-body py-md-4">
                 <h3>Trusted by Thousands</h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                <p>We remain committed to expanding the frontiers of our services to you.</p>
               </div>
             </div>      
           </div>
@@ -155,7 +158,7 @@
             	<div class="icon d-flex justify-content-center align-items-center"><span class="flaticon-home"></span></div>
               <div class="media-body py-md-4">
                 <h3>Wide Range of Properties</h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                <p>Whatever your needs, we will get it for you.</p>
               </div>
             </div>      
           </div>
@@ -164,7 +167,7 @@
             	<div class="icon d-flex justify-content-center align-items-center"><span class="flaticon-stats"></span></div>
               <div class="media-body py-md-4">
                 <h3>Financing Made Easy</h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                <p>Make payment from anywhere using our online platform</p>
               </div>
             </div>      
           </div>
@@ -172,8 +175,8 @@
             <div class="media block-6 services services-bg d-block text-center px-4 py-5">
             	<div class="icon d-flex justify-content-center align-items-center"><span class="flaticon-quarantine"></span></div>
               <div class="media-body py-md-4">
-                <h3>Locked in Pricing</h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                <h3>Valuation</h3>
+                <p>We offers a wide range of specialist services from financial and investment advice to valuation, planning and property management.</p>
               </div>
             </div>      
           </div>
@@ -239,7 +242,7 @@
               	<img src="/images/blob.svg" alt="">
               	</div>
                 <h3>Evaluate Property</h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                <p>Explore our list properties online and You can make inspection request.</p>
               </div>
             </div>      
           </div>
@@ -249,7 +252,7 @@
               	<div class="icon mb-1 d-flex align-items-center justify-content-center"><span>02</span>
               	<img src="/images/blob.svg" alt=""></div>
                 <h3>Meet Your Agent</h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                <p>Meet our agent to inspection your desire property on the schdule date</p>
               </div>
             </div>      
           </div>
@@ -258,8 +261,8 @@
               <div class="media-body py-md-4 text-center">
               	<div class="icon mb-1 d-flex align-items-center justify-content-center"><span>03</span>
               	<img src="/images/blob.svg" alt=""></div>
-                <h3>Close the Deal</h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                <h3>Make Payment</h3>
+                <p>You can either make payment online or in our office</p>
               </div>
             </div>      
           </div>
@@ -269,71 +272,13 @@
               	<div class="icon mb-1 d-flex align-items-center justify-content-center"><span>04</span>
               	<img src="/images/blob.svg" alt=""></div>
                 <h3>Have Your Property</h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                <p>Close deal and have your properties with the neccessary documents.</p>
               </div>
             </div>      
           </div>
     		</div>
     	</div>
     </section>
-
-    @*<section class="ftco-section ftco-no-pb ftco-no-pt">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-7 order-md-last d-flex align-items-stretch">
-						<div class="img w-100 img-2 mr-md-2" style="background-image: url('images/about.jpg');"></div>
-						<div class="img w-100 img-2 ml-md-2" style="background-image: url('images/about-2.jpg');"></div>
-					</div>
-					<div class="col-md-5 wrap-about py-md-5 ftco-animate">
-	          <div class="heading-section pr-md-5">
-	            <h2 class="mb-4">Ecoverde Real Estate</h2>
-
-	            <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-	            <p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. But nothing the copy said could convince her and so it didn’t take long until a few insidious Copy Writers ambushed her, made her drunk with Longe and Parole and dragged her into their agency, where they abused her for their.</p>
-	          </div>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<section class="ftco-counter img" id="section-counter">
-    	<div class="container">
-    		<div class="row pt-md-5">
-          <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
-            <div class="block-18 py-5 mb-4">
-              <div class="text text-border d-flex align-items-center">
-                <strong class="number" data-number="1000">0</strong>
-                <span>Area <br>Population</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
-            <div class="block-18 py-5 mb-4">
-              <div class="text text-border d-flex align-items-center">
-                <strong class="number" data-number="2500">0</strong>
-                <span>Total <br>Properties</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
-            <div class="block-18 py-5 mb-4">
-              <div class="text text-border d-flex align-items-center">
-                <strong class="number" data-number="500">0</strong>
-                <span>Average <br>House</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
-            <div class="block-18 py-5 mb-4">
-              <div class="text d-flex align-items-center">
-                <strong class="number" data-number="67">0</strong>
-                <span>Total <br>Branches</span>
-              </div>
-            </div>
-          </div>
-        </div>
-    	</div>
-    </section>*@
 
     <section class="ftco-section testimony-section bg-light">
       <div class="container">
@@ -483,86 +428,30 @@
         </div>
     	</div>
     </section>
-
-
-    @*
-    <section class="ftco-section ftco-no-pt">
-      <div class="container">
-        <div class="row justify-content-center mb-5">
-          <div class="col-md-7 heading-section text-center ftco-animate">
-          	<span class="subheading">Blog</span>
-            <h2>Recent Blog</h2>
-          </div>
-        </div>
-        <div class="row d-flex">
-          <div class="col-md-3 d-flex ftco-animate">
-          	<div class="blog-entry justify-content-end">
-              <div class="text">
-                <a href="blog-single.html" class="block-20 img" style="background-image: url('images/image_1.jpg');">
-	              </a>
-	              <div class="meta mb-3">
-                  <div><a href="#">June 01, 2020</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="fa fa-comment"></span> 3</a></div>
-                </div>
-	              <h3 class="heading"><a href="#">Why Lead Generation is Key for Business Growth</a></h3>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 d-flex ftco-animate">
-          	<div class="blog-entry justify-content-end">
-              <div class="text">
-                <a href="blog-single.html" class="block-20 img" style="background-image: url('images/image_2.jpg');">
-	              </a>
-	              <div class="meta mb-3">
-                  <div><a href="#">June 01, 2020</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="fa fa-comment"></span> 3</a></div>
-                </div>
-	              <h3 class="heading"><a href="#">Why Lead Generation is Key for Business Growth</a></h3>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 d-flex ftco-animate">
-          	<div class="blog-entry justify-content-end">
-              <div class="text">
-                <a href="blog-single.html" class="block-20 img" style="background-image: url('images/image_3.jpg');">
-	              </a>
-	              <div class="meta mb-3">
-                  <div><a href="#">June 01, 2020</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="fa fa-comment"></span> 3</a></div>
-                </div>
-	              <h3 class="heading"><a href="#">Why Lead Generation is Key for Business Growth</a></h3>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 d-flex ftco-animate">
-          	<div class="blog-entry justify-content-end">
-              <div class="text">
-                <a href="blog-single.html" class="block-20 img" style="background-image: url('images/image_4.jpg');">
-	              </a>
-	              <div class="meta mb-3">
-                  <div><a href="#">June 01, 2020</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="fa fa-comment"></span> 3</a></div>
-                </div>
-	              <h3 class="heading"><a href="#">Why Lead Generation is Key for Business Growth</a></h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>		
-    *@
+    
+    <script >
+    async function getState(){
+        const select = document.querySelector('#state');
+        const api_Url = 'https://myvtu.com/api/qs/statelists';
+        const response = await fetch(api_Url);
+        const data = await response.json();
+        
+        const get = data.lists
+         console.log(get)
+         get.forEach(x=>console.log(x.stname));
+         get.forEach(x => select.innerHTML += `<option value="${x.stname}">${x.stname}</option>`);
+        }
+    
+     getState();
+    </script>
 
     <footer class="ftco-footer ftco-section">
       <div class="container">
         <div class="row mb-5">
           <div class="col-md">
             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Ecoverde</h2>
-              <p>Far far away, behind the word mountains, far from the countries.</p>
+              <h2 class="ftco-heading-2">Realty Mulad</h2>
+              <p>Property listing platform.</p>
               <ul class="ftco-footer-social list-unstyled mt-5">
                 <li class="ftco-animate"><a href="#"><span class="fa fa-twitter"></span></a></li>
                 <li class="ftco-animate"><a href="#"><span class="fa fa-facebook"></span></a></li>
@@ -607,9 +496,9 @@
             	<h2 class="ftco-heading-2">Have a Questions?</h2>
             	<div class="block-23 mb-3">
 	              <ul>
-	                <li><span class="icon fa fa-map"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
-	                <li><a href="#"><span class="icon fa fa-phone"></span><span class="text">+2 392 3929 210</span></a></li>
-	                <li><a href="#"><span class="icon fa fa-envelope pr-4"></span><span class="text">info@yourdomain.com</span></a></li>
+	                <li><span class="icon fa fa-map"></span><span class="text">No 5, Ayanfe Community, Alexander, Apata, Ibadan</span></li>
+	                <li><a href="#"><span class="icon fa fa-phone"></span><span class="text">+234 813679 4915</span></a></li>
+	                <li><a href="#"><span class="icon fa fa-envelope pr-4"></span><span class="text">oladejimujib@gmail.com</span></a></li>
 	              </ul>
 	            </div>
             </div>

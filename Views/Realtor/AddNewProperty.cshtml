@@ -14,6 +14,9 @@
     #buildingType{
     
     }
+    #state{
+    
+    }
 </style>
 <br>
 <div class="container">
@@ -37,10 +40,10 @@
                 <div class="form-group">
                     <div>
                         <label class="control-label">Property Type</label>
-                        <select onchange="check()" id="value" required class="form-control">
+                        <select name="PropertyType" onchange="check()" id="value" required class="form-control">
                             <option selected>Choose...</option>
-                            <option>Building</option>
-                            <option>Land</option>
+                            <option value="Building">Building</option>
+                            <option value="Land" >Land</option>
                         </select>
                         <span asp-validation-for="PropertyType" class="text-danger"></span>
                     </div>
@@ -71,9 +74,12 @@
                         <span asp-validation-for="LGA" class="text-danger"></span>
                     </div>
                     <div>
-                        <label asp-for="State" class="control-label"></label>
+                        @*<label asp-for="State" class="control-label"></label>
                         <input asp-for="State" type="text" class="form-control"required/>
-                        <span asp-validation-for="State" class="text-danger"></span>
+                        <span asp-validation-for="State" class="text-danger"></span>*@
+                        <select name="State" required class="form-control" id="state">
+                            
+                        </select>
                     </div>
                 </div>
                 
@@ -139,7 +145,19 @@
 </div>
 
 <script >
+async function getState(){
+    const select = document.querySelector('#state');
+    const api_Url = 'https://myvtu.com/api/qs/statelists';
+    const response = await fetch(api_Url);
+    const data = await response.json();
+    
+    const get = data.lists
+     console.log(get)
+     get.forEach(x=>console.log(x.stname));
+     get.forEach(x => select.innerHTML += `<option value="${x.stname}">${x.stname}</option>`);
+    }
 
+ getState();
 
 function check(){
 let select = document.getElementById("value").value; 
@@ -149,17 +167,17 @@ let setType = document.getElementById('buildingType');
 if (select==="Building")
     {
        newField.innerHTML =`<div> <label class="control-label">Number of Bedroom</label> 
-                                <input asp-for="Bedroom" type="number" class="form-control" required>
+                                <input name="Bedroom" type="number" class="form-control" required>
                                 <span asp-validation-for="Bedroom" class="text-danger"></span>
                             </div>
                              <div>
                                <label asp-for="Toilet" class="control-label">No of Toilet</label>
-                               <input asp-for="Toilet" type="number" class="form-control" required/>
+                               <input name="Toilet" type="number" class="form-control" required/>
                                <span asp-validation-for="Toilet" class="text-danger"></span>
                              </div>`;
        
        setType.innerHTML=`<label class="control-label">Building Type</label>
-                       <input asp-for="BuildingType" type="text" class="form-control" required/>
+                       <input name="BuildingType" type="text" class="form-control" required/>
                        <span asp-validation-for="BuildingType" class="text-danger"></span>`;
     }
 else{

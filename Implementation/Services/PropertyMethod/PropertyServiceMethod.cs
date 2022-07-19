@@ -54,6 +54,7 @@ namespace RealtyWebApp.Implementation.Services.PropertyMethod
                     IsAvailable = getProperty.IsAvailable,
                     LGA = getProperty.LGA,
                     State = getProperty.State,
+                    RegisteredDate = getProperty.RegisteredDate,
                     ImagePath = _propertyImage.QueryWhere(y=>y.PropertyRegNo==getProperty.PropertyRegNo).Select(y=>y.DocumentName).ToList(),
                 },
                 Message = "load successfully"

@@ -135,7 +135,7 @@ namespace RealtyWebApp.Implementation.Services
 
         public BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByBuyer(int buyerId)
         {
-            var getProperty = _propertyRepository.QueryWhere(x => x.BuyerIdentity == buyerId && x.IsAvailable && x.IsSold).
+            var getProperty = _propertyRepository.QueryWhere(x => x.BuyerIdentity == buyerId && x.IsSold).
                 Select(x=>new PropertyDto()
                 {
                     Id = x.Id,
@@ -249,7 +249,8 @@ namespace RealtyWebApp.Implementation.Services
                     BuyerName = request.BuyerName,
                     BuyerPhoneNo = request.BuyerTelephone,
                     PropertyPrice = getProperty.Price,
-                    Mail = request.BuyerEmail
+                    Mail = request.BuyerEmail,
+                    PropertyType = request.PropertyType
                 },
                 Status = true,
                 Message = $"Kind Visit Our office on {visitDate} for Property Inspection," +
@@ -512,8 +513,8 @@ namespace RealtyWebApp.Implementation.Services
             if (response.StatusCode==System.Net.HttpStatusCode.OK)
             {
                 payment.PaymentDate = DateTime.Now;
-                //var savePayment =  await _paymentRepository.Add(payment);
-                /*property.BuyerIdentity = buyerId;
+                var savePayment =  await _paymentRepository.Add(payment);
+                property.BuyerIdentity = buyerId;
                 property.IsSold = true;
                 property.IsAvailable = false;
                 var updatePropertySale = await _propertyRepository.Update(property);
@@ -521,10 +522,10 @@ namespace RealtyWebApp.Implementation.Services
                 {
                     return new BaseResponse()
                     {
-                        Status = true,
+                        Status = false,
                         Message = "Payment Failed"
                     };
-                }*/
+                }
 
                 var responseObject = JsonConvert.DeserializeObject<PayStackResponse>(responseToString);
                 if (responseObject.status)
@@ -577,7 +578,7 @@ namespace RealtyWebApp.Implementation.Services
                 var responseObject = JsonConvert.DeserializeObject<PayStackResponse>(responseToString);
                 if (responseObject.data.status == "success")
                 {
-                    /*verify.Status = PaymentStatus.Success;
+                    verify.Status = PaymentStatus.Success;
                     var updatePayment = await _paymentRepository.Update(verify);
                     if (updatePayment == null)
                     {
@@ -586,7 +587,7 @@ namespace RealtyWebApp.Implementation.Services
                             Status = false,
                             Message = "Something Went Wrong"
                         };
-                    }*/
+                    }
 
                     return new BaseResponse()
                     {
