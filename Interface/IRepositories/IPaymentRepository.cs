@@ -6,6 +6,7 @@ namespace RealtyWebApp.Interface.IRepositories
 {
     public interface IPaymentRepository:IBaseRepository<Payment>
     {
-       Task<IList<Payment>>GetAllPayment();
+       Task<List<Payment>>GetAllPayment();
+      
     }
 }

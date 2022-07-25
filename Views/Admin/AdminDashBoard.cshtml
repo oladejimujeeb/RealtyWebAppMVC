@@ -15,7 +15,7 @@
         <table>
             <thead>
             <tr>
-                <th>Property Id</th>
+                <th>Property RefNo</th>
                 <th>Property Type</th>
                 <th>Feature</th>
                 <th>Address</th>
@@ -23,6 +23,8 @@
                 <th>Price</th>
                 <th>Registered Date</th>
                 <th>Status</th>
+                <th>Agent Name</th>
+                <th>Agent RefNo</th>
                 <th>Edit Info</th>
             </tr>
             </thead>
@@ -40,6 +42,8 @@
                          <td data-label="Price">@pro.PropertyPrice.ToString("N")</td>
                          <td datat-label="Price">@pro.RegisteredDate</td>
                          <td data-label="Status">@pro.Status</td>
+                         <td data-label="Agent Name">@pro.AgentName</td>
+                         <td data-label="Agent RefNo">@pro.AgentId</td>
                         <td class="actions-cell">
                             
                             <div class="buttons right nowrap">

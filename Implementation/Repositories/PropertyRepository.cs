@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,6 +31,33 @@ namespace RealtyWebApp.Implementation.Repositories
                                                          x.Price <= search.Price
                                                          || x.Address.ToLower() == search.KeyWord.ToLower()).ToListAsync();
             return property;
+        }
+
+        public IEnumerable<Property> PurchasedProperty(int userId)
+        {
+            var property = Context.Properties.Include(x=>x.Payment).Where(x=>x.BuyerIdentity==userId).ToList();
+            return property;
+        }
+
+        public List<Property> AllUnverifiedProperty()
+        {
+            using (Context)
+            {
+                var pro = Context.Properties
+                    .Where(x => x.BuyerIdentity == 0 && x.IsSold == false && x.VerificationStatus == false)
+                    .Include(x => x.Realtor).ThenInclude(x => x.User).ToList();
+                return pro;
+            }
+        }
+
+        public List<Property> AllVerifiedProperty()
+        {
+            using (Context)
+            {
+                var property = Context.Properties.Where(x => x.VerificationStatus && !x.IsSold).Include(x=>x.Realtor).
+                    ThenInclude(x=>x.User).ToList();
+                return property;
+            }
         }
     }
 }

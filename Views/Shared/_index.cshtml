@@ -1,3 +1,4 @@
+@using Microsoft.AspNetCore.Identity
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -39,6 +40,10 @@
 	          <li class="nav-item"><a asp-controller="Realtor" asp-action="DashBoard" class="nav-link" >Agent</a></li>
 	          <li class="nav-item"><a asp-controller="Buyer" asp-action="Dashboard" class="nav-link">Client</a></li>
 	          <li class="nav-item"><a asp-controller="Home" asp-action="AllProperties" class="nav-link">Properties</a></li>
+	          @*@if (SignInManager.IsSignedIn(User))
+	          {
+		          
+	          }*@
 	          <li class="nav-item"><a class="nav-link" asp-controller="User" asp-action="Login" >Login</a></li>
 	          <li class="nav-item"><a  class="nav-link">Contact</a></li>
 	        </ul>
@@ -102,7 +107,7 @@
 								        <div class="form-field">
 									        <div class="select-wrap">
 										        <div class="icon"><span class="fa fa-chevron-down"></span></div>
-										        <select id="state" required  name="Price" class="form-control"></select>
+										        <select id="state" required  name="Location" class="form-control"></select>
 									        </div>
 										</div>
 							        </div>
@@ -386,7 +391,7 @@
     					<div class="img">
 		    				<img src="/images/team-1.jpg" class="img-fluid" alt="Colorlib Template">
 		    				<div class="desc">
-		    					<h3><a href="properties.html">Carlos Henderson</a></h3>
+		    					<h3><a>Carlos Henderson</a></h3>
 									<p class="h-info"><span class="location">Listing</span> <span class="details">10 Properties</span></p>
 		    				</div>
 	    				</div>
@@ -398,7 +403,7 @@
 		    				<img src="/images/mujib.jpg" class="img-fluid" alt="Colorlib Template">
 	    				</div>
 	    				<div class="desc">
-	    					<h3><a href="properties.html">Oladeji Mujib</a></h3>
+	    					<h3><a>Oladeji Mujib</a></h3>
 								<p class="h-info"><span class="location">Listing</span> <span class="details">10 Properties</span></p>
 	    				</div>
     				</div>
@@ -409,7 +414,7 @@
 		    				<img src="/images/miss.jpg" class="img-fluid" alt="Colorlib Template">
 	    				</div>
 	    				<div class="desc">
-	    					<h3><a href="properties.html">Jessica Moore</a></h3>
+	    					<h3><a>Jessica Moore</a></h3>
 								<p class="h-info"><span class="location">Listing</span> <span class="details">10 Properties</span></p>
 	    				</div>
     				</div>
@@ -420,7 +425,7 @@
 		    				<img src="/images/team-4.jpg" class="img-fluid" alt="Colorlib Template">
 	    				</div>
 	    				<div class="desc">
-	    					<h3><a href="properties.html">Sarah Geronimo</a></h3>
+	    					<h3><a >Sarah Geronimo</a></h3>
 								<p class="h-info"><span class="position">Listing</span> <span class="details">10 Properties</span></p>
 	    				</div>
     				</div>
@@ -439,7 +444,7 @@
         const get = data.lists
          console.log(get)
          get.forEach(x=>console.log(x.stname));
-         get.forEach(x => select.innerHTML += `<option value="${x.stname}">${x.stname}</option>`);
+         get.forEach(x => select.innerHTML += `<option  value="${x.stname}">${x.stname}</option>`);
         }
     
      getState();

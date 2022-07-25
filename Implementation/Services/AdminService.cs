@@ -169,7 +169,7 @@ namespace RealtyWebApp.Implementation.Services
         public BaseResponseModel<IEnumerable<PropertyDto>> AllUnverifiedProperty()
         {
             var getProperty = _propertyRepository
-                .QueryWhere(x => x.BuyerIdentity == 0 && x.IsSold == false && x.VerificationStatus == false).Select(x =>
+                .AllUnverifiedProperty().Select(x =>
                     new PropertyDto()
                     {
                         Id = x.Id,
@@ -195,6 +195,8 @@ namespace RealtyWebApp.Implementation.Services
                         RegisteredDate = x.RegisteredDate,
                         LGA = x.LGA,
                         State = x.State,
+                        AgentName =$"{x.Realtor.User.FirstName} {x.Realtor.User.LastName}",
+                        AgentId = x.Realtor.AgentId
                         //ImagePath = _propertyImage.QueryWhere(y=>y.PropertyRegNo==x.PropertyRegNo).Select(y=>y.DocumentName).ToList()
                     }).OrderByDescending(x => x.RegisteredDate).ToList();
             return new BaseResponseModel<IEnumerable<PropertyDto>>()
@@ -333,7 +335,7 @@ namespace RealtyWebApp.Implementation.Services
 
         public BaseResponseModel<IEnumerable<PropertyDto>> AllVerifiedProperty()
         {
-            var getProperty = _propertyRepository.QueryWhere(x => x.VerificationStatus).Select(x => new PropertyDto()
+            var getProperty = _propertyRepository.AllVerifiedProperty().Select(x => new PropertyDto()
             {
                 Id = x.Id,
                 Address = x.Address,
@@ -357,8 +359,8 @@ namespace RealtyWebApp.Implementation.Services
                 LGA = x.LGA,
                 State = x.State,
                 RegisteredDate = x.RegisteredDate,
-
-                //ImagePath = _propertyImage.QueryWhere(y=>y.PropertyRegNo==x.PropertyRegNo).Select(y=>y.DocumentName).ToList()
+                AgentName = $"{x.Realtor.User.LastName} {x.Realtor.User.FirstName}",
+                AgentId = x.Realtor.AgentId,
             }).ToList();
             if (getProperty.Count == 0)
             {
@@ -382,10 +384,7 @@ namespace RealtyWebApp.Implementation.Services
             {
                 Id = x.Id,
                 Address = x.Address,
-                Bedroom = x.Bedroom,
                 Features = x.Features,
-                Latitude = x.Latitude,
-                Longitude = x.Longitude,
                 Toilet = x.Toilet,
                 BuildingType = x.BuildingType,
                 BuyerId = x.BuyerIdentity,
@@ -394,12 +393,9 @@ namespace RealtyWebApp.Implementation.Services
                 RealtorId = x.RealtorId,
                 PropertyType = x.PropertyType,
                 PropertyRegNumber = x.PropertyRegNo,
-                VerificationStatus = x.VerificationStatus,
-                IsAvailable = x.IsAvailable,
                 PropertyRegNo = x.PropertyRegNo,
-                LGA = x.LGA,
-                State = x.State,
                 RegisteredDate = x.RegisteredDate,
+                Status = x.Status,
                 //SoldDate = 
             }).ToList();
             if (getProperty.Count == 0)

@@ -4,6 +4,7 @@ namespace RealtyWebApp.Entities.Identity.Enum
     {
         Approved,
         UnderReview,
-        Rejected
+        Rejected,
+        Sold
     }
 }

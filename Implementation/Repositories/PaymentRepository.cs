@@ -14,11 +14,13 @@ namespace RealtyWebApp.Implementation.Repositories
         {
             Context = context;
         }
-        public async Task<IList<Payment>> GetAllPayment()
+        public async Task<List<Payment>> GetAllPayment()
         {
             var payment = await Context.Payments.Where(x=>x.Status==PaymentStatus.Success).Include(x => x.Property).Include(x=>x.Property.Realtor)
                 .Include(x=>x.Property.Realtor.User).ToListAsync();
             return payment;
         }
+
+       
     }
 }

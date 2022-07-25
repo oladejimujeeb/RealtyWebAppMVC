@@ -22,14 +22,12 @@
         <table>
             <thead>
             <tr>
-                <th>Property Id</th>
+                <th>Property Ref No</th>
                 <th>Property Type</th>
-                <th>Feature</th>
                 <th>Address</th>
-                <th>State</th>
                 <th>Price</th>
-                <th>Registered Date</th>
-                <th>Status</th>
+                <th>Payment Date</th>
+                <th>Payment Ref No</th>
             </tr>
             </thead>
             <tbody>
@@ -40,12 +38,10 @@
                     <tr>
                         <td data-label="Property Id">@pro.PropertyRegNumber</td>
                          <td data-label="Property Type">@pro.PropertyType</td>
-                         <td data-label="Features">@pro.Features</td>
                          <td data-label="Address">@pro.Address</td>
-                         <td data-label="State">@pro.LGA, @pro.State</td>
-                         <td data-label="Price">@pro.PropertyPrice.ToString("N")</td>
-                         <td datat-label="Price">@pro.RegisteredDate</td>
-                         <td data-label="Status">@pro.Status</td>
+                         <td data-label="Price">#@pro.PropertyPrice.ToString("N")</td>
+                         <td datat-label="Price">@pro.SoldDate</td>
+                         <td data-label="Status">@pro.PaymentReference</td>
                     </tr>
                 }
             }

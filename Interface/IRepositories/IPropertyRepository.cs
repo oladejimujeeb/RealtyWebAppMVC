@@ -10,5 +10,8 @@ namespace RealtyWebApp.Interface.IRepositories
     {
         Task<Property> GetWhere(string propertyId);
         Task<IList<Property>> SearchWhere(SearchRequest search);
+        IEnumerable<Property> PurchasedProperty(int userId);
+        List<Property> AllUnverifiedProperty();
+        List<Property> AllVerifiedProperty();
     }
 }

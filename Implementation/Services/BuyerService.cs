@@ -13,6 +13,7 @@ using RealtyWebApp.DTOs;
 using RealtyWebApp.DTOs.PayStack;
 using RealtyWebApp.Entities;
 using RealtyWebApp.Entities.Identity;
+using RealtyWebApp.Entities.Identity.Enum;
 using RealtyWebApp.Interface.IRepositories;
 using RealtyWebApp.Interface.IServices;
 using RealtyWebApp.Interface.IServices.IPropertyMethod;
@@ -135,30 +136,21 @@ namespace RealtyWebApp.Implementation.Services
 
         public BaseResponseModel<IEnumerable<PropertyDto>> GetPropertyByBuyer(int buyerId)
         {
-            var getProperty = _propertyRepository.QueryWhere(x => x.BuyerIdentity == buyerId && x.IsSold).
+            var getProperty = _propertyRepository.PurchasedProperty(buyerId).
                 Select(x=>new PropertyDto()
                 {
                     Id = x.Id,
-                    Address = x.Address,
-                    Bedroom = x.Bedroom,
+                    Address = $"{x.Address}, {x.LGA}, {x.State}",
                     Features = x.Features,
-                    Latitude = x.Latitude,
-                    Longitude = x.Longitude,
-                    Toilet = x.Toilet,
-                    BuildingType = x.BuildingType,
+                    PropertyType = x.PropertyType,
                     BuyerId = x.BuyerIdentity,
                     LandArea = x.PlotArea,
-                    PropertyPrice = x.Price,
-                    RealtorId = x.RealtorId,
-                    PropertyType = x.PropertyType,
-                    Action = x.Action,
-                    Status = x.Status,
-                    VerificationStatus = x.VerificationStatus,
-                    IsAvailable = x.IsAvailable,
+                    PropertyPrice = x.Payment.TotalPrice,
+                    PropertyRegNumber = x.PropertyRegNo,
                     PropertyRegNo = x.PropertyRegNo,
-                    LGA = x.LGA,
-                    State = x.State,
-                    ImagePath = _propertyImage.QueryWhere(y=>y.PropertyRegNo==x.PropertyRegNo).Select(y=>y.DocumentName).ToList() 
+                    SoldDate = x.Payment.PaymentDate,
+                    PaymentReference = x.Payment.TransactionId
+                    //ImagePath = _propertyImage.QueryWhere(y=>y.PropertyRegNo==x.PropertyRegNo).Select(y=>y.DocumentName).ToList() 
                 }).ToList();
             if (getProperty.Count == 0)
             {
@@ -516,6 +508,7 @@ namespace RealtyWebApp.Implementation.Services
                 var savePayment =  await _paymentRepository.Add(payment);
                 property.BuyerIdentity = buyerId;
                 property.IsSold = true;
+                property.Status = Status.Sold.ToString();
                 property.IsAvailable = false;
                 var updatePropertySale = await _propertyRepository.Update(property);
                 if (savePayment == null && updatePropertySale == null)
@@ -564,6 +557,7 @@ namespace RealtyWebApp.Implementation.Services
                     Message = "Payment Not Completed"
                 };
             }
+
             using var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Clear();

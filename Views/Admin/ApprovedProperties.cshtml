@@ -25,39 +25,10 @@
                 <th>Registered Date</th>
                 <th>Status</th>
                 <th>Land Area</th>
+                <th>Agent RefNo</th>
+                <th>Agent Name</th>
             </tr>
             </thead>
-            @*<tbody>
-            @if (Model != null)
-            {
-                @foreach (var pro in Model)
-                {
-                    <tr>
-                        <td data-label="Property Id">@pro.PropertyRegNumber</td>
-                         <td data-label="Property Type">@pro.PropertyType</td>
-                         <td data-label="Building Type">@pro.BuildingType</td>
-                         <td data-label="Features">@pro.Features</td>
-                         <td data-label="Address">@pro.Address, @pro.LGA, @pro.State</td>
-                         <td data-label="Price">@pro.PropertyPrice.ToString("N")</td>
-                         <td datat-label="Price">@pro.RegisteredDate</td>
-                         <td data-label="Status">@pro.Status</td>
-                         <td data-label="Status">@pro.LandArea</td>
-                        <td class="actions-cell">
-                            
-                            <div class="buttons right nowrap">
-                                <a class="button small green --jb-modal" type="button" asp-controller="Admin" asp-action="ViewProperty" asp-route-Id="@pro.Id">
-                                    <span class="icon"><i class="mdi mdi-eye"></i></span>
-                                </a>
-                            </div>
-                            <div class="buttons right nowrap">
-                               
-                            </div>
-                        </td>
-                    </tr>
-                }
-            }
-
-            </tbody>*@
             
         </table>
         @if(!string.IsNullOrEmpty(ViewBag.Message))
@@ -107,6 +78,8 @@
                                 {"data":"registeredDate", "name": "Registered Date"},
                                 {"data":"status", "name": "Status"},
                                 {"data":"landArea", "name": "Land Area"},
+                                {"data":"agentId", "name": "Agent RefNo"},
+                                {"data":"agentName", "name": "Agent Name"},
                            ]
                 });
                 console.log(response);

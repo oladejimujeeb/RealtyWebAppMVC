@@ -15,27 +15,27 @@
         <form method="post" asp-controller="Admin" asp-action="VerifyProperty">
             <div class="field">
                 <label class="label">Building Type</label>
-                <input name="BuildingType" class="input" type="text" required value="@Model.BuildingType">
+                <input name="BuildingType" class="input" type="text" readonly required value="@Model.BuildingType">
             </div>
             <div class="field">
                 <label class="label">Address</label>
-                <input name="Address" class="input" type="text" required value="@Model.Address">
+                <input name="Address" class="input" type="text" readonly required value="@Model.Address">
             </div>
             <div class="field">
                 <label class="label">Bedroom</label>
-                <input name="Bedroom" class="input" type="number" required value="@Model.Bedroom">
+                <input name="Bedroom" class="input" type="number" readonly required value="@Model.Bedroom">
             </div>
             <div class="field">
                 <label class="label">Toilet</label>
-                <input name="Toilet" class="input" type="number" required value="@Model.Toilet">
+                <input name="Toilet" class="input" type="number" readonly required value="@Model.Toilet">
             </div>
             <div class="field">
                 <label class="label">Land Area</label>
-                <input name="PlotArea" class="input" type="number" required value="@Model.LandArea">
+                <input name="PlotArea" class="input" type="number" readonly required value="@Model.LandArea">
             </div>
             <div class="field">
                 <label class="label">Price</label>
-                <input name="Price" class="input" type="number" required value="@Model.PropertyPrice">
+                <input name="Price" class="input" type="number" readonly required value="@Model.PropertyPrice">
             </div>
             <div class="field">
                 <label class="label">Property Type</label>

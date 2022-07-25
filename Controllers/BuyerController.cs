@@ -167,8 +167,8 @@ namespace RealtyWebApp.Controllers
         [Authorize(Roles = "Buyer")]
         public IActionResult Myproperty()
         {
-            var buyerId = int.Parse(User.FindFirst(ClaimTypes.Name).Value);
-            var inspectedProperty =  _buyerService.GetPropertyByBuyer(buyerId);
+            var userBuyerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var inspectedProperty =  _buyerService.GetPropertyByBuyer(userBuyerId);
             string name = User.FindFirst(ClaimTypes.Surname)?.Value;
             ViewBag.Name = name;
             TempData["profilePic"] = User.FindFirst(ClaimTypes.GivenName).Value;
