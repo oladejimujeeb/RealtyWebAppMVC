@@ -1,8 +1,175 @@
 @model dynamic
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    Layout = null;
 }
 
-<h2>title</h2>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html" lang="en">
+<head>
+    <title>Book Inspection</title>
+    <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900&display=swap" rel="stylesheet">
+    
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+        <link rel="stylesheet" href="~/tem/css/animate.css">
+        
+        <link rel="stylesheet" href="~/tem/css/owl.carousel.min.css">
+        <link rel="stylesheet" href="~/tem/css/owl.theme.default.min.css">
+        <link rel="stylesheet" href="~/tem/css/magnific-popup.css">
+        
+        <link rel="stylesheet" href="~/tem/css/flaticon.css">
+		<link rel="stylesheet" href="~/tem/css/style.css">
+
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+	<div class="container">
+		<a class="navbar-brand" href="">Realty Mulad</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="oi oi-menu"></span> Menu
+		</button>
+
+		<div class="collapse navbar-collapse" id="ftco-nav">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item active"><a asp-controller="Home" asp-action="index"class="nav-link">Home</a></li>
+				<li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Privacy" class="nav-link">About</a></li>
+				<li class="nav-item"><a asp-controller="Realtor" asp-action="DashBoard" class="nav-link" >Agent</a></li>
+				<li class="nav-item"><a href="" class="nav-link">Services</a></li>
+				<li class="nav-item"><a asp-controller="Home" asp-action="AllProperties" class="nav-link">Properties</a></li>
+				<li class="nav-item"><a class="nav-link" asp-controller="User" asp-action="Login" >Login</a></li>
+				<li class="nav-item"><a  class="nav-link">Contact</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<section class="hero-wrap" style="background-image: url('/images/termsandconditions.jpg');" data-stellar-background-ratio="0.5">
+	<div class="overlay"></div>
+	<div class="container">
+		<div class="row no-gutters slider-text align-items-center">
+			<div class="col-lg-7 col-md-6 ftco-animate d-flex align-items-end">
+				<div class="text">
+					<p style="font-size: 18px;">Get specialist advice from local experts across all types of residential, commercial and rural property</p>
+					<p><a asp-controller="Realtor" asp-action="AddNewProperty" class="btn btn-primary py-3 px-4">Register Your Property</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section style="background-color: #e9ecef" class="ftco-section contact-section">
+	<div class="container">
+		<h3>DISCLAIMER</h3>
+		<p>The information contained in this website is for general information purposes only.</p>
+	</div>
+	<div class="container">
+		<ol style="background-color: #ffffff; padding-top: 10px; border-radius: 10px">
+			<li>In no event will we be liable for any loss or damage including without limitation, indirect or consequential 
+				loss or damage, or any loss or damage whatsoever arising from loss of data or profits arising out of, or in
+				connection with, the use of this website. Through this website you are able to link to other websites which are 
+				not under the control of Realty Mulad. We have no control over the nature, content and availability of those 
+				sites. The inclusion of any links does not necessarily imply a recommendation or endorse the views expressed 
+				within them. Every effort is made to keep the website up and running smoothly. However,Realty Mulad takes 
+				no responsibility for, and will not be liable for, the website being temporarily unavailable due to technical 
+				issues beyond our control.</li>
+			<li style="padding:10px">By visiting our site and/ or purchasing something from us, you engage in our “Service” and agree to be bound by the following
+				terms and conditions (“Terms of Service”, “Terms”), including those additional terms and conditions and policies 
+				referenced herein and/or available by hyperlink. These Terms of Service apply to all users of the site, including 
+				without limitation users who are browsers, agents, customers, merchants, and/ or contributors of content.</li>
+		</ol>
+		<div>
+			<em>  Please read these Terms of Service carefully before accessing or using our website. By accessing or using any part of the site, you agree
+				to be bound by these Terms of Service. If you do not agree to all the terms and conditions of this agreement, then you may not access the
+				website or use any services. If these Terms of Service are considered an offer, acceptance is expressly limited to these Terms of Service.</em>
+            		
+			<p style="padding: 10px">Any new features or tools which are added to the current site shall also be subject to the Terms of Service. You can review the most current version 
+				of the Terms of Service at any time on this page. We reserve the right to update, change or replace any part of these Terms of Service by posting updates and/or 
+				changes to our website. It is your responsibility to check this page periodically for changes. Your continued use of or access to the website following the posting 
+				of any changes constitutes acceptance of those changes.</p>
+		</div>
+		<div>
+			<em>Mulad & Associates shall promote, market, manage and or sell the properties (buildings/lands) posted on the website of Realty Mulad subject to the following terms and condition:</em>
+			<ol style="background-color: #ffffff; padding-top: 10px; border-radius: 10px">
+				<li style="padding: 15px">
+					Upon registration and certification of the properties and owners/landlords, agents and estates developers, Realty Mulad reserves the exclusive and sole rights to promote, market, manage and or sell the properties posted on 
+					its website to any clients who show interest and conclude the transactions on behalf of the external agents, landlords/owners and Estate/Properties Developers upon instruction from the agent,
+					landlords/owners and Estate/Properties Developers.
+				</li>
+				<li style="padding: 15px">
+					The parties in this collaboration agreement shall share the fees and commission on any concluded transactions as shall be agreed between them
+				</li >
+				<li style="padding: 15px">
+					Under no circumstances shall either party be liable to the other party or any third party for any damage resulting from any part of this agreement such as, but not limited to,
+					loss of revenue or anticipated profits or loss of business, course of delay or failure of delivery which are not related to or the direct result of parties’ negligence or breach.
+				</li>
+				<li style="padding: 15px">
+					The parties agree that this agreement shall be governed by the relevant Laws of the Federal Republic of Nigeria.
+				</li>
+			</ol>
+		</div>
+		
+	</div>
+</section>
+
+<section class="ftco-section contact-section">
+      <div class="container">
+        
+        <div class="row d-flex mb-5 contact-info justify-content-center">
+        	<div class="col-md-8">
+        		<div class="row mb-5">
+		          <div class="col-md-4 text-center py-4">
+		          	<div class="icon">
+		          		<span class="fa fa-map"></span>
+		          	</div>
+		            <address><span>Address:</span>No 3, Ayanfe Community, Kuola, Apata, Ibadan</address>
+		          </div>
+		          <div class="col-md-4 text-center border-height py-4">
+		          	<div class="icon">
+		          		<span class="fa fa-phone"></span>
+		          	</div>
+		            <p><span>Phone:</span> <a href="tel:+2348136794915">+2348136794915</a></p>
+		          </div>
+		          <div class="col-md-4 text-center py-4">
+		          	<div class="icon">
+		          		<span class="fa fa-paper-plane"></span>
+		          	</div>
+		            <p><span>Email:</span> <a href="mailto:oladejimujib@gmail.com">oladejimujib@gmail.com</a></p>
+		          </div>
+		        </div>
+          </div>
+        </div>
+       
+      </div>
+    </section>	
+
+<div class="row">
+	<div class="col-md-12 text-center">
+	
+		<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+			Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Mulad</a>
+			<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+		</p>
+	</div>
+	
+	<script src="~/tem/js/jquery.min.js"></script>
+      <script src="~/tem/js/jquery-migrate-3.0.1.min.js"></script>
+      <script src="~/tem/js/popper.min.js"></script>
+      <script src="~/tem/js/bootstrap.min.js"></script>
+      <script src="~/tem/js/jquery.easing.1.3.js"></script>
+      <script src="~/tem/js/jquery.waypoints.min.js"></script>
+      <script src="~/tem/js/jquery.stellar.min.js"></script>
+      <script src="~/tem/js/owl.carousel.min.js"></script>
+      <script src="~/tem/js/jquery.magnific-popup.min.js"></script>
+      <script src="~/tem/js/jquery.animateNumber.min.js"></script>
+      <script src="~/tem/js/scrollax.min.js"></script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+      <script src="~/tem/js/google-map.js"></script>
+      <script src="~/tem/js/main.js"></script>
+</div>
+</body>
+</html>

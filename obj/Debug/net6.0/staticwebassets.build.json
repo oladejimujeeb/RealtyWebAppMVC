@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "B9OLqBeZTJW83Et1g1VR8fHM0u/JxEj8iqiivPXiups=",
+  "Hash": "dlrnlhNpr9ioWeXG+tIw6gU+0DF6GgK6AEgz3xqyamo=",
   "Source": "RealtyWebApp",
   "BasePath": "_content/RealtyWebApp",
   "Mode": "Default",
@@ -763,6 +763,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Images\\team-9.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\User\\Desktop\\code learners hub\\RealtyWebApp\\RealtyWebApp\\wwwroot\\Images\\termsandconditions.jpg",
+      "SourceId": "RealtyWebApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\Desktop\\code learners hub\\RealtyWebApp\\RealtyWebApp\\wwwroot\\",
+      "BasePath": "_content/RealtyWebApp",
+      "RelativePath": "Images/termsandconditions.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Images\\termsandconditions.jpg"
     },
     {
       "Identity": "C:\\Users\\User\\Desktop\\code learners hub\\RealtyWebApp\\RealtyWebApp\\wwwroot\\Images\\work-1.jpg",

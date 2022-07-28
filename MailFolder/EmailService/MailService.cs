@@ -30,10 +30,13 @@ namespace RealtyWebApp.MailFolder.EmailService
             str.Close();
             mailText = mailText.Replace("[username]", $"{message.FullName}").Replace("[RegId]",$"{message.Id}");
             myMailMessage.Body =mailText;
-            System.Net.Mail.SmtpClient smptServer = new System.Net.Mail.SmtpClient(_mailSetting.Host);
-            smptServer.Port = _mailSetting.Port;
-            smptServer.Credentials = new System.Net.NetworkCredential(_mailSetting.Mail, _mailSetting.Password);
-            smptServer.EnableSsl = true;
+            System.Net.Mail.SmtpClient smptServer = new System.Net.Mail.SmtpClient(_mailSetting.Host)
+            {
+                Port = _mailSetting.Port,
+                Credentials = new System.Net.NetworkCredential(_mailSetting.Mail, _mailSetting.Password),
+                EnableSsl = true
+            };
+            
             try
             {
                 smptServer.Send(myMailMessage);

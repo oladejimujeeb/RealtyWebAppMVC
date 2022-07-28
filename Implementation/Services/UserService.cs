@@ -53,9 +53,8 @@ namespace RealtyWebApp.Implementation.Services
             }
 
             var userRole = await _userRoleRepository.GetUserRole(user.Id);
-            /*var realtor = await _realtorRepository.Get(x => x.UserId == user.Id);
-            var buyer = await _buyerRepository.Get(x => x.UserId == user.Id);
-            var mail = new WelcomeMessage()
+            
+            /*var mail = new WelcomeMessage()
             {
                 Email = "oladejimujib@gmail.com",
                 Id = "mujib007",
@@ -96,14 +95,6 @@ namespace RealtyWebApp.Implementation.Services
             return r.Id;
           
         }
-        public Task<BaseResponseModel<UserDto>> GetUserById(int id)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public BaseResponseModel<UserDto> GetAllRealtor()
-        {
-            throw new System.NotImplementedException();
-        }
+       
     }
 }

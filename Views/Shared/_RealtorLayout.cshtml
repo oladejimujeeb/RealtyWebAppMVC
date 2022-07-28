@@ -13,7 +13,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"/>
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"/>
   <link rel="mask-icon" href="safari-pinned-tab.svg" color="#00b4b6"/>
-
+  <script src="~/lib/jquery/dist/jquery.min.js"></script> 
   <meta name="description" content="Admin One - free Tailwind dashboard">
 
   <meta property="og:url" content="https://justboil.github.io/admin-one-tailwind/">
@@ -44,44 +44,6 @@
       } 
 }
 <div id="app">
-@*<header id="navbar-main" class="navbar is-fixed-top">
-    <nav class="navbar-brand" >
-      <a class="navbar-brand" href="#">Navbar</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Log Out</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Dropdown
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
-          </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-      </div>
-    </nav>
-    </header>*@
-
 <nav id="navbar-main" class="navbar is-fixed-top">
   <div class="navbar-brand">
     <a class="navbar-item mobile-aside-button">
@@ -225,18 +187,36 @@
 <main role="main" class="pb-3">
         @RenderBody()
     </main>
-@*<div class="container" style="display: flex;">
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis laborum quisquam facere aliquid, aspernatur libero provident eligendi sapiente. Modi dolor quaerat aliquid sint veniam voluptates dolorem eius eos enim eaque?</p>
-    <h4>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et quidem repudiandae modi aspernatur optio labore sequi vero consequuntur, molestias quibusdam excepturi numquam quo voluptates eius doloremque eos. Facilis, distinctio quisquam?</h4>
-</div>*@
+<footer class="footer">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
+    <div class="flex items-center justify-start space-x-3">
+      <div>
+        © 2022, Realty Web App
+      </div>
+
+      <div>
+        <p>Distributed By: <a href="https://themewagon.com/" target="_blank">Mulad Realty</a></p>
+      </div>
+      <a href="https://github.com/justboil/admin-one-tailwind" style="height: 20px">
+        <img src="https://img.shields.io/github/v/release/justboil/admin-one-tailwind?color=%23999">
+      </a>
+    </div>
+   
+  </div>
+</footer>
 
 <!-- Scripts below are for demo only -->
+<script type="text/javascript" src="~/js/main.min.js?v=1628755089081"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+
+
+<noscript>
+  <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=658339141622648&ev=PageView&noscript=1" alt=""/>
+</noscript>
 
 <!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
 <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

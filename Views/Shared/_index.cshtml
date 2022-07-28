@@ -40,12 +40,8 @@
 	          <li class="nav-item"><a asp-controller="Realtor" asp-action="DashBoard" class="nav-link" >Agent</a></li>
 	          <li class="nav-item"><a asp-controller="Buyer" asp-action="Dashboard" class="nav-link">Client</a></li>
 	          <li class="nav-item"><a asp-controller="Home" asp-action="AllProperties" class="nav-link">Properties</a></li>
-	          @*@if (SignInManager.IsSignedIn(User))
-	          {
-		          
-	          }*@
 	          <li class="nav-item"><a class="nav-link" asp-controller="User" asp-action="Login" >Login</a></li>
-	          <li class="nav-item"><a  class="nav-link">Contact</a></li>
+	          <li class="nav-item"><a asp-controller="Home" asp-action="SignUpAgreement"  class="nav-link">Contact</a></li>
 	        </ul>
 	      </div>
 	    </div>

@@ -86,6 +86,12 @@
                              <input asp-for="CacNumber" type="text" class="form-control" required/>
                              <span asp-validation-for="CacNumber" class="text-danger"></span>
                          </div>
+                         <div class="w-50">
+                         	<a asp-controller="Home" asp-action="SignUpAgreement" class="checkbox-wrap checkbox-primary" style="color: green">Remember Me
+                         		<input type="checkbox" checked>
+                         		<span class="checkmark"></span>
+                         	</a>
+                        </div>
                      </div>
                     <div class="form-group ">
                         <input  type="submit" value="Submit" class="btn btn-success trigger-btn col-sm-12" data-toggle="modal"/>

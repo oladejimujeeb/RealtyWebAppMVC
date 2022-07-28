@@ -20,10 +20,10 @@
           "lib/netstandard2.0/Humanizer.dll": {}
         }
       },
-      "MailKit/3.1.1": {
+      "MailKit/3.3.0": {
         "type": "package",
         "dependencies": {
-          "MimeKit": "3.1.1"
+          "MimeKit": "3.3.0"
         },
         "compile": {
           "lib/net6.0/MailKit.dll": {}
@@ -302,7 +302,7 @@
           "ref/netstandard1.3/Microsoft.Win32.Primitives.dll": {}
         }
       },
-      "MimeKit/3.1.1": {
+      "MimeKit/3.3.0": {
         "type": "package",
         "dependencies": {
           "Portable.BouncyCastle": "1.9.0",
@@ -1827,20 +1827,17 @@
         "logo.png"
       ]
     },
-    "MailKit/3.1.1": {
-      "sha512": "NprdMF0ABNWOqQUuqz45X5YkJK6f3vtYwwvqR6nGVdmrZ7HkahNbSATpOZ5Rj3W1cgDGf/iD8vs/oCyZ4wUO7g==",
+    "MailKit/3.3.0": {
+      "sha512": "+TkmnfnicAgtwmPDiqZ/CvtLh7z36o44wjgvJzkbFXyGSnhVxmUWdvnzerA6EqslPTP9nK8aWqoQvr1uMpeHCw==",
       "type": "package",
-      "path": "mailkit/3.1.1",
+      "path": "mailkit/3.3.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "icons/mailkit-50.png",
-        "lib/net452/MailKit.dll",
-        "lib/net452/MailKit.pdb",
-        "lib/net452/MailKit.xml",
-        "lib/net46/MailKit.dll",
-        "lib/net46/MailKit.pdb",
-        "lib/net46/MailKit.xml",
+        "lib/net462/MailKit.dll",
+        "lib/net462/MailKit.pdb",
+        "lib/net462/MailKit.xml",
         "lib/net47/MailKit.dll",
         "lib/net47/MailKit.pdb",
         "lib/net47/MailKit.xml",
@@ -1859,7 +1856,7 @@
         "lib/netstandard2.1/MailKit.dll",
         "lib/netstandard2.1/MailKit.pdb",
         "lib/netstandard2.1/MailKit.xml",
-        "mailkit.3.1.1.nupkg.sha512",
+        "mailkit.3.3.0.nupkg.sha512",
         "mailkit.nuspec"
       ]
     },
@@ -2330,20 +2327,17 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "MimeKit/3.1.1": {
-      "sha512": "aY2fuCucJ0S5gWeak8o7aSZXm19Vr/rJj746+RlvUrPKzUESDyXKLoxqW6rs7z4DA0qJ1AQxEAO2MnWxZncLGA==",
+    "MimeKit/3.3.0": {
+      "sha512": "l3J4XEioKPfck1WnCSVPPH3Jc3BefaAd2ntU66zn6pHDM2F5ev4KSUCwg3VnEKBCe8up2T8+qhliKPxug9fRZw==",
       "type": "package",
-      "path": "mimekit/3.1.1",
+      "path": "mimekit/3.3.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "icons/mimekit-50.png",
-        "lib/net452/MimeKit.dll",
-        "lib/net452/MimeKit.pdb",
-        "lib/net452/MimeKit.xml",
-        "lib/net46/MimeKit.dll",
-        "lib/net46/MimeKit.pdb",
-        "lib/net46/MimeKit.xml",
+        "lib/net462/MimeKit.dll",
+        "lib/net462/MimeKit.pdb",
+        "lib/net462/MimeKit.xml",
         "lib/net47/MimeKit.dll",
         "lib/net47/MimeKit.pdb",
         "lib/net47/MimeKit.xml",
@@ -2362,7 +2356,7 @@
         "lib/netstandard2.1/MimeKit.dll",
         "lib/netstandard2.1/MimeKit.pdb",
         "lib/netstandard2.1/MimeKit.xml",
-        "mimekit.3.1.1.nupkg.sha512",
+        "mimekit.3.3.0.nupkg.sha512",
         "mimekit.nuspec"
       ]
     },
@@ -6224,11 +6218,10 @@
   "projectFileDependencyGroups": {
     "net6.0": [
       "BCrypt.Net-Next >= 4.0.3",
-      "MailKit >= 3.1.1",
+      "MailKit >= 3.3.0",
       "Microsoft.AspNet.WebApi.Client >= 5.2.9",
       "Microsoft.EntityFrameworkCore >= 6.0.0",
       "Microsoft.EntityFrameworkCore.Tools >= 6.0.0",
-      "MimeKit >= 3.1.1",
       "Pomelo.EntityFrameworkCore.MySql >= 6.0.0"
     ]
   },
@@ -6275,7 +6268,7 @@
           },
           "MailKit": {
             "target": "Package",
-            "version": "[3.1.1, )"
+            "version": "[3.3.0, )"
           },
           "Microsoft.AspNet.WebApi.Client": {
             "target": "Package",
@@ -6290,10 +6283,6 @@
             "suppressParent": "All",
             "target": "Package",
             "version": "[6.0.0, )"
-          },
-          "MimeKit": {
-            "target": "Package",
-            "version": "[3.1.1, )"
           },
           "Pomelo.EntityFrameworkCore.MySql": {
             "target": "Package",

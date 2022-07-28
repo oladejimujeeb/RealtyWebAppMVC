@@ -1,12 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +33,7 @@ namespace RealtyWebApp
             services.AddControllersWithViews();
             services.AddScoped<IPropertyServiceMethod, PropertyServiceMethod>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
-            services.AddTransient<IMailService,MailService>();
+            services.AddScoped<IMailService,MailService>();
             services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<IRealtorRepository, RealtorRepository>();
             services.AddScoped<IBuyerRepository, BuyerRepository>();
@@ -68,7 +63,8 @@ namespace RealtyWebApp
                     config.LogoutPath = "/User/LogOut";
                     config.ExpireTimeSpan = TimeSpan.FromMinutes(40);
                     config.AccessDeniedPath = "/User/Login";
-    
+                    config.ClaimsIssuer = "Realty Mulad ";
+
                 });
             services.AddAuthorization();
         }
@@ -98,8 +94,7 @@ namespace RealtyWebApp
 
             app.UseEndpoints(endpoints =>
             {
-                /*endpoints.MapControllerRoute("Buyer",
-                    "{controller=Buyer}/{action=VerifyPayment}/{reference?}");*/
+                
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}"

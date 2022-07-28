@@ -9,11 +9,10 @@
       "RealtyWebApp/1.0.0": {
         "dependencies": {
           "BCrypt.Net-Next": "4.0.3",
-          "MailKit": "3.1.1",
+          "MailKit": "3.3.0",
           "Microsoft.AspNet.WebApi.Client": "5.2.9",
           "Microsoft.EntityFrameworkCore": "6.0.0",
           "Microsoft.EntityFrameworkCore.Tools": "6.0.0",
-          "MimeKit": "3.1.1",
           "Pomelo.EntityFrameworkCore.MySql": "6.0.0"
         },
         "runtime": {
@@ -36,14 +35,14 @@
           }
         }
       },
-      "MailKit/3.1.1": {
+      "MailKit/3.3.0": {
         "dependencies": {
-          "MimeKit": "3.1.1"
+          "MimeKit": "3.3.0"
         },
         "runtime": {
           "lib/net6.0/MailKit.dll": {
-            "assemblyVersion": "3.1.0.0",
-            "fileVersion": "3.1.1.0"
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.3.0.0"
           }
         }
       },
@@ -190,15 +189,15 @@
           "System.Runtime": "4.3.0"
         }
       },
-      "MimeKit/3.1.1": {
+      "MimeKit/3.3.0": {
         "dependencies": {
           "Portable.BouncyCastle": "1.9.0",
           "System.Security.Cryptography.Pkcs": "6.0.0"
         },
         "runtime": {
           "lib/net6.0/MimeKit.dll": {
-            "assemblyVersion": "3.1.0.0",
-            "fileVersion": "3.1.1.0"
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.3.0.0"
           }
         }
       },
@@ -1065,12 +1064,12 @@
       "path": "humanizer.core/2.8.26",
       "hashPath": "humanizer.core.2.8.26.nupkg.sha512"
     },
-    "MailKit/3.1.1": {
+    "MailKit/3.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-NprdMF0ABNWOqQUuqz45X5YkJK6f3vtYwwvqR6nGVdmrZ7HkahNbSATpOZ5Rj3W1cgDGf/iD8vs/oCyZ4wUO7g==",
-      "path": "mailkit/3.1.1",
-      "hashPath": "mailkit.3.1.1.nupkg.sha512"
+      "sha512": "sha512-+TkmnfnicAgtwmPDiqZ/CvtLh7z36o44wjgvJzkbFXyGSnhVxmUWdvnzerA6EqslPTP9nK8aWqoQvr1uMpeHCw==",
+      "path": "mailkit/3.3.0",
+      "hashPath": "mailkit.3.3.0.nupkg.sha512"
     },
     "Microsoft.AspNet.WebApi.Client/5.2.9": {
       "type": "package",
@@ -1212,12 +1211,12 @@
       "path": "microsoft.win32.primitives/4.3.0",
       "hashPath": "microsoft.win32.primitives.4.3.0.nupkg.sha512"
     },
-    "MimeKit/3.1.1": {
+    "MimeKit/3.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-aY2fuCucJ0S5gWeak8o7aSZXm19Vr/rJj746+RlvUrPKzUESDyXKLoxqW6rs7z4DA0qJ1AQxEAO2MnWxZncLGA==",
-      "path": "mimekit/3.1.1",
-      "hashPath": "mimekit.3.1.1.nupkg.sha512"
+      "sha512": "sha512-l3J4XEioKPfck1WnCSVPPH3Jc3BefaAd2ntU66zn6pHDM2F5ev4KSUCwg3VnEKBCe8up2T8+qhliKPxug9fRZw==",
+      "path": "mimekit/3.3.0",
+      "hashPath": "mimekit.3.3.0.nupkg.sha512"
     },
     "MySqlConnector/2.0.0": {
       "type": "package",

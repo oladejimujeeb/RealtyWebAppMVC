@@ -44,7 +44,7 @@
             },
             "MailKit": {
               "target": "Package",
-              "version": "[3.1.1, )"
+              "version": "[3.3.0, )"
             },
             "Microsoft.AspNet.WebApi.Client": {
               "target": "Package",
@@ -59,10 +59,6 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.0, )"
-            },
-            "MimeKit": {
-              "target": "Package",
-              "version": "[3.1.1, )"
             },
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
