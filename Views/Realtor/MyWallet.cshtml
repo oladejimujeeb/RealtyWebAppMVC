@@ -1,0 +1,61 @@
+@model RealtyWebApp.DTOs.WalletDto;
+@{
+    ViewBag.Title = "Wallet Balance";
+    Layout = "_RealtorLayout";
+    string pic = "";
+    @if (TempData.ContainsKey("profilePic"))  
+    {  
+        pic = TempData["profilePic"] as string;  
+    } 
+}
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+	<div class="alert alert-danger">@ViewBag.Message</div>
+}
+
+@if (Model != null)
+{
+    <div class="card-content">
+            
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+        @if (!string.IsNullOrEmpty(@ViewBag.Name))
+        {
+            <h3 class="title">Hi @ViewBag.Name</h3>
+            <h2 class="title">Date: @DateTime.Now.ToString("f")</h2>
+            <img width="100px" height="100px" src="/ProfilePictures/@pic" alt="...">
+            <br>
+            <br>
+        }
+    </div >
+        <div class="field">
+            <label class="label">Account Name</label>
+            <input  class="input" type="text" readonly required value="@Model.AccountName">
+        </div>
+        <div class="field">
+            <label class="label">Account Number</label>
+            <input  class="input" type="text" readonly required value="@Model.AccountNo">
+        </div>
+        <div class="field">
+            <label class="label">Bank Name</label>
+            <input  class="input" type="text" readonly required value="@Model.BankName">
+        </div>
+         <div class="field">
+            <label class="label">Account Balance</label>
+            <input  class="input" type="text" readonly required value="# @Model.AccountBalance.ToString("N")">
+        </div>
+    </div>
+}
+<div class="card-content">
+    <form method="post" asp-controller="" asp-action="">
+        <div class="field">
+            <label class="label"> Withdraw to Your Account</label>
+        </div>
+        <div class="field">
+            <label class="label">Amount</label>
+            <input name="Amount" class="input" type="number" min="3000"  placeholder="minimum withdraw 3000 "  required >
+        </div>
+          <div class="form-group ">
+             <input  type="submit" value="Submit" class="btn btn-success trigger-btn col-sm-12" data-toggle="modal"/>
+         </div>       
+    </form>
+</div>

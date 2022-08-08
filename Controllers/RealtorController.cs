@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealtyWebApp.DTOs;
+using RealtyWebApp.DTOs.PayStack;
 using RealtyWebApp.Interface.IServices;
 using RealtyWebApp.Models.RequestModel;
 
@@ -146,6 +147,43 @@ namespace RealtyWebApp.Controllers
 
             ViewBag.Info = property.Message;
             return View();
+        }
+
+        [Authorize(Roles = "Realtor")]
+        public async Task<IActionResult> MyWallet()
+        {
+            var realtorId = int.Parse(User.FindFirst(ClaimTypes.Name).Value);
+            var accountDetails =await _realtorService.GetWallet(realtorId);
+            string name = User.FindFirst(ClaimTypes.Surname)?.Value;
+            ViewBag.Name = name;
+            TempData["profilePic"] = User.FindFirst(ClaimTypes.GivenName).Value;
+            if (accountDetails.Status)
+            {
+                return View(accountDetails.Data);
+            }
+
+            ViewBag.Message = accountDetails.Message;
+            return View();
+        }
+        
+        [Authorize(Roles = "Realtor")]
+        public IActionResult AddAccountDetails()
+        {
+            return View();
+        }
+        [HttpPost]
+        [Authorize(Roles = "Realtor")]
+        public async Task<IActionResult> AddAccountDetails(TransferRequest request)
+        {
+            var realtorId = int.Parse(User.FindFirst(ClaimTypes.Name).Value);
+            var addAccount =await _realtorService.AddAccount(realtorId, request);
+            if (addAccount.Status)
+            {
+                ViewBag.Message = addAccount.Message;
+                return View("MyWallet");
+            }
+            ViewBag.Message = addAccount.Message;
+            return View("MyWallet");
         }
     }
 }

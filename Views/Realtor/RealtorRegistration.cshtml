@@ -14,6 +14,7 @@
                     <h1 class="tagcolor" style="color:green">Register</h1>
                     <p class="tagcolor" style="color:green">Please fill in this form to create an account.</p>
                     <hr class="tagcolor" style="color:green">
+                    
                 </div>
                 <form method="post" enctype="multipart/form-data"  asp-controller="Realtor" asp-action="RealtorRegistration">
                      @if(!string.IsNullOrEmpty(ViewBag.Message))
@@ -23,6 +24,7 @@
                               @ViewBag.Message
                             </div>
                       }
+                       @Html.ValidationSummary()
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-row">
                         <div class="form-group col-sm-6">

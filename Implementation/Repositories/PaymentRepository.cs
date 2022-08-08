@@ -21,6 +21,11 @@ namespace RealtyWebApp.Implementation.Repositories
             return payment;
         }
 
-       
+        public Task<Payment> GetPayment(string transactionReference)
+        {
+            var payment =  Context.Payments.Where(x=>x.TransactionId== transactionReference).Include(x => x.Property).
+                ThenInclude(x => x.Realtor).ThenInclude(x=>x.Wallet).SingleAsync();
+            return payment;
+        }
     }
 }

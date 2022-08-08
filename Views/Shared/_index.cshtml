@@ -1,4 +1,5 @@
 @using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -37,10 +38,28 @@
 	        <ul class="navbar-nav ml-auto">
 	          <li class="nav-item active"><a  asp-controller="Home" asp-action="index" class="nav-link">Home</a></li>
 	          <li class="nav-item"><a  asp-controller="Home" asp-action="Privacy" class="nav-link">About</a></li>
-	          <li class="nav-item"><a asp-controller="Realtor" asp-action="DashBoard" class="nav-link" >Agent</a></li>
-	          <li class="nav-item"><a asp-controller="Buyer" asp-action="Dashboard" class="nav-link">Client</a></li>
+	         		          
+				@if(User.Identity.IsAuthenticated){
+                					@if (User.FindFirst(ClaimTypes.Role).Value == "Realtor")
+                					{
+                						<li class="nav-item"><a asp-controller="Realtor" asp-action="DashBoard" class="nav-link" >Agent</a></li>
+                					}
+                					else if (User.FindFirst(ClaimTypes.Role).Value == "Administrator")
+                					{
+                						<li class="nav-item"><a asp-controller="Admin" asp-action="AdminDashBoard" class="nav-link" >Agent</a></li>
+                					}
+                					else
+                					{
+                						<li class="nav-item"><a asp-controller="Buyer" asp-action="Dashboard" class="nav-link">Client</a></li>
+                					}
+                				}
+                				else
+                				{
+                					<li class="nav-item"><a class="nav-link" asp-controller="User" asp-action="Login" >Login</a></li>
+                				}
+                				
 	          <li class="nav-item"><a asp-controller="Home" asp-action="AllProperties" class="nav-link">Properties</a></li>
-	          <li class="nav-item"><a class="nav-link" asp-controller="User" asp-action="Login" >Login</a></li>
+	          
 	          <li class="nav-item"><a asp-controller="Home" asp-action="SignUpAgreement"  class="nav-link">Contact</a></li>
 	        </ul>
 	      </div>

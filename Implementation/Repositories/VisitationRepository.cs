@@ -27,8 +27,14 @@ namespace RealtyWebApp.Implementation.Repositories
         public async Task<IEnumerable<VisitationRequest>> BuyerInspectedProperty(int buyerId)
         {
             var inspect = await Context.VisitationRequests.Include(x => x.Property)
-                .Where(x => x.BuyerId == buyerId).ToListAsync();
+                .Where(x => x.BuyerId == buyerId && !x.Property.IsSold).ToListAsync();
             return inspect;
+        }
+
+        public int CheckIfDateIsAvailable(DateTime date)
+        {
+                var count =  Context.VisitationRequests.Count(x => x.RequestDate.Date == date.Date);
+                return count;
         }
     }
 }

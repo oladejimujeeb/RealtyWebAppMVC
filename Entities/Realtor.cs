@@ -11,6 +11,7 @@ namespace RealtyWebApp.Entities
         public string BusinessName { get; set; }
         public string CacRegistrationNumber { get; set; }
         public User User{get;set;}
+        public Wallet Wallet { get; set; }
         public int UserId{get;set;}
         public IList<Property> Properties { get; set; } = new List<Property>();
     }

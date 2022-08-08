@@ -41,23 +41,19 @@ namespace RealtyWebApp.Implementation.Repositories
 
         public List<Property> AllUnverifiedProperty()
         {
-            using (Context)
-            {
-                var pro = Context.Properties
-                    .Where(x => x.BuyerIdentity == 0 && x.IsSold == false && x.VerificationStatus == false)
-                    .Include(x => x.Realtor).ThenInclude(x => x.User).ToList();
-                return pro;
-            }
+            var pro = Context.Properties
+                .Where(x => x.BuyerIdentity == 0 && x.IsSold == false && x.VerificationStatus == false)
+                .Include(x => x.Realtor).ThenInclude(x => x.User).ToList();
+            return pro;
+            
         }
 
         public List<Property> AllVerifiedProperty()
         {
-            using (Context)
-            {
-                var property = Context.Properties.Where(x => x.VerificationStatus && !x.IsSold).Include(x=>x.Realtor).
-                    ThenInclude(x=>x.User).ToList();
-                return property;
-            }
+            var property = Context.Properties.Where(x => x.VerificationStatus && !x.IsSold).Include(x=>x.Realtor).
+                ThenInclude(x=>x.User).ToList();
+            return property;
+            
         }
     }
 }

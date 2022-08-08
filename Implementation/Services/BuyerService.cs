@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -19,6 +20,7 @@ using RealtyWebApp.Interface.IServices;
 using RealtyWebApp.Interface.IServices.IPropertyMethod;
 using RealtyWebApp.MailFolder.EmailService;
 using RealtyWebApp.MailFolder.MailEntities;
+using RealtyWebApp.Migrations;
 using RealtyWebApp.Models.RequestModel;
 
 namespace RealtyWebApp.Implementation.Services
@@ -35,10 +37,12 @@ namespace RealtyWebApp.Implementation.Services
         private readonly IPropertyServiceMethod _propertyServiceMethod;
         private readonly IMailService _mailService;
         private readonly IPaymentRepository _paymentRepository;
+        private readonly IWalletRepository _walletRepository;
 
         public BuyerService(IConfiguration configuration, IBuyerRepository buyerRepository, IRoleRepository roleRepository, IUserRepository userRepository, 
             IPropertyRepository propertyRepository, IVisitationRepository visitationRepository, IPropertyServiceMethod propertyServiceMethod,
-            IPropertyImage propertyImage, IMailService mailService, IPaymentRepository paymentRepository)
+            IPropertyImage propertyImage, IMailService mailService, IPaymentRepository paymentRepository,
+            IWalletRepository walletRepository)
         {
             _configuration = configuration;
             _buyerRepository = buyerRepository;
@@ -50,6 +54,7 @@ namespace RealtyWebApp.Implementation.Services
             _propertyServiceMethod = propertyServiceMethod;
             _mailService = mailService;
             _paymentRepository = paymentRepository;
+            _walletRepository = walletRepository;
         }
         public async Task<BaseResponseModel<BuyerDto>> RegisterBuyer(BuyerRequestModel model)
         {
@@ -203,19 +208,16 @@ namespace RealtyWebApp.Implementation.Services
                 PropertyRegNo = getProperty.PropertyRegNo,
                 Address = $"{getProperty.Address} {getProperty.LGA} {getProperty.State}",
             };
-            var date = DateTime.Now.AddDays(3);
             
-            if (date.DayOfWeek == DayOfWeek.Sunday)
+            var date = GenerateVisitationDateTime();
+            var check = _visitationRepository.CheckIfDateIsAvailable(date);
+            if (check > 5)
             {
-               var newDate = date.AddDays(1);
-               request.RequestDate = newDate;
-            }
-            else
-            {
-                request.RequestDate = date;
+                var dateTime = date.AddDays(3);
+                date = dateTime;
             }
 
-            //getProperty.BuyerIdentity = buyerId;
+            request.RequestDate = date;
             var addVisitation =await _visitationRepository.Add(request);
             if (addVisitation != request)
             {
@@ -226,7 +228,7 @@ namespace RealtyWebApp.Implementation.Services
                 };
             }
             var scheduledDate = date;
-            string visitDate = scheduledDate.ToString("dddd,dd MMMM yyyy");
+            var visitDate = scheduledDate.ToString("dddd,dd MMMM yyyy");
             
             return new BaseResponseModel<VisitationRequestDto>()
             {
@@ -248,6 +250,26 @@ namespace RealtyWebApp.Implementation.Services
                 Message = $"Kind Visit Our office on {visitDate} for Property Inspection," +
                           $" If Date is not convenient call Our Customer Service on 08136794915 to reschedule ",
             };
+        }
+
+        private DateTime GenerateVisitationDateTime()
+        {
+            var date = DateTime.Now.AddDays(3);
+            
+            if (date.DayOfWeek == DayOfWeek.Sunday)
+            {
+                return date.AddDays(1);
+                
+            }
+            else if (date.DayOfWeek==DayOfWeek.Saturday)
+            {
+                return date.AddDays(2);
+            }
+            else
+            {
+                return date;
+            }
+
         }
 
         public async Task<BaseResponseModel<PropertyDocumentDto>> DownloadPropertyDocument(int documentId)
@@ -469,7 +491,7 @@ namespace RealtyWebApp.Implementation.Services
                 }
             };
         }
-
+        
         public async Task<BaseResponse> MakePayment(int buyerId, PaymentRequestModel paymentRequest)
         {
             var property = await _propertyRepository.GetWhere(paymentRequest.PropertyRegNumber);
@@ -507,9 +529,9 @@ namespace RealtyWebApp.Implementation.Services
                 payment.PaymentDate = DateTime.Now;
                 var savePayment =  await _paymentRepository.Add(payment);
                 property.BuyerIdentity = buyerId;
-                property.IsSold = true;
+                /*property.IsSold = true;
                 property.Status = Status.Sold.ToString();
-                property.IsAvailable = false;
+                property.IsAvailable = false;*/
                 var updatePropertySale = await _propertyRepository.Update(property);
                 if (savePayment == null && updatePropertySale == null)
                 {
@@ -545,10 +567,10 @@ namespace RealtyWebApp.Implementation.Services
                 };
             }
         }
-
+        
         public async Task<BaseResponse> VerifyPayment(string transactionReference)
         {
-            var verify = await _paymentRepository.Get(x => x.TransactionId == transactionReference);
+            var verify = await _paymentRepository.GetPayment(transactionReference);
             if (verify == null)
             {
                 return new BaseResponse()
@@ -559,7 +581,6 @@ namespace RealtyWebApp.Implementation.Services
             }
 
             using var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpClient.BaseAddress = new Uri("https://api.paystack.co/transaction/verify/");
@@ -573,7 +594,15 @@ namespace RealtyWebApp.Implementation.Services
                 if (responseObject.data.status == "success")
                 {
                     verify.Status = PaymentStatus.Success;
+                    verify.Property.IsSold = true;
+                    verify.Property.Status = Status.Sold.ToString();
+                    verify.Property.IsAvailable = false;
+                    verify.Property.Realtor.Wallet.AccountBalance += verify.Amount;
+                   
                     var updatePayment = await _paymentRepository.Update(verify);
+                    await _walletRepository.Update(verify.Property.Realtor.Wallet);
+                    await _propertyRepository.Update(verify.Property);
+                    
                     if (updatePayment == null)
                     {
                         return new BaseResponse()

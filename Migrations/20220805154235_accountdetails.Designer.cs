@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealtyWebApp.Context;
 
@@ -10,9 +11,10 @@ using RealtyWebApp.Context;
 namespace RealtyWebApp.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20220805154235_accountdetails")]
+    partial class accountdetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,7 +222,7 @@ namespace RealtyWebApp.Migrations
                             Email = "oladejimujib@yahoo.com",
                             FirstName = "Mujib",
                             LastName = "Oladeji",
-                            Password = "$2a$11$akSASxX6B8kOq34o4wLUYeMOmzMmp58Hsad1zLXAsoN8e.hD7Z9k2",
+                            Password = "$2a$11$C4G2nfIl/s0codCwdYDGvuwKIJnDB44RGtnWM3xFR/Oxft1OA0TI.",
                             PhoneNumber = "08136794915"
                         });
                 });
@@ -460,12 +462,6 @@ namespace RealtyWebApp.Migrations
                         .HasColumnType("double");
 
                     b.Property<string>("AccountName")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("AccountNo")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("BankName")
                         .HasColumnType("longtext");
 
                     b.Property<int>("RealtorId")

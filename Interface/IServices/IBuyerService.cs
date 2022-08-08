@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using RealtyWebApp.DTOs;
+using RealtyWebApp.DTOs.PayStack;
 using RealtyWebApp.Models.RequestModel;
 
 namespace RealtyWebApp.Interface.IServices
@@ -18,5 +19,6 @@ namespace RealtyWebApp.Interface.IServices
         Task<BaseResponseModel<PaymentBreakDown>> PaymentBreakDown(int propertyId, int buyerId);
         Task<BaseResponse> MakePayment(int buyerId, PaymentRequestModel paymentRequest);
         Task<BaseResponse> VerifyPayment(string transactionReference);
+        
     }
 }

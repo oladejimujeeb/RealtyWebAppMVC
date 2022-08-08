@@ -71,7 +71,7 @@
           </span>
         </a>
         <div class="navbar-dropdown">
-          <a class="navbar-item">
+          <a asp-controller="Home" asp-action="AllProperties" class="navbar-item">
             <span class="icon"><i class="mdi mdi-account"></i></span>
             <span>All Properties</span>
           </a>
@@ -90,46 +90,7 @@
           </a>
         </div>
       </div>
-      <div class="navbar-item dropdown has-divider has-user-avatar">
-        <a class="navbar-link">
-          @*<div class="user-avatar">
-            <img src="https://avatars.dicebear.com/v2/initials/john-doe.svg" alt="John Doe" class="rounded-full">
-          </div>*@
-          <div class="is-user-name"><span>My Profile</span></div>
-          <span class="icon"><i class="mdi mdi-chevron-down"></i></span>
-        </a>
-        <div class="navbar-dropdown">
-          <a  class="navbar-item">
-            <span class="icon"><i class="mdi mdi-account"></i></span>
-            <span>My Profile</span>
-          </a>
-          <a class="navbar-item">
-            <span class="icon"><i class="mdi mdi-settings"></i></span>
-            <span>Settings</span>
-          </a>
-          <a class="navbar-item">
-            <span class="icon"><i class="mdi mdi-email"></i></span>
-            <span>Messages</span>
-          </a>
-          <hr class="navbar-divider">
-          <a  asp-controller="User" asp-action="LogOut" class="navbar-item">
-            <span class="icon"><i class="mdi mdi-logout"></i></span>
-            <span>Log Out</span>
-          </a>
-        </div>
-      </div>
-      <a asp-controller="Home" asp-action="Index" class="navbar-item has-divider desktop-icon-only">
-        <span class="icon"><i class="mdi mdi-help-circle-outline"></i></span>
-        <span>About</span>
-      </a>
-      @*<a class="navbar-item has-divider desktop-icon-only">
-        <span class="icon"><i class="mdi mdi-github-circle"></i></span>
-        <span>GitHub</span>
-      </a>*@
-      <a asp-controller="User" asp-action="LogOut" title="Log out" class="navbar-item desktop-icon-only">
-        <span class="icon"><i class="mdi mdi-logout"></i></span>
-        <span>Log out</span>
-      </a>
+    
     </div>
   </div>
 </nav>

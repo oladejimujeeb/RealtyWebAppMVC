@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using RealtyWebApp.DTOs;
@@ -9,5 +10,6 @@ namespace RealtyWebApp.Interface.IRepositories
     {
         IEnumerable<VisitationRequest> Visitation();
         Task<IEnumerable<VisitationRequest>> BuyerInspectedProperty(int buyerId);
+        int CheckIfDateIsAvailable(DateTime date);
     }
 }

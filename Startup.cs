@@ -49,6 +49,7 @@ namespace RealtyWebApp
             services.AddScoped<IRealtorService, RealtorService>();
             services.AddScoped<IPropertyImageService,PropertyImageService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IWalletRepository, WalletRepository>();
             services.AddScoped<IPropertyService, PropertyService>();
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();
             services.Configure<MailSetting>(Configuration.GetSection("MailSetting"));

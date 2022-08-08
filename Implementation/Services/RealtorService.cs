@@ -2,9 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using RealtyWebApp.DTOs;
+using RealtyWebApp.DTOs.PayStack;
 using RealtyWebApp.Entities;
 using RealtyWebApp.Entities.File;
 using RealtyWebApp.Entities.Identity;
@@ -14,12 +20,14 @@ using RealtyWebApp.Interface.IServices;
 using RealtyWebApp.Interface.IServices.IPropertyMethod;
 using RealtyWebApp.MailFolder.EmailService;
 using RealtyWebApp.MailFolder.MailEntities;
+using RealtyWebApp.Migrations;
 using RealtyWebApp.Models.RequestModel;
 
 namespace RealtyWebApp.Implementation.Services
 {
     public class RealtorService:IRealtorService
     {
+        private readonly IConfiguration _configuration;
         private readonly IRealtorRepository _realtorRepository;
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
@@ -27,16 +35,17 @@ namespace RealtyWebApp.Implementation.Services
         private readonly IPropertyImage _propertyImage;
         private readonly IPropertyDocument _propertyDocument;
         private readonly IPropertyRepository _propertyRepository;
-        private readonly IUserRoleRepository _userRoleRepository;
+        private readonly IWalletRepository _walletRepository;
         private readonly IPaymentRepository _paymentRepository;
         private readonly IMailService _mailService;
         private readonly IPropertyServiceMethod _propertyServiceMethod;
 
-        public RealtorService(IRealtorRepository realtorRepository, IUserRepository userRepository, IRoleRepository roleRepository, 
+        public RealtorService(IConfiguration configuration,IRealtorRepository realtorRepository, IUserRepository userRepository, IRoleRepository roleRepository, 
             IWebHostEnvironment webHostEnvironment, IPropertyImage propertyImage, IPropertyDocument propertyDocument, 
-            IPropertyRepository propertyRepository, IUserRoleRepository userRoleRepository, IPropertyServiceMethod propertyServiceMethod,
+            IPropertyRepository propertyRepository, IWalletRepository walletRepository, IPropertyServiceMethod propertyServiceMethod,
             IPaymentRepository paymentRepository, IMailService mailService)
         {
+            _configuration = configuration;
             _realtorRepository = realtorRepository;
             _userRepository = userRepository;
             _roleRepository = roleRepository;
@@ -44,7 +53,7 @@ namespace RealtyWebApp.Implementation.Services
             _propertyImage = propertyImage;
             _propertyDocument = propertyDocument;
             _propertyRepository = propertyRepository;
-            _userRoleRepository = userRoleRepository;
+            _walletRepository = walletRepository;
             _paymentRepository = paymentRepository;
             _mailService = mailService;
             _propertyServiceMethod = propertyServiceMethod;
@@ -118,6 +127,12 @@ namespace RealtyWebApp.Implementation.Services
                     User = user,
                 };
                 var addRealtor = await _realtorRepository.Add(realtor);
+                var wallet = new Wallet()
+                { 
+                    Realtor = realtor,
+                    RealtorId = realtor.Id
+                };
+                await _walletRepository.Add(wallet);
                 if (addRealtor == realtor)
                 {
                     //sending mail upon registration
@@ -330,8 +345,6 @@ namespace RealtyWebApp.Implementation.Services
                     Address = x.Address,
                     Bedroom = x.Bedroom,
                     Features = x.Features,
-                    Latitude = x.Latitude,
-                    Longitude = x.Longitude,
                     Toilet = x.Toilet,
                     BuildingType = x.BuildingType,
                     BuyerId = x.BuyerIdentity,
@@ -342,6 +355,7 @@ namespace RealtyWebApp.Implementation.Services
                     PropertyRegNumber = x.PropertyRegNo,
                     PropertyRegNo = x.PropertyRegNo,
                     RegisteredDate = x.RegisteredDate,
+                    Status = x.Status,
                     LGA = x.LGA,
                     State = x.State,
                 }).ToList();
@@ -362,7 +376,7 @@ namespace RealtyWebApp.Implementation.Services
 
         public BaseResponseModel<IEnumerable<PropertyDto>> GetRealtorApprovedProperty(int id)
         {
-            var getProperty = _propertyRepository.QueryWhere(x => x.RealtorId == id && x.VerificationStatus).
+            var getProperty = _propertyRepository.QueryWhere(x => x.RealtorId == id && x.VerificationStatus && !x.IsSold).
                 Select(x=>new PropertyDto()
                 {
                     Id = x.Id,
@@ -491,5 +505,82 @@ namespace RealtyWebApp.Implementation.Services
                 Message = $"Property {upDate.PropertyRegNo} updated successfully"
             };
         }
+         public async Task<BaseResponse> AddAccount(int realtorId, TransferRequest request)
+         {
+             var upDatedWallet = await _walletRepository.Get(x => x.RealtorId == realtorId);
+             if (upDatedWallet == null) return new BaseResponse() { Status = false, Message = "Invalid login Credential "};
+             //if (upDatedWallet.ReceipientCode!=null) return new BaseResponse() { Status = false, Message = "Account Details Already Added "};
+             using var httpClient = new HttpClient();
+             httpClient.DefaultRequestHeaders.Accept.Clear();
+             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue
+                 ("Bearer", _configuration["PayStack:SecretKey"]);
+             httpClient.BaseAddress = new Uri("https://api.paystack.co/");
+             var accountDetails = new StringContent(JsonConvert.SerializeObject(new
+             {
+                 type = "nuban",
+                 name = request.AccountName,
+                 account_number =request.AccountNo,
+                 bank_code = request.BankCode,
+                 currency = "NGN"
+             }), Encoding.UTF8, "application/json");
+             var addAccount = await httpClient.PostAsync("transferrecipient",accountDetails);
+             var addResponse = await addAccount.Content.ReadAsStringAsync();
+             if (addAccount.IsSuccessStatusCode)
+             {
+                 var responseDetails = JsonConvert.DeserializeObject<AddAccountResponse>(addResponse);
+                 if (responseDetails.data.active == "true")
+                 {
+
+                     upDatedWallet.ReceipientCode = responseDetails.data.recipient_code;
+                     upDatedWallet.AccountName = responseDetails.data.details.account_name;
+                     upDatedWallet.AccountNo = responseDetails.data.details.account_number;
+                     upDatedWallet.BankName = responseDetails.data.details.bank_name;
+                     var add = await _walletRepository.Update(upDatedWallet);
+                     if(add ==null) return new BaseResponse() { Status = false, Message = "Failed"};
+                     return new BaseResponse()
+                     {
+                         Status = true,
+                         Message = "Account Added Successfully"
+                     };
+                 }
+                 return new BaseResponse(){
+                     Status = false,
+                     Message = "Wrong Account number or Account Name"
+                 };
+             }
+            
+             return new BaseResponse()
+             {
+                 Status = false,
+                 Message = "Wrong Account number or Account Name"
+             };
+            
+         }
+
+         public async Task<BaseResponseModel<WalletDto>> GetWallet(int realtorId)
+         {
+             var getWallet = await _walletRepository.Get(x => x.RealtorId == realtorId);
+             if (getWallet == null)
+             {
+                 return new BaseResponseModel<WalletDto>()
+                 {
+                     Status = false,
+                     Message = "Invalid login Credential"
+                 };
+             }
+
+             return new BaseResponseModel<WalletDto>()
+             {
+                 Status = true,
+                 Data = new WalletDto()
+                 {
+                     AccountBalance = getWallet.AccountBalance,
+                     AccountName = getWallet.AccountName,
+                     BankName = getWallet.BankName,
+                     AccountNo = getWallet.AccountNo
+                 }
+             };
+         }
     }
 }
