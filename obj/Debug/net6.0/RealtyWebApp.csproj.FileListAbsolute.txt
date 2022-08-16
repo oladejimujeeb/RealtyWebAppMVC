@@ -37,3 +37,7 @@ C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6
 C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\System.Net.Http.Formatting.dll
 C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\Newtonsoft.Json.dll
 C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\FubarCoder.RestSharp.Portable.Core.dll
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\FubarCoder.RestSharp.Portable.HttpClient.dll
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\JsonSubTypes.dll
+C:\Users\User\Desktop\code learners hub\RealtyWebApp\RealtyWebApp\bin\Debug\net6.0\sib_api_v3_sdk.dll

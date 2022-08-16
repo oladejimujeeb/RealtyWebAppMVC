@@ -18,6 +18,7 @@ namespace RealtyWebApp.Interface.IServices
         Task<BaseResponseModel<RealtorDto>> GetUser(int id);
         Task<BaseResponse> AddAccount(int realtorId, TransferRequest transferRequest);
         Task<BaseResponseModel<WalletDto>> GetWallet(int realtorId);
+        Task<BaseResponseModel<WalletDto>>WithdrawFund(int realtorId, Withdraw withdraw);
         Task<BaseResponseModel<BaseResponseModel<PropertyDto>>> EditProperty(int propertyId, UpdatePropertyModel updateProperty);
     }
 }

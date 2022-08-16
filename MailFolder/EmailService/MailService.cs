@@ -1,12 +1,18 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using Newtonsoft.Json.Linq;
 using RealtyWebApp.MailFolder.MailEntities;
 using RealtyWebApp.MailFolder.EmailSettings;
+using sib_api_v3_sdk.Api;
+using sib_api_v3_sdk.Client;
+using sib_api_v3_sdk.Model;
+using Task = System.Threading.Tasks.Task;
 
 namespace RealtyWebApp.MailFolder.EmailService
 {
@@ -20,65 +26,73 @@ namespace RealtyWebApp.MailFolder.EmailService
         }
         public async Task WelcomeMail(WelcomeMessage message)
         {
-            System.Net.Mail.MailMessage myMailMessage = new System.Net.Mail.MailMessage();
-            myMailMessage.From = new System.Net.Mail.MailAddress(_mailSetting.Mail);
-            myMailMessage.To.Add(message.Email);
-            myMailMessage.Subject = "Confirmation of Registration - Realty Mulad";
+             Configuration.Default.ApiKey.Add("api-key", _mailSetting.Password);
+
+            var apiInstance = new TransactionalEmailsApi();
+            string senderName = _mailSetting.DisplayName;
+            string senderEmail = _mailSetting.Mail;
+            SendSmtpEmailSender email = new SendSmtpEmailSender(senderName, senderEmail);
+            string toEmail = message.Email;
+            string toName = message.FullName;
+            SendSmtpEmailTo smtpEmailTo = new SendSmtpEmailTo(toEmail, toName);
+            List<SendSmtpEmailTo> to = new List<SendSmtpEmailTo>();
+            to.Add(smtpEmailTo);
+            string BccName = "CEO Realty Mulad";
+            string BccEmail = "peerlessdomain@gmail.com";
+            SendSmtpEmailBcc bccData = new SendSmtpEmailBcc(BccEmail, BccName);
+            List<SendSmtpEmailBcc> bcc = new List<SendSmtpEmailBcc>();
+            bcc.Add(bccData);
+            string CcName = "CEO Realty Mulad";
+            string CcEmail = "peerlessdomain@gmail.com";
+            SendSmtpEmailCc ccData = new SendSmtpEmailCc(CcEmail, CcName);
+            List<SendSmtpEmailCc> Cc = new List<SendSmtpEmailCc>();
+            Cc.Add(ccData);
             string filePath = Directory.GetCurrentDirectory() + "\\MailFolder\\Templates\\WelcomeTemplate.html";
             StreamReader str = new StreamReader(filePath);
             string mailText = await str.ReadToEndAsync();
             str.Close();
-            mailText = mailText.Replace("[username]", $"{message.FullName}").Replace("[RegId]",$"{message.Id}");
-            myMailMessage.Body =mailText;
-            System.Net.Mail.SmtpClient smptServer = new System.Net.Mail.SmtpClient(_mailSetting.Host)
-            {
-                Port = _mailSetting.Port,
-                Credentials = new System.Net.NetworkCredential(_mailSetting.Mail, _mailSetting.Password),
-                EnableSsl = true
-            };
-            
+            mailText = mailText.Replace("[username]", $"{message.FullName}").Replace("[RegId]",$"{message.Id}").Replace("[email]", $"{_mailSetting.Mail}");
+            string htmlContent = mailText;//"<html><body><h1>This is my first transactional email {{params.parameter}}</h1></body></html>";
+            string textContent = null;
+            string Subject = "Confirmation of Registration - Realty Mulad";
+            string ReplyToName = "Realty Mulad";
+            string ReplyToEmail = "oladejimujib@gmail.com";
+            SendSmtpEmailReplyTo replyTo = new SendSmtpEmailReplyTo(ReplyToEmail, ReplyToName);
+            string attachmentUrl = null;
+            string stringInBase64 = "aGVsbG8gdGhpcyBpcyB0ZXN0";
+            byte[] content = System.Convert.FromBase64String(stringInBase64);
+            string AttachmentName = "Realty.jpg";
+            SendSmtpEmailAttachment attachmentContent = new SendSmtpEmailAttachment(attachmentUrl, content, AttachmentName);
+            List<SendSmtpEmailAttachment> attachment = new List<SendSmtpEmailAttachment>();
+            attachment.Add(attachmentContent);
+            JObject Headers = new JObject();
+            Headers.Add("Some-Custom-Name", "unique-id-1234");
+            long? TemplateId = null;
+            JObject Params = new JObject();
+            Params.Add("parameter", "My param value");
+            Params.Add("subject", "New Subject");
+            List<string> Tags = new List<string>();
+            Tags.Add("mytag");
+            SendSmtpEmailTo1 smtpEmailTo1 = new SendSmtpEmailTo1(toEmail, toName);
+            List<SendSmtpEmailTo1> to1 = new List<SendSmtpEmailTo1>();
+            to1.Add(smtpEmailTo1);
+            Dictionary<string, object> _parmas = new Dictionary<string, object>();
+            _parmas.Add("params", Params);
+            SendSmtpEmailReplyTo1 replyTo1 = new SendSmtpEmailReplyTo1(ReplyToEmail, ReplyToName);
+            SendSmtpEmailMessageVersions messageVersion = new SendSmtpEmailMessageVersions(to1, _parmas, bcc, Cc, replyTo1, Subject);
+            List<SendSmtpEmailMessageVersions> messageVersiopns = new List<SendSmtpEmailMessageVersions>();
+            messageVersiopns.Add(messageVersion);
             try
             {
-                smptServer.Send(myMailMessage);
-                      
+                var sendSmtpEmail = new SendSmtpEmail(email, to, bcc, Cc, htmlContent, textContent, Subject, replyTo, attachment, Headers, TemplateId, Params, messageVersiopns, Tags);
+                CreateSmtpEmail result = await apiInstance.SendTransacEmailAsync(sendSmtpEmail);
+                Configuration.Default.ApiKey.Clear();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                string error = ex.Message;
-                Console.WriteLine(error);
+                Debug.WriteLine(e.Message);
+                Console.WriteLine(e.Message);
             }
-            /*string filePath = Directory.GetCurrentDirectory() + "\\MailFolder\\Templates\\WelcomeTemplate.html";
-            StreamReader str = new StreamReader(filePath);
-            string mailText = await str.ReadToEndAsync();
-            str.Close();
-            mailText = mailText.Replace("[username]", $"{message.FullName}").Replace("[RegId]",$"{message.Id}");
-            var email = new MimeMessage();
-            email.Sender = MailboxAddress.Parse(_mailSetting.Mail);
-            email.To.Add(MailboxAddress.Parse(message.Email));
-            email.Subject = "Confirmation of Registration - Realty Mulad";
-            
-            var builder = new BodyBuilder();
-            builder.HtmlBody = mailText;
-            email.Body = builder.ToMessageBody();
-            using (var smtp = new SmtpClient())
-            {
-                try
-                {
-                    /*smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
-                    smtp.CheckCertificateRevocation = false;#1#
-                    
-                    await smtp.ConnectAsync(_mailSetting.Host, _mailSetting.Port,SecureSocketOptions.StartTls);
-                    await smtp.AuthenticateAsync(_mailSetting.Mail, _mailSetting.Password);
-                    await smtp.SendAsync(email);
-                    await smtp.DisconnectAsync(true);
-                    
-                }
-                catch (Exception e)
-                {
-                    string error = e.Message;
-                    Console.WriteLine(error);
-                }
-            }*/
         }
     }
 }

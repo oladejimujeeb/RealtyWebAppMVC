@@ -185,5 +185,18 @@ namespace RealtyWebApp.Controllers
             ViewBag.Message = addAccount.Message;
             return View("MyWallet");
         }
+
+        public async Task<IActionResult> WithDrawToBank(Withdraw request)
+        {
+            var realtorId = int.Parse(User.FindFirst(ClaimTypes.Name).Value);
+            var withdraw = await _realtorService.WithdrawFund(realtorId, request);
+            if (withdraw.Status)
+            {
+                ViewBag.Status = withdraw.Message;
+                return View("MyWallet");
+            }
+            ViewBag.Status = withdraw.Message;
+            return View("MyWallet");
+        }
     }
 }

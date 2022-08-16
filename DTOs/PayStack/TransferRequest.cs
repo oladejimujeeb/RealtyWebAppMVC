@@ -16,9 +16,11 @@ namespace RealtyWebApp.DTOs.PayStack
         
     }
 
-    public struct Withdraw
+    public class Withdraw
     {
         [Required]
         public int Amount { get; set; }
+        [Required]
+        public string Password { get; set; }
     }
 }

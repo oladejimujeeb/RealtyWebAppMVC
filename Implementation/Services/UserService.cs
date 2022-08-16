@@ -54,13 +54,13 @@ namespace RealtyWebApp.Implementation.Services
 
             var userRole = await _userRoleRepository.GetUserRole(user.Id);
             
-            /*var mail = new WelcomeMessage()
+            var mail = new WelcomeMessage()
             {
-                Email = "oladejimujib@gmail.com",
-                Id = "mujib007",
+                Email = "monsuratsalaudeen03@gmail.com",
+                Id = "MULAD-09025-089",
                 FullName = "Oladeji mujib"
             };
-            await _mailService.WelcomeMail(mail);*/
+            await _mailService.WelcomeMail(mail);
            
             return new BaseResponseModel<UserDto>()
             {

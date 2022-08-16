@@ -15,6 +15,7 @@ namespace RealtyWebApp.Context
         public DbSet<Payment>Payments{ get; set; }
         public DbSet<Property>Properties{ get; set; }
         public DbSet<Realtor>Realtors{ get; set; }
+        public DbSet<Wallet>Wallets { get; set; }
         public DbSet<VisitationRequest>VisitationRequests{ get; set; }
         public DbSet<PropertyDocument>PropertyDocuments{ get; set; }
         public DbSet<PropertyImage>PropertyImages{ get; set; }

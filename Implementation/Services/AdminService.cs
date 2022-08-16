@@ -12,6 +12,8 @@ using RealtyWebApp.Interface.IRepositories;
 using RealtyWebApp.Interface.IServices;
 using RealtyWebApp.Models.RequestModel;
 using RealtyWebApp.Interface.IServices.IPropertyMethod;
+using RealtyWebApp.MailFolder.EmailService;
+using RealtyWebApp.MailFolder.MailEntities;
 
 namespace RealtyWebApp.Implementation.Services
 {
@@ -28,12 +30,13 @@ namespace RealtyWebApp.Implementation.Services
         private readonly IBuyerRepository _buyerRepository;
         private readonly IPropertyServiceMethod _propertyServiceMethod;
         private readonly IPaymentRepository _paymentRepository;
+        private readonly IMailService _mailService;
 
         public AdminService(IAdminRepository adminRepository, IRoleRepository roleRepository,
             IUserRepository userRepository, IPropertyRepository propertyRepository,
             IVisitationRepository visitationRepository, IPropertyImage propertyImage,
             IPropertyServiceMethod propertyServiceMethod, IPaymentRepository paymentRepository,
-            IWebHostEnvironment webHostEnvironment,IRealtorRepository realtorRepository, IBuyerRepository buyerRepository)
+            IWebHostEnvironment webHostEnvironment,IRealtorRepository realtorRepository, IBuyerRepository buyerRepository,IMailService mailService)
         {
             _adminRepository = adminRepository;
             _roleRepository = roleRepository;
@@ -46,6 +49,7 @@ namespace RealtyWebApp.Implementation.Services
             _buyerRepository = buyerRepository;
             _propertyServiceMethod = propertyServiceMethod;
             _paymentRepository = paymentRepository;
+            _mailService = mailService;
         }
 
         public async Task<BaseResponseModel<AdminDto>> RegisterAdmin(AdminRequestModel model)
@@ -106,6 +110,14 @@ namespace RealtyWebApp.Implementation.Services
                     UserId = user.Id,
                 };
                 var addAdmin = await _adminRepository.Add(admin);
+                var sendMail = new WelcomeMessage()
+                {
+                    Email = user.Email,
+                    FullName = $"{user.FirstName} {user.LastName}",
+                    Id = admin.RegId
+                };
+                //send mail
+                await _mailService.WelcomeMail(sendMail);
                 return new BaseResponseModel<AdminDto>()
                 {
                     Status = true,

@@ -220,7 +220,7 @@ namespace RealtyWebApp.Migrations
                             Email = "oladejimujib@yahoo.com",
                             FirstName = "Mujib",
                             LastName = "Oladeji",
-                            Password = "$2a$11$akSASxX6B8kOq34o4wLUYeMOmzMmp58Hsad1zLXAsoN8e.hD7Z9k2",
+                            Password = "$2a$11$HRRee8yLSwrGIo8Whu9NC.s4oQ7M.tQqfKTiOPHjXSS8PeGM60Pc6",
                             PhoneNumber = "08136794915"
                         });
                 });
@@ -479,7 +479,7 @@ namespace RealtyWebApp.Migrations
                     b.HasIndex("RealtorId")
                         .IsUnique();
 
-                    b.ToTable("Wallet");
+                    b.ToTable("Wallets");
                 });
 
             modelBuilder.Entity("RealtyWebApp.Entities.Admin", b =>

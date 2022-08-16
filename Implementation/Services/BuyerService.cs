@@ -112,7 +112,7 @@ namespace RealtyWebApp.Implementation.Services
                 RegId = $"CLT/{Guid.NewGuid().ToString().Substring(0, 4)}",
             };
             var addBuyer = await _buyerRepository.Add(buyer);
-            if (addBuyer != buyer)//potential error
+            if (addBuyer != buyer)
             {
                 return new BaseResponseModel<BuyerDto>()
                 {
@@ -127,7 +127,7 @@ namespace RealtyWebApp.Implementation.Services
                 Id = buyer.RegId
             };
             //send mail
-            //await _mailService.WelcomeMail(sendMail);
+            await _mailService.WelcomeMail(sendMail);
             return new BaseResponseModel<BuyerDto>()
             {
                 Status = true,

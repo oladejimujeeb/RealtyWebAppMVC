@@ -13,6 +13,11 @@
 	<div class="alert alert-danger">@ViewBag.Message</div>
 }
 
+@if (!string.IsNullOrEmpty(ViewBag.Status))
+{
+	<div class="alert alert-danger">@ViewBag.Status</div>
+}
+
 @if (Model != null)
 {
     <div class="card-content">
@@ -46,7 +51,7 @@
     </div>
 }
 <div class="card-content">
-    <form method="post" asp-controller="" asp-action="">
+    <form method="post" asp-controller="Realtor" asp-action="WithDrawToBank">
         <div class="field">
             <label class="label"> Withdraw to Your Account</label>
         </div>
@@ -54,8 +59,12 @@
             <label class="label">Amount</label>
             <input name="Amount" class="input" type="number" min="3000"  placeholder="minimum withdraw 3000 "  required >
         </div>
+         <div class="field">
+            <label class="label">Password</label>
+            <input name="Password" class="input" type="password"  placeholder="password"  required >
+        </div>
           <div class="form-group ">
-             <input  type="submit" value="Submit" class="btn btn-success trigger-btn col-sm-12" data-toggle="modal"/>
+             <input type="submit" value="Withdraw" class="btn btn-primary" />
          </div>       
     </form>
 </div>

@@ -136,14 +136,14 @@ namespace RealtyWebApp.Implementation.Services
                 if (addRealtor == realtor)
                 {
                     //sending mail upon registration
-                    /*WelcomeMessage sendMail = new WelcomeMessage()
+                    WelcomeMessage sendMail = new WelcomeMessage()
                     {
                         Email = user.Email,
                         FullName = $"{user.FirstName} {user.LastName}",
                         Id = addRealtor.AgentId
                     };
                     //send mail
-                    await _mailService.WelcomeMail(sendMail);*/
+                    await _mailService.WelcomeMail(sendMail);
                     return new BaseResponseModel<RealtorDto>
                     {
                         Status = true,
@@ -282,11 +282,6 @@ namespace RealtyWebApp.Implementation.Services
             {
                 Message = "Property Successfully Registered",
                 Status = true,
-                /*Data =new PropertyDto()
-                {
-                    ImagePath = registerProperty.PropertyImages.Select(x=>x.DocumentName).ToList()
-                }*/
-                
             };
         }
 
@@ -467,6 +462,50 @@ namespace RealtyWebApp.Implementation.Services
             };
         }
 
+        public async Task<BaseResponseModel<WalletDto>> WithdrawFund(int realtorId, Withdraw withdraw)
+        {
+            var getWallet =  _walletRepository.GetWalletDetails(realtorId);
+            var pin = BCrypt.Net.BCrypt.Verify( withdraw.Password, getWallet.Realtor.User.Password);
+            if (!pin) return new BaseResponseModel<WalletDto>() { Status = false, Message = "Invalid Login"};
+            if(withdraw.Amount>getWallet.AccountBalance)  return new BaseResponseModel<WalletDto>() { Status = false, Message = "Insufficient Balance"};
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _configuration["PayStack:SecretKey"]);
+            httpClient.BaseAddress = new Uri("https://api.paystack.co/transfer");
+            var content = new StringContent(JsonConvert.SerializeObject(new
+            {
+                source = "balance",
+                reason = "Debit Transaction",
+                amount = withdraw.Amount * 100,
+                recipient = getWallet.ReceipientCode,
+               
+            }),Encoding.UTF8,"application/json" );
+            var withDw = await httpClient.PostAsync("https://api.paystack.co/transfer",content);
+            var response = await withDw.Content.ReadAsStringAsync();
+            if (withDw.IsSuccessStatusCode)
+            {
+                var transferResponse = JsonConvert.DeserializeObject<Transfer>(response);
+                if (transferResponse.data.status == "otp")
+                {
+                    getWallet.AccountBalance -= withdraw.Amount;
+                    await _walletRepository.Update(getWallet);
+                    return new BaseResponseModel<WalletDto>()
+                    {
+                        Status = true,
+                        Message = $"# {withdraw.Amount:N} successfully transfered to your " +
+                                  $"account. Transaction Id:{transferResponse.data.reference} Time:{transferResponse.data.updatedAt}"
+                    };
+                }
+            }
+
+            return new BaseResponseModel<WalletDto>()
+            {
+                Status = false,
+                Message = "Transfer failed",
+            };
+        }
+
         public async Task<BaseResponseModel<BaseResponseModel<PropertyDto>>> EditProperty(int propertyId, UpdatePropertyModel updateProperty)
         {
             var getProperty = await _propertyRepository.Get(x => x.Id == propertyId);
@@ -509,7 +548,6 @@ namespace RealtyWebApp.Implementation.Services
          {
              var upDatedWallet = await _walletRepository.Get(x => x.RealtorId == realtorId);
              if (upDatedWallet == null) return new BaseResponse() { Status = false, Message = "Invalid login Credential "};
-             //if (upDatedWallet.ReceipientCode!=null) return new BaseResponse() { Status = false, Message = "Account Details Already Added "};
              using var httpClient = new HttpClient();
              httpClient.DefaultRequestHeaders.Accept.Clear();
              httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -531,7 +569,6 @@ namespace RealtyWebApp.Implementation.Services
                  var responseDetails = JsonConvert.DeserializeObject<AddAccountResponse>(addResponse);
                  if (responseDetails.data.active == "true")
                  {
-
                      upDatedWallet.ReceipientCode = responseDetails.data.recipient_code;
                      upDatedWallet.AccountName = responseDetails.data.details.account_name;
                      upDatedWallet.AccountNo = responseDetails.data.details.account_number;
